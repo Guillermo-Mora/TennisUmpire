@@ -5,10 +5,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
+import com.guimor.tennisumpire.icons.addIcon
 import com.guimor.tennisumpire.ui.navigation.rememberNavigationState
 
 
@@ -54,5 +58,13 @@ fun NavKey.getTitle(): String = when (this) {
     NavRoutesMain.Matches -> "Matches"
     NavRoutesMain.Results -> "Results"
     NavRoutesMain.Players -> "Players"
+    else -> ""
+}
+
+@Composable
+fun NavKey.getFabDescription(): String = when (this) {
+    NavRoutesMain.Matches -> "New Match"
+    NavRoutesMain.Results -> "New Result"
+    NavRoutesMain.Players -> "New Player"
     else -> ""
 }

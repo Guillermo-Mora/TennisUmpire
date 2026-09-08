@@ -1,6 +1,5 @@
-package com.guimor.tennisumpire.ui.screen.results
+package com.guimor.tennisumpire.ui.screen.players
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ResultsScreen(
+fun PlayersScreen(
 ) {
     LazyColumn {
         items(20) {
@@ -29,7 +28,7 @@ fun ResultsScreen(
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
                 Text(
-                    text = "Result x VS y",
+                    text = "Player x",
                     modifier = Modifier
                         .padding(20.dp)
                 )

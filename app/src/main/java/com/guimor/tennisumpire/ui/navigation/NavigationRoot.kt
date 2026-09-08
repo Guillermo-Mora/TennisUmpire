@@ -11,6 +11,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.preferences_data_store.SettingsViewModel
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
+import com.guimor.tennisumpire.ui.screen.main.new_result.NewResultScreen
+import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
+import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import kotlinx.coroutines.runBlocking
@@ -48,12 +51,30 @@ fun NavigationRoot(
         entry<NavRoutesRoot.Main> {
             MainScreen(
                 onNavigateBack = navigator::goBack,
-                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) }
+                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
+                onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
+                onNavigateToNewResult = { navigator.navigate(NavRoutesRoot.NewResult) },
+                onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) }
             )
         }
         entry<NavRoutesRoot.Settings> {
             SettingsScreen(
                 onNavigateBack = navigator::goBack,
+            )
+        }
+        entry<NavRoutesRoot.NewMatch> {
+            NewMatchScreen(
+                onNavigateBack = navigator::goBack
+            )
+        }
+        entry<NavRoutesRoot.NewResult> {
+            NewResultScreen(
+                onNavigateBack = navigator::goBack
+            )
+        }
+        entry<NavRoutesRoot.NewPlayer> {
+            NewPlayerScreen(
+                onNavigateBack = navigator::goBack
             )
         }
     }

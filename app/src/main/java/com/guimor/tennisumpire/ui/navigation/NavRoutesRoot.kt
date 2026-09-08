@@ -14,6 +14,15 @@ sealed class NavRoutesRoot {
     data object Settings : NavKey
 
     @Serializable
+    data object NewMatch : NavKey
+
+    @Serializable
+    data object NewResult : NavKey
+
+    @Serializable
+    data object NewPlayer : NavKey
+
+    @Serializable
     data class Results(
         val canNavigateBack: Boolean = false
     ) : NavKey

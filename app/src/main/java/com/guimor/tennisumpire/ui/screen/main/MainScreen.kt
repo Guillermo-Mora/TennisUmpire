@@ -3,13 +3,9 @@ package com.guimor.tennisumpire.ui.screen.main
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,7 +20,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import com.guimor.tennisumpire.icons.addIcon
-import com.guimor.tennisumpire.icons.add_2Icon
 import com.guimor.tennisumpire.icons.groupsFilledIcon
 import com.guimor.tennisumpire.icons.groupsIcon
 import com.guimor.tennisumpire.icons.library_booksFilledIcon
@@ -34,10 +28,12 @@ import com.guimor.tennisumpire.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.icons.sports_tennisIcon
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
+import com.guimor.tennisumpire.ui.navigation.NavRoutesRoot
 import com.guimor.tennisumpire.ui.navigation.Navigator
 import com.guimor.tennisumpire.ui.navigation.toEntries
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavigationMain
+import com.guimor.tennisumpire.ui.screen.main.navigation.getFabDescription
 import com.guimor.tennisumpire.ui.screen.main.navigation.getTitle
 import com.guimor.tennisumpire.ui.screen.matches.MatchesScreen
 import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
@@ -67,7 +63,10 @@ Text("I will also add an option for exporting the data from the app database")
 fun MainScreen(
     viewModel: MainViewModel = viewModel { MainViewModel() },
     onNavigateBack: () -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToNewMatch: () -> Unit,
+    onNavigateToNewResult: () -> Unit,
+    onNavigateToNewPlayer: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navigationState = NavigationMain.getRememberNavigationState()
@@ -100,11 +99,25 @@ fun MainScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    when (navigationState.topLevelRoute) {
+                        NavRoutesMain.Matches -> {
+                            onNavigateToNewMatch()
+                        }
+
+                        NavRoutesMain.Results -> {
+                            onNavigateToNewResult()
+                        }
+
+                        NavRoutesMain.Players -> {
+                            onNavigateToNewPlayer()
+                        }
+                    }
+                }
             ) {
                 Icon(
                     imageVector = addIcon,
-                    contentDescription = "New match",
+                    contentDescription = navigationState.topLevelRoute.getFabDescription(),
                 )
             }
         },
@@ -157,6 +170,9 @@ fun MainScreen(
 fun MainScreenPreview() {
     MainScreen(
         onNavigateBack = {},
-        onNavigateToSettings = {}
+        onNavigateToSettings = {},
+        onNavigateToNewMatch = {},
+        onNavigateToNewPlayer = {},
+        onNavigateToNewResult = {}
     )
 }
