@@ -25,6 +25,7 @@ All these features are currently in progress of being implemented:
 - Kotlin
 - SQL
 - SQLDelight (I will probably use this for the local Database)
+
 For this project, I wanted to learn the latest things for Android. So I'm using the latest versions even if experimental of all the Android dependencies. Such as Material 3, Navigation 3 and more.
 
 ## Releases
