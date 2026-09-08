@@ -1,7 +1,14 @@
 package com.guimor.tennisumpire.ui.screen.main.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.ui.navigation.rememberNavigationState
 
 
@@ -18,6 +25,27 @@ object NavigationMain {
     fun getRememberNavigationState() = rememberNavigationState(
         startRoute = NavRoutesMain.Matches,
         topLevelRoutes = topLevelRoutes
+    )
+
+    @Composable
+    fun <T : NavKey> GetNavDisplay(
+        entries: List<NavEntry<T>>,
+        onBack: () -> Unit
+    ) = NavDisplay(
+        entries = entries,
+        onBack = { onBack() },
+        transitionSpec = {
+            slideInHorizontally { it } + fadeIn() togetherWith
+                    slideOutHorizontally { -it } + fadeOut()
+        },
+        popTransitionSpec = {
+            slideInHorizontally { -it } + fadeIn() togetherWith
+                    slideOutHorizontally { it } + fadeOut()
+        },
+        predictivePopTransitionSpec = {
+            slideInHorizontally { -it } + fadeIn() togetherWith
+                    slideOutHorizontally { it } + fadeOut()
+        },
     )
 }
 

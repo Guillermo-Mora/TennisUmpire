@@ -1,37 +1,39 @@
 package com.guimor.tennisumpire.ui.screen.main
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.ui.NavDisplay
+import com.guimor.tennisumpire.icons.addIcon
+import com.guimor.tennisumpire.icons.add_2Icon
+import com.guimor.tennisumpire.icons.groupsFilledIcon
 import com.guimor.tennisumpire.icons.groupsIcon
+import com.guimor.tennisumpire.icons.library_booksFilledIcon
 import com.guimor.tennisumpire.icons.library_booksIcon
-import com.guimor.tennisumpire.icons.settingsIcon
+import com.guimor.tennisumpire.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.icons.sports_tennisIcon
+import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
+import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.navigation.Navigator
 import com.guimor.tennisumpire.ui.navigation.toEntries
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
@@ -69,8 +71,6 @@ fun MainScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navigationState = NavigationMain.getRememberNavigationState()
-    //I still don't know if rememberSaveable is necessary or not here.
-    //I have to try with screen rotations, theme changing, variables resetting, etc.
     val navigator = remember { Navigator(navigationState) }
     val entryProvider = entryProvider {
         entry<NavRoutesMain.Matches> {
@@ -89,61 +89,50 @@ fun MainScreen(
             )
         }
     }
+
+    fun isScreenSelected(route: NavKey) = navigationState.topLevelRoute == route
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(navigationState.topLevelRoute.getTitle()) },
-                //navigationIcon = { },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            onNavigateToSettings()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = settingsIcon,
-                            contentDescription = "",
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
+            MainTopAppBar(
+                title = navigationState.topLevelRoute.getTitle(),
+                onNavigateToSettings = { onNavigateToSettings() }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = addIcon,
+                    contentDescription = "New match",
+                )
+            }
         },
         bottomBar = {
             NavigationBar {
-                NavigationBarItem(
-                    onClick = { navigator.navigate(NavRoutesMain.Matches) },
-                    icon = {
-                        Icon(
-                            imageVector = sports_tennisIcon,
-                            contentDescription = "Matches",
-                        )
-                    },
-                    label = { Text("Matches") },
-                    selected = navigationState.topLevelRoute == NavRoutesMain.Matches,
+                BaseNavigationBarItem(
+                    route = NavRoutesMain.Matches,
+                    onClick = navigator::navigate,
+                    selected = ::isScreenSelected,
+                    label = "Matches",
+                    icon = sports_tennisIcon,
+                    iconSelected = sports_tennisFilledIcon,
                 )
-                NavigationBarItem(
-                    onClick = { navigator.navigate(NavRoutesMain.Results) },
-                    icon = {
-                        Icon(
-                            imageVector = library_booksIcon,
-                            contentDescription = "Results",
-                        )
-                    },
-                    label = { Text("Results") },
-                    selected = navigationState.topLevelRoute == NavRoutesMain.Results,
+                BaseNavigationBarItem(
+                    route = NavRoutesMain.Results,
+                    onClick = navigator::navigate,
+                    selected = ::isScreenSelected,
+                    label = "Results",
+                    icon = library_booksIcon,
+                    iconSelected = library_booksFilledIcon,
                 )
-                NavigationBarItem(
-                    onClick = { navigator.navigate(NavRoutesMain.Players) },
-                    icon = {
-                        Icon(
-                            imageVector = groupsIcon,
-                            contentDescription = "Players",
-                        )
-                    },
-                    label = { Text("Players") },
-                    selected = navigationState.topLevelRoute == NavRoutesMain.Players,
+                BaseNavigationBarItem(
+                    route = NavRoutesMain.Players,
+                    onClick = navigator::navigate,
+                    selected = ::isScreenSelected,
+                    label = "Players",
+                    icon = groupsIcon,
+                    iconSelected = groupsFilledIcon
                 )
             }
         }
@@ -155,21 +144,9 @@ fun MainScreen(
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NavDisplay(
+            NavigationMain.GetNavDisplay(
                 entries = navigationState.toEntries(entryProvider),
-                onBack = navigator::goBack,
-                transitionSpec = {
-                    slideInHorizontally { it } + fadeIn() togetherWith
-                            slideOutHorizontally { -it } + fadeOut()
-                },
-                popTransitionSpec = {
-                    slideInHorizontally { -it } + fadeIn() togetherWith
-                            slideOutHorizontally { it } + fadeOut()
-                },
-                predictivePopTransitionSpec = {
-                    slideInHorizontally { -it } + fadeIn() togetherWith
-                            slideOutHorizontally { it } + fadeOut()
-                },
+                onBack = navigator::goBack
             )
         }
     }
@@ -179,6 +156,7 @@ fun MainScreen(
 @Composable
 fun MainScreenPreview() {
     MainScreen(
-        onNavigateBack = {}
-    ) {}
+        onNavigateBack = {},
+        onNavigateToSettings = {}
+    )
 }
