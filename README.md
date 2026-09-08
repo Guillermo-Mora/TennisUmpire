@@ -27,6 +27,6 @@ All these features are currently in progress of being implemented:
 - SQLDelight (I will probably use this for the local Database)
 For this project, I wanted to learn the latest things for Android. So I'm using the latest versions even if experimental of all the Android dependencies. Such as Material 3, Navigation 3 and more.
 
-##Releases
+## Releases
 This project si very new and still in very active development, so the app isn't still ready for use.
 When the main features are implemented, I will release the application both on Play Store and F-Droid. I would also think about porting it to iOS if the app gets popular enough.
