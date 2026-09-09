@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.screen.main.navigation
 
+import android.media.Image
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -9,10 +10,15 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.icons.addIcon
+import com.guimor.tennisumpire.icons.add_notesIcon
+import com.guimor.tennisumpire.icons.library_addIcon
+import com.guimor.tennisumpire.icons.person_addIcon
+import com.guimor.tennisumpire.icons.sportsIcon
 import com.guimor.tennisumpire.ui.navigation.rememberNavigationState
 
 
@@ -51,20 +57,4 @@ object NavigationMain {
                     slideOutHorizontally { it } + fadeOut()
         },
     )
-}
-
-@Composable
-fun NavKey.getTitle(): String = when (this) {
-    NavRoutesMain.Matches -> "Matches"
-    NavRoutesMain.Results -> "Results"
-    NavRoutesMain.Players -> "Players"
-    else -> ""
-}
-
-@Composable
-fun NavKey.getFabDescription(): String = when (this) {
-    NavRoutesMain.Matches -> "New Match"
-    NavRoutesMain.Results -> "New Result"
-    NavRoutesMain.Players -> "New Player"
-    else -> ""
 }

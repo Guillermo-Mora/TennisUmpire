@@ -11,7 +11,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.preferences_data_store.SettingsViewModel
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
-import com.guimor.tennisumpire.ui.screen.main.new_result.NewResultScreen
+import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
@@ -74,7 +74,8 @@ fun NavigationRoot(
         }
         entry<NavRoutesRoot.NewPlayer> {
             NewPlayerScreen(
-                onNavigateBack = navigator::goBack
+                onNavigateBack = navigator::goBack,
+                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) }
             )
         }
     }

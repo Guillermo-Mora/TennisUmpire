@@ -10,16 +10,21 @@ import androidx.navigation3.runtime.NavKey
 
 @Composable
 fun RowScope.BaseNavigationBarItem(
-    route: NavKey,
-    onClick: (route: NavKey) -> Unit,
+    currentRoute: NavKey,
+    newRoute: NavKey,
+    onClick: (newRoute: NavKey) -> Unit,
+    updateScreenData: (currentRoute: NavKey, newRoute: NavKey) -> Unit,
     selected: (route: NavKey) -> Boolean,
     label: String,
     icon: ImageVector,
-    iconSelected: ImageVector,
+    iconSelected: ImageVector
 ) {
-    val selected = selected(route)
+    val selected = selected(newRoute)
     NavigationBarItem(
-        onClick = { onClick(route) },
+        onClick = {
+            onClick(newRoute)
+            updateScreenData(currentRoute, newRoute)
+        },
         icon = {
             Icon(
                 imageVector = if (selected) iconSelected else icon,
@@ -30,3 +35,10 @@ fun RowScope.BaseNavigationBarItem(
         selected = selected,
     )
 }
+
+data class BaseNavigationBarItemData(
+    val newRoute: NavKey,
+    val label: String,
+    val icon: ImageVector,
+    val iconSelected: ImageVector
+)

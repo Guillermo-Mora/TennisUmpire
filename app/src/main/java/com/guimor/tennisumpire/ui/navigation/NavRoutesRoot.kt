@@ -3,27 +3,34 @@ package com.guimor.tennisumpire.ui.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-sealed class NavRoutesRoot {
+sealed interface NavRoutesRoot {
     @Serializable
-    data object OnBoarding : NavKey
+    data object OnBoarding :
+        NavKey
 
     @Serializable
-    data object Main : NavKey
+    data object Main :
+        NavKey
 
     @Serializable
-    data object Settings : NavKey
+    data object Settings :
+        NavKey
 
     @Serializable
-    data object NewMatch : NavKey
+    data object NewMatch :
+        NavKey
 
     @Serializable
-    data object NewResult : NavKey
+    data object NewResult :
+        NavKey
 
     @Serializable
-    data object NewPlayer : NavKey
+    data object NewPlayer :
+        NavKey
 
     @Serializable
     data class Results(
         val canNavigateBack: Boolean = false
-    ) : NavKey
+    ) :
+        NavKey
 }

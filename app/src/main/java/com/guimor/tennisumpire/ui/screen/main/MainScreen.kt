@@ -13,13 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import com.guimor.tennisumpire.icons.addIcon
+import com.guimor.tennisreferee.R
 import com.guimor.tennisumpire.icons.groupsFilledIcon
 import com.guimor.tennisumpire.icons.groupsIcon
 import com.guimor.tennisumpire.icons.library_booksFilledIcon
@@ -27,14 +28,13 @@ import com.guimor.tennisumpire.icons.library_booksIcon
 import com.guimor.tennisumpire.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.icons.sports_tennisIcon
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
+import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
-import com.guimor.tennisumpire.ui.navigation.NavRoutesRoot
 import com.guimor.tennisumpire.ui.navigation.Navigator
 import com.guimor.tennisumpire.ui.navigation.toEntries
+import com.guimor.tennisumpire.ui.screen.main.MainScreensProperties.function
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavigationMain
-import com.guimor.tennisumpire.ui.screen.main.navigation.getFabDescription
-import com.guimor.tennisumpire.ui.screen.main.navigation.getTitle
 import com.guimor.tennisumpire.ui.screen.matches.MatchesScreen
 import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
 import com.guimor.tennisumpire.ui.screen.results.ResultsScreen
@@ -68,6 +68,26 @@ fun MainScreen(
     onNavigateToNewResult: () -> Unit,
     onNavigateToNewPlayer: () -> Unit
 ) {
+    val navigationBarItemsData = listOf(
+        BaseNavigationBarItemData(
+            newRoute = NavRoutesMain.Matches,
+            label = stringResource(R.string.matches),
+            icon = sports_tennisIcon,
+            iconSelected = sports_tennisFilledIcon
+        ),
+        BaseNavigationBarItemData(
+            newRoute = NavRoutesMain.Results,
+            label = stringResource(R.string.results),
+            icon = library_booksIcon,
+            iconSelected = library_booksFilledIcon
+        ),
+        BaseNavigationBarItemData(
+            newRoute = NavRoutesMain.Players,
+            label = stringResource(R.string.players),
+            icon = groupsIcon,
+            iconSelected = groupsFilledIcon
+        )
+    )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navigationState = NavigationMain.getRememberNavigationState()
     val navigator = remember { Navigator(navigationState) }
@@ -93,60 +113,40 @@ fun MainScreen(
     Scaffold(
         topBar = {
             MainTopAppBar(
-                title = navigationState.topLevelRoute.getTitle(),
-                onNavigateToSettings = { onNavigateToSettings() }
+                title = uiState.mainScreenData.title,
+                onNavigateToSettings = { onNavigateToSettings() },
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    when (navigationState.topLevelRoute) {
-                        NavRoutesMain.Matches -> {
-                            onNavigateToNewMatch()
-                        }
-
-                        NavRoutesMain.Results -> {
-                            onNavigateToNewResult()
-                        }
-
-                        NavRoutesMain.Players -> {
-                            onNavigateToNewPlayer()
-                        }
-                    }
+                    (navigationState.topLevelRoute).function(
+                        matchesScreen = { onNavigateToNewMatch() },
+                        resultsScreen = { onNavigateToNewResult() },
+                        playersScreen = { onNavigateToNewPlayer() },
+                    )
                 }
             ) {
                 Icon(
-                    imageVector = addIcon,
-                    contentDescription = navigationState.topLevelRoute.getFabDescription(),
+                    imageVector = uiState.mainScreenData.fabIcon,
+                    contentDescription = uiState.mainScreenData.fabDescription,
                 )
             }
         },
         bottomBar = {
             NavigationBar {
-                BaseNavigationBarItem(
-                    route = NavRoutesMain.Matches,
-                    onClick = navigator::navigate,
-                    selected = ::isScreenSelected,
-                    label = "Matches",
-                    icon = sports_tennisIcon,
-                    iconSelected = sports_tennisFilledIcon,
-                )
-                BaseNavigationBarItem(
-                    route = NavRoutesMain.Results,
-                    onClick = navigator::navigate,
-                    selected = ::isScreenSelected,
-                    label = "Results",
-                    icon = library_booksIcon,
-                    iconSelected = library_booksFilledIcon,
-                )
-                BaseNavigationBarItem(
-                    route = NavRoutesMain.Players,
-                    onClick = navigator::navigate,
-                    selected = ::isScreenSelected,
-                    label = "Players",
-                    icon = groupsIcon,
-                    iconSelected = groupsFilledIcon
-                )
+                navigationBarItemsData.forEach {
+                    BaseNavigationBarItem(
+                        currentRoute = navigationState.topLevelRoute,
+                        newRoute = it.newRoute,
+                        onClick = navigator::navigate,
+                        updateScreenData = viewModel::changeMainScreen,
+                        selected = ::isScreenSelected,
+                        label = it.label,
+                        icon = it.icon,
+                        iconSelected = it.iconSelected
+                    )
+                }
             }
         }
     ) { paddingValues ->

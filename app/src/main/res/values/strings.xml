@@ -3,4 +3,9 @@
     <string name="players">Players</string>
     <string name="results">Results</string>
     <string name="pending_matches">Pending matches</string>
+    <string name="asa">asa</string>
+    <string name="matches">Matches</string>
+    <string name="new_match">New match</string>
+    <string name="new_result">New result</string>
+    <string name="new_player">New player</string>
 </resources>

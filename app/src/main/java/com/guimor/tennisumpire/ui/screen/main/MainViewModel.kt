@@ -1,6 +1,7 @@
 package com.guimor.tennisumpire.ui.screen.main
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation3.runtime.NavKey
 import com.guimor.tennisumpire.view_model.UiStateHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,11 +13,15 @@ class MainViewModel(
     override val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 ) : ViewModel(),
     UiStateHolder<MainUiState> {
-    fun test(str: String) {
-        _uiState.update {
-            it.copy(
-                test = str
-            )
-        }
+    fun changeMainScreen(
+        currentMainScreen: NavKey,
+        newMainScreen: NavKey
+    ) {
+        if (newMainScreen != currentMainScreen)
+            _uiState.update {
+                it.copy(
+                    mainScreenData = newMainScreen.getCurrentScreenData()
+                )
+            }
     }
 }

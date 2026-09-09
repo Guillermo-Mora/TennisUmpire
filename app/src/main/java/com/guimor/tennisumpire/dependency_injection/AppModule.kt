@@ -6,6 +6,7 @@ import com.guimor.tennisumpire.preferences_data_store.UserPreferencesRepository
 
 interface AppModule {
     val userPreferencesRepository: UserPreferencesRepository
+    val context: Context
 }
 
 class AppModuleImpl(
@@ -15,4 +16,5 @@ class AppModuleImpl(
     // With get() = I could do new repositories for each time I need them
     override val userPreferencesRepository: UserPreferencesRepository =
         UserPreferencesRepository(dataStore = appContext.dataStore)
+    override val context: Context = appContext
 }

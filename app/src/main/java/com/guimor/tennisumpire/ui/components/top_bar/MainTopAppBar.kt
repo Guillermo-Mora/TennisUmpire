@@ -15,10 +15,14 @@ import com.guimor.tennisumpire.icons.settingsIcon
 @Composable
 fun MainTopAppBar(
     title: String,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    navigationIcon: @Composable (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
+        navigationIcon = {
+            navigationIcon?.invoke()
+        },
         actions = {
             IconButton(
                 onClick = { onNavigateToSettings() }

@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.main.new_result
+package com.guimor.tennisumpire.ui.screen.new_result
 
 import androidx.compose.runtime.Composable
 

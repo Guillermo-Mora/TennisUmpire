@@ -31,14 +31,14 @@ class SettingsViewModel(
             userPreferencesRepository.finishOnBoarding()
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 //Used for saving viewModel properties and then get them again when
                 //the viewmodel is instantiated in another place
                 //val savedStateHandle = createSavedStateHandle()
-                val userPreferencesRepository =
-                    (this[APPLICATION_KEY] as MyApplication).appModule.userPreferencesRepository
+                val userPreferencesRepository = MyApplication.appModule.userPreferencesRepository
                 SettingsViewModel(
                     userPreferencesRepository = userPreferencesRepository,
                     //savedStateHandle = savedStateHandle
