@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.navigation
 
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 
 /**
@@ -32,5 +33,10 @@ class Navigator(val state: NavigationState) {
         val currentStack = state.backStacks[state.topLevelRoute]
             ?: error("Stack for ${state.topLevelRoute} not found")
         currentStack.clear()
+    }
+
+    fun goBackAndGetNewRoute(): NavKey? {
+        goBack()
+        return state.backStacks[state.topLevelRoute]?.last()
     }
 }

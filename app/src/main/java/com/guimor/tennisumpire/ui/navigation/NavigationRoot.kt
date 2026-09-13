@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.guimor.tennisumpire.preferences_data_store.SettingsViewModel
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
@@ -20,14 +20,14 @@ import kotlinx.coroutines.runBlocking
 
 @Composable
 fun NavigationRoot(
-    settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory)
+    preferencesDataStoreViewModel: PreferencesDataStoreViewModel = viewModel(factory = PreferencesDataStoreViewModel.Factory)
 ) {
     //Get settings as reactive flow
     //val settings by settingsViewModel.userSettings.collectAsStateWithLifecycle()
 
     //I run it blocking for preventing the app ui to build anything before the first screen
     //is decided.
-    val settings = runBlocking { settingsViewModel.getUserSettingsValue() }
+    val settings = runBlocking { preferencesDataStoreViewModel.getUserSettingsValue() }
     val navigationState = rememberNavigationState(
         startRoute =
             if (settings.isOnBoardingFinished) NavRoutesRoot.Main

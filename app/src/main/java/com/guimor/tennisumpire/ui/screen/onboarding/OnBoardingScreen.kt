@@ -17,30 +17,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.guimor.tennisumpire.dataStore
-import com.guimor.tennisumpire.preferences_data_store.SettingsViewModel
-import com.guimor.tennisumpire.preferences_data_store.UserPreferencesRepository
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
     viewModel: OnBoardingViewModel = viewModel { OnBoardingViewModel() },
-    settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
+    preferencesDataStoreViewModel: PreferencesDataStoreViewModel = viewModel(factory = PreferencesDataStoreViewModel.Factory),
     onNavigateToMainScreen: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -93,7 +85,7 @@ fun OnBoardingScreen(
                         else -> OnBoardingScreen3(
                             onNextPage = {
                                 onNavigateToMainScreen()
-                                settingsViewModel.finishOnBoarding()
+                                preferencesDataStoreViewModel.finishOnBoarding()
                             }
                         )
                     }

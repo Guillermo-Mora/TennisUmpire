@@ -10,23 +10,23 @@ import kotlinx.coroutines.flow.map
 class UserPreferencesRepository(
     private val dataStore: DataStore<Preferences>
 ) {
-    val userSettingsFlow: Flow<Settings> =
+    val userPreferencesDataStoreFlow: Flow<PreferencesDataStore> =
         dataStore.data.map {
-            Settings.LoadedSettings(
-                isOnBoardingFinished = it[SettingsKeys.IS_ONBOARDING_FINISHED] ?: false
+            PreferencesDataStore.LoadedPreferencesDataStore(
+                isOnBoardingFinished = it[PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED] ?: false
             )
         }
 
-    suspend fun getUserSettingsValue(): Settings.LoadedSettings {
+    suspend fun getUserSettingsValue(): PreferencesDataStore.LoadedPreferencesDataStore {
         val settings = dataStore.data.first()
-        return Settings.LoadedSettings(
-            settings[SettingsKeys.IS_ONBOARDING_FINISHED] ?: false
+        return PreferencesDataStore.LoadedPreferencesDataStore(
+            settings[PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED] ?: false
         )
     }
 
     suspend fun finishOnBoarding() {
         dataStore.edit {
-            it[SettingsKeys.IS_ONBOARDING_FINISHED] = true
+            it[PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED] = true
         }
     }
 }

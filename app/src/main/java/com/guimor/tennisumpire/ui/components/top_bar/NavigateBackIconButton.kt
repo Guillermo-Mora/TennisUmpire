@@ -1,12 +1,15 @@
 package com.guimor.tennisumpire.ui.components.top_bar
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.guimor.tennisumpire.icons.arrow_backIcon
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.guimor.tennisumpire.ui.icons.arrow_backIcon
 
 @Composable
 fun NavigateBackIconButton(
@@ -19,7 +22,8 @@ fun NavigateBackIconButton(
             contentColor = IconButtonDefaults.iconButtonColors().contentColor,
             disabledContainerColor = IconButtonDefaults.iconButtonColors().disabledContainerColor,
             disabledContentColor = IconButtonDefaults.iconButtonColors().disabledContentColor
-        )
+        ),
+        modifier = Modifier.padding(start = 16.dp)
     ) {
         Icon(
             imageVector = arrow_backIcon,

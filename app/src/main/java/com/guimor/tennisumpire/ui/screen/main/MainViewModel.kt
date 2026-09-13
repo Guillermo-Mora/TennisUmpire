@@ -24,4 +24,16 @@ class MainViewModel(
                 )
             }
     }
+
+    fun changeMainScreen(
+        newMainScreen: NavKey?
+    ) {
+        newMainScreen?.let {
+            _uiState.update {
+                it.copy(
+                    mainScreenData = newMainScreen.getCurrentScreenData()
+                )
+            }
+        }
+    }
 }

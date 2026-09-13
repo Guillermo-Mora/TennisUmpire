@@ -11,7 +11,7 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.preferencesDataStore
-import com.guimor.tennisumpire.preferences_data_store.SettingsKeys
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreKeys
 import com.guimor.tennisumpire.ui.navigation.NavigationRoot
 import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
 
@@ -19,7 +19,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "settings",
     corruptionHandler = ReplaceFileCorruptionHandler {
         preferencesOf(
-            SettingsKeys.IS_ONBOARDING_FINISHED to true
+            PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED to true
         )
     }
 )
