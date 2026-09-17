@@ -6,11 +6,12 @@ import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
-import com.guimor.tennisumpire.ui.components.error.FormatError
-import com.guimor.tennisumpire.ui.components.form.FormFieldData
-import com.guimor.tennisumpire.ui.components.form.FormFieldDataType
+import com.guimor.tennisumpire.domain.error.FormatError
+import com.guimor.tennisumpire.ui.model.FormFieldData
+import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import com.guimor.tennisumpire.view_model.Resettable
 import com.guimor.tennisumpire.view_model.UiStateHolder
+import com.guimor.tennisumpire.view_model.ValidatableForm
 import com.guimor.tennisumpire.view_model.ViewModelHelper
 import com.guimor.tennisumpire.view_model.validationDebounce
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,15 +25,30 @@ class NewPlayerViewModel(
     override val uiState: StateFlow<NewPlayerUiState> = _uiState.asStateFlow()
 ) : ViewModel(),
     UiStateHolder<NewPlayerUiState>,
-    Resettable {
+    Resettable,
+    ValidatableForm {
     val debounceValidatePlayerFirstName = validationDebounce { validatePlayerFirstName() }
     val debounceValidatePlayerSecondName = validationDebounce { validatePlayerSecondName() }
     val debounceValidatePlayerHeight = validationDebounce { validatePlayerHeight() }
     val debounceValidatePlayerWeight = validationDebounce { validatePlayerWeight() }
 
-    override fun resetData() {
-        _uiState.value = NewPlayerUiState()
-    }
+    override fun resetData() { _uiState.value = NewPlayerUiState() }
+
+    override fun validateForm() {
+        //I use null to represent the items from the screen that don't have any type of
+        //validation. I think this is the best way to do it, as I don't have to manually
+        //assign any type of positional number.
+        ViewModelHelper.validateForm(
+            null,
+            ::validatePlayerFirstName,
+            ::validatePlayerSecondName,
+            null,
+            ::validatePlayerHeight,
+            ::validatePlayerWeight
+        ) { firstErrorPosition ->
+            _uiState.update { state -> state.copy(scrollToErrorSection = firstErrorPosition) } } }
+
+    fun resetScrollToError() { _uiState.update { state -> state.copy(scrollToErrorSection = -1) } }
 
     fun setPlayerFirstName(newValue: String) {
         _uiState.update { state ->
@@ -129,26 +145,26 @@ class NewPlayerViewModel(
         }
     }
 
-    fun validatePlayerFirstName() {
-        ViewModelHelper.validateField(
+    fun validatePlayerFirstName(): Boolean {
+        return ViewModelHelper.isFieldError(
             formFieldData = uiState.value.playerFirstName,
             required = true,
             ViewModelHelper.ValidationRule(
                 condition = String::isBlank,
                 error = FormatError.IS_BLANK
             )
-        )?.let { _uiState.update { state -> state.copy(playerFirstName = it) } }
+        ) { _uiState.update { state -> state.copy(playerFirstName = it) } }
     }
 
-    fun validatePlayerSecondName() {
-        ViewModelHelper.validateField(
+    fun validatePlayerSecondName(): Boolean {
+        return ViewModelHelper.isFieldError(
             formFieldData = uiState.value.playerSecondName,
             required = true,
             ViewModelHelper.ValidationRule(
                 condition = String::isBlank,
                 error = FormatError.IS_BLANK
             )
-        )?.let { _uiState.update { state -> state.copy(playerSecondName = it) } }
+        ) { _uiState.update { state -> state.copy(playerSecondName = it) } }
     }
 
     //Test for type validations
@@ -165,31 +181,25 @@ class NewPlayerViewModel(
     }
      */
 
-    fun validatePlayerHeight() {
-        ViewModelHelper.validateField(
+    fun validatePlayerHeight(): Boolean {
+        return ViewModelHelper.isFieldError(
             formFieldData = uiState.value.playerHeight,
             required = false,
             ViewModelHelper.ValidationRule(
                 condition = { it.isNotNumberGreaterThanZero() },
                 error = FormatError.INVALID_NUMBER
             )
-        )?.let { _uiState.update { state -> state.copy(playerHeight = it) } }
+        ) { _uiState.update { state -> state.copy(playerHeight = it) } }
     }
 
-    fun validatePlayerWeight() {
-        ViewModelHelper.validateField(
+    fun validatePlayerWeight(): Boolean {
+        return ViewModelHelper.isFieldError(
             formFieldData = uiState.value.playerWeight,
             required = false,
             ViewModelHelper.ValidationRule(
-                //IMPORTANT NEXT THING TO IMPLEMENT:
-                //PREVENT ACCIDENTAL DOUBLE NAVIGATIONS FORWARD AND BACKWARD
-                //IN ORDER TO DO THIS, USE THE METHOD THAT ALLOWS TO SET THE WINDOWS THE
-                //ONLY ONE IF ITS TYPE IN ALL THE BACKSTACK.
-                //AND FOR THE BACK NAVIGATION USE THE SAME METHOD I USED IN LIBREGUARDIA
-                //OR SEARCH ON INTERNET FOR A NEW WAY OF DOING IT.
                 condition = { it.isNotNumberGreaterThanZero() },
                 error = FormatError.INVALID_NUMBER
             )
-        )?.let { _uiState.update { state -> state.copy(playerWeight = it) } }
+        ) { _uiState.update { state -> state.copy(playerWeight = it) } }
     }
 }

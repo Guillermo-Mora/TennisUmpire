@@ -4,16 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -33,9 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.guimor.tennisumpire.ui.icons.cancelIcon
-import com.guimor.tennisumpire.ui.icons.errorIcon
 import com.guimor.tennisumpire.ui.icons.searchIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,17 +79,6 @@ fun <T>FormDropDownMenuWithSearch(
                 .widthIn(max = 300.dp)
                 .fillMaxWidth()
         ) {
-            /*
-            SearchBar(
-                state = TODO(),
-                inputField = TODO(),
-                modifier = TODO(),
-                shape = TODO(),
-                colors = TODO(),
-                tonalElevation = TODO(),
-                shadowElevation = TODO()
-            )
-             */
             TextField(
                 value = value ?: label,
                 onValueChange = {},

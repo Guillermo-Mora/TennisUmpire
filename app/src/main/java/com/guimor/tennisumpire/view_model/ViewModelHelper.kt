@@ -1,9 +1,9 @@
 package com.guimor.tennisumpire.view_model
 
-import com.guimor.tennisumpire.ui.components.error.Error
-import com.guimor.tennisumpire.ui.components.error.FormatError
-import com.guimor.tennisumpire.ui.components.form.FormFieldData
-import com.guimor.tennisumpire.ui.components.form.FormFieldDataType
+import com.guimor.tennisumpire.domain.error.Error
+import com.guimor.tennisumpire.domain.error.FormatError
+import com.guimor.tennisumpire.ui.model.FormFieldData
+import com.guimor.tennisumpire.ui.model.FormFieldDataType
 
 object ViewModelHelper {
     data class ValidationRule(
@@ -16,7 +16,7 @@ object ViewModelHelper {
         val error: Error
     )
 
-    fun validateField(
+    private fun validateField(
         formFieldData: FormFieldData,
         required: Boolean = false,
         vararg validationRules: ValidationRule
@@ -32,7 +32,7 @@ object ViewModelHelper {
         return null
     }
 
-    fun <T> validateField(
+    private fun <T> validateField(
         formFieldData: FormFieldDataType<T>,
         required: Boolean = false,
         vararg validationRules: ValidationRuleType<T>
@@ -47,5 +47,39 @@ object ViewModelHelper {
             }
         }
         return null
+    }
+
+    fun isFieldError(
+        formFieldData: FormFieldData,
+        required: Boolean = false,
+        vararg validationRules: ValidationRule,
+        setError: (FormFieldData) -> Unit,
+    ): Boolean {
+        validateField(
+            formFieldData = formFieldData,
+            required = required,
+            validationRules = validationRules
+        )?.let {
+            setError(it)
+            return true
+        }
+        return false
+    }
+
+    fun validateForm(
+        vararg formValidations: (() -> Boolean)?,
+        navigateToFirstError: (firstErrorPosition: Int) -> Unit
+    ): Boolean {
+        var containsErrors = false
+        var firstErrorPosition = -1
+        formValidations.forEachIndexed { index, validateField ->
+            if (containsErrors) validateField?.invoke()
+            else if (validateField?.invoke() == true) {
+                firstErrorPosition = index
+                containsErrors = true
+            }
+        }
+        if (containsErrors) navigateToFirstError(firstErrorPosition)
+        return containsErrors
     }
 }

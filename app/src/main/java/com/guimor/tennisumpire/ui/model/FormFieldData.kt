@@ -1,6 +1,6 @@
-package com.guimor.tennisumpire.ui.components.form
+package com.guimor.tennisumpire.ui.model
 
-import com.guimor.tennisumpire.ui.components.error.Error
+import com.guimor.tennisumpire.domain.error.Error
 
 data class FormFieldData(
     val value: String = "",

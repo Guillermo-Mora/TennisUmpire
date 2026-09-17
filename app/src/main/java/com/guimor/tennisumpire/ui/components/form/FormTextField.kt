@@ -22,7 +22,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisreferee.R
 import com.guimor.tennisumpire.ui.icons.errorIcon
-import com.guimor.tennisumpire.ui.components.error.getErrorMessage
+import com.guimor.tennisumpire.domain.error.getErrorMessage
+import com.guimor.tennisumpire.ui.model.FormFieldData
 
 @Composable
 fun FormTextField(

@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
+import kotlin.collections.forEachIndexed
 
 @Composable
 fun <T>FormSingleChoiceSegmentedButtonRow(
@@ -67,11 +69,3 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
         }
     }
 }
-
-data class SegmentedButtonOption<T>(
-    val selected: Boolean = false,
-    val label: String,
-    val icon: ImageVector,
-    val mirrorIcon: Boolean = false,
-    val value: T
-)
