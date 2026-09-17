@@ -65,6 +65,7 @@ import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,16 +80,16 @@ fun NewPlayerScreen(
     }
     val uiState by viewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
-    //This still doesn't work perfectly. Because if I click too fast the button or
-    // press the screen after the click, this breaks and the condition can't be reached again.
     LaunchedEffect(uiState.scrollToErrorSection) {
         if (uiState.scrollToErrorSection != -1) {
-            println("Do scroll to item")
-            lazyListState.animateScrollToItem(
-                index =  uiState.scrollToErrorSection,
-                scrollOffset = -50
-            )
-            viewModel.resetScrollToError()
+            try {
+                lazyListState.animateScrollToItem(
+                    index = uiState.scrollToErrorSection,
+                    scrollOffset = -50
+                )
+            } finally {
+                viewModel.resetScrollToError()
+            }
         }
     }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()

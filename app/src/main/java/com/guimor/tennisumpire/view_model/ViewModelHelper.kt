@@ -79,7 +79,7 @@ object ViewModelHelper {
                 containsErrors = true
             }
         }
-        if (containsErrors) navigateToFirstError(firstErrorPosition)
+        navigateToFirstError(firstErrorPosition)
         return containsErrors
     }
 }
