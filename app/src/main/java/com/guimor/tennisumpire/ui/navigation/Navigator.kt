@@ -1,6 +1,5 @@
 package com.guimor.tennisumpire.ui.navigation
 
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 
 /**
@@ -12,6 +11,10 @@ class Navigator(val state: NavigationState) {
             // This is a top level route, just switch to it.
             state.topLevelRoute = route
         } else {
+            //Added to prevent double or more navigations on clicking fast on a navigation button
+            //that calls the navigate function.
+            if (state.backStacks[state.topLevelRoute]?.lastOrNull() == route) return
+            //
             state.backStacks[state.topLevelRoute]?.add(route)
         }
     }
@@ -38,5 +41,10 @@ class Navigator(val state: NavigationState) {
     fun goBackAndGetNewRoute(): NavKey? {
         goBack()
         return state.backStacks[state.topLevelRoute]?.last()
+    }
+
+    fun clearPreviousRoutesAndNavigate(route: NavKey) {
+        state.backStacks[state.topLevelRoute]?.removeAll { navKey -> navKey != route }
+        navigate(route)
     }
 }

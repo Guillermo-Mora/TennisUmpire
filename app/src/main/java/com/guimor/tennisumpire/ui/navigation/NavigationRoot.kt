@@ -43,8 +43,7 @@ fun NavigationRoot(
         entry<NavRoutesRoot.OnBoarding> {
             OnBoardingScreen(
                 onNavigateToMainScreen = {
-                    navigator.clearBackStack()
-                    navigator.navigate(NavRoutesRoot.Main)
+                    navigator.clearPreviousRoutesAndNavigate(NavRoutesRoot.Main)
                 }
             )
         }

@@ -65,7 +65,6 @@ import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
-import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
