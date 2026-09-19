@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -40,8 +42,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.ui.icons.cakeFilledIcon
 import com.guimor.tennisumpire.ui.icons.cakeIcon
+import com.guimor.tennisumpire.ui.icons.femaleIcon
+import com.guimor.tennisumpire.ui.icons.maleIcon
 import com.guimor.tennisumpire.ui.icons.more_vertIcon
 import com.guimor.tennisumpire.ui.icons.personFilledIcon
 import java.time.LocalDate
@@ -118,7 +123,7 @@ fun PlayersScreen(
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
-                            space = 1.dp,
+                            space = 0.dp,
                             alignment = Alignment.CenterVertically
                         ),
                         modifier = Modifier
@@ -161,19 +166,58 @@ fun PlayersScreen(
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+
                         }
                     }
-                    playerAge?.let { playerAge ->
-                        Icon(
-                            imageVector = cakeFilledIcon,
-                            contentDescription = "Player age",
-                            modifier = Modifier.size(20.dp)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 4.dp,
+                            alignment = Alignment.CenterVertically
                         )
-                        Text(
-                            text = playerAge,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
+                    ) {
+                        //I don't like very much how this looks with the space separation
+                        // from the name. So I will change the layout and do it like Sofascore.
+                        //However, I'm sure that I will only add gender and age as extra
+                        //information in this view. The rest will be visible inside the
+                        //detail screen.
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxHeight(0.5f)
+                        ) {
+                             player.gender?.let { gender ->
+                                Icon(
+                                    imageVector = when(gender) {
+                                        PlayerGender.MALE -> maleIcon
+                                        PlayerGender.FEMALE -> femaleIcon
+                                    },
+                                    contentDescription = "Player age",
+                                    modifier = Modifier.size(15.dp),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxHeight(0.5f)
+                        ) {
+                            playerAge?.let { playerAge ->
+                                Icon(
+                                    imageVector = cakeFilledIcon,
+                                    contentDescription = "Player age",
+                                    modifier = Modifier.size(15.dp),
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Text(
+                                    text = playerAge,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                     }
                 }
                 IconButton(
