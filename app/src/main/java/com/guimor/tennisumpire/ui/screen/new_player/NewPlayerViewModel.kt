@@ -6,16 +6,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
-import com.guimor.tennisumpire.domain.error.DatabaseError
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
 import com.guimor.tennisumpire.domain.error.FormatError
-import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.room_database.player.Player
-import com.guimor.tennisumpire.room_database.player.PlayerRepository
+import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import com.guimor.tennisumpire.ui.model.getValueOrNull
@@ -34,7 +32,7 @@ import java.time.LocalDate
 class NewPlayerViewModel(
     override val _uiState: MutableStateFlow<NewPlayerUiState> = MutableStateFlow(NewPlayerUiState()),
     override val uiState: StateFlow<NewPlayerUiState> = _uiState.asStateFlow(),
-    private val playerRepository: PlayerRepository
+    private val playerRepository: PlayerRepositoryImpl
 ) : ViewModel(),
     UiStateHolder<NewPlayerUiState>,
     Resettable,

@@ -6,12 +6,12 @@ import androidx.sqlite.driver.AndroidSQLiteDriver
 import com.guimor.tennisumpire.dataStore
 import com.guimor.tennisumpire.preferences_data_store.UserPreferencesRepository
 import com.guimor.tennisumpire.room_database.AppDatabase
-import com.guimor.tennisumpire.room_database.player.PlayerRepository
+import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
 
 interface AppModule {
     val db : AppDatabase
     val userPreferencesRepository: UserPreferencesRepository
-    val playerRepository: PlayerRepository
+    val playerRepository: PlayerRepositoryImpl
 }
 
 class AppModuleImpl(
@@ -26,7 +26,7 @@ class AppModuleImpl(
     ).setDriver(AndroidSQLiteDriver()).build()
     override val userPreferencesRepository: UserPreferencesRepository =
         UserPreferencesRepository(dataStore = appContext.dataStore)
-    override val playerRepository: PlayerRepository = PlayerRepository(
+    override val playerRepository: PlayerRepositoryImpl = PlayerRepositoryImpl(
         playerDao = db.playerDao()
     )
 }

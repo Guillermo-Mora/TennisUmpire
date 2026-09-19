@@ -1,17 +1,26 @@
 package com.guimor.tennisumpire.ui.screen.players
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -20,10 +29,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.ui.icons.cakeFilledIcon
+import com.guimor.tennisumpire.ui.icons.cakeIcon
+import com.guimor.tennisumpire.ui.icons.more_vertIcon
+import com.guimor.tennisumpire.ui.icons.personFilledIcon
+import java.time.LocalDate
+import java.time.Period
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,25 +56,134 @@ fun PlayersScreen(
 ) {
     BackHandler { onNavigateBack() }
     val uiState by viewModel.uiState.collectAsState()
+    val currentLocalDate = LocalDate.now()
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         itemsIndexed(uiState.players) { index, player ->
+            val playerAge =
+                 player.birthdate?.let { playerBirthdate ->
+                     Period.between(playerBirthdate, currentLocalDate).years.toString()
+                         .let {
+                             if (it.length >= 4) it.substring(0,3)
+                             else it
+                         }
+                 }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(4.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             ) {
-                Text(
-                    text = player.firstName,
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        space = 8.dp,
+                        alignment = Alignment.CenterHorizontally
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .padding(20.dp)
-                )
+                        .padding(
+                            horizontal = 8.dp,
+                            vertical = 8.dp
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(35.dp)
+                    ) {
+                        player.country?.let {
+                            Image(
+                                painter = painterResource(it.flag),
+                                contentDescription = "Player image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                                    .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
+                            )
+                        } ?: Icon(
+                            imageVector = personFilledIcon,
+                            contentDescription = "Player image",
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .background(color = MaterialTheme.colorScheme.background)
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 1.dp,
+                            alignment = Alignment.CenterVertically
+                        ),
+                        modifier = Modifier
+                            .widthIn(max = 120.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "${player.firstName.first()}. ${player.lastName}",
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                space = 4.dp,
+                                alignment = Alignment.Start
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(15.dp)
+                            ) {
+                                player.country?.let { country ->
+                                    Image(
+                                        painter = painterResource(country.flag),
+                                        contentDescription = "Country",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(CircleShape)
+                                    )
+                                }
+                            }
+                            Text(
+                                text = player.country?.let { stringResource(it.displayName) }
+                                    ?: "",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    playerAge?.let { playerAge ->
+                        Icon(
+                            imageVector = cakeFilledIcon,
+                            contentDescription = "Player age",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = playerAge,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                        )
+                    }
+                }
+                IconButton(
+                    onClick = {}
+                ) {
+                    Icon(
+                        imageVector = more_vertIcon,
+                        contentDescription = "Player options"
+                    )
+                }
             }
         }
     }
