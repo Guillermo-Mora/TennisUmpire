@@ -22,6 +22,8 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
@@ -46,6 +50,8 @@ import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.form.FormTextField
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
 import com.guimor.tennisumpire.ui.components.spacer.BigSpacer
 import com.guimor.tennisumpire.ui.components.spacer.DefaultSpacer
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
@@ -71,14 +77,34 @@ import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
 fun NewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    viewModel: NewPlayerViewModel = viewModel{ NewPlayerViewModel() }
+    newPlayerViewModel: NewPlayerViewModel,
+    onOperationSuccess: (successResult: OperationResult.Success) -> Unit
 ) {
     BackHandler {
         onNavigateBack()
-        viewModel.resetData()
+        newPlayerViewModel.resetData()
     }
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by newPlayerViewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val snackBarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(uiState.operationResult) {
+        uiState.operationResult?.let { operationResult ->
+            if (operationResult is OperationResult.Success) {
+                onOperationSuccess(operationResult)
+                onNavigateBack()
+                newPlayerViewModel.resetData()
+            } else {
+                snackBarHostState.showSnackbar(
+                    visuals = OperationSnackbarVisuals(
+                        operationResult = operationResult,
+                        duration = SnackbarDuration.Short,
+                    ),
+                )
+                newPlayerViewModel.resetOperationResult()
+            }
+        }
+    }
     LaunchedEffect(uiState.scrollToErrorSection) {
         if (uiState.scrollToErrorSection != -1) {
             try {
@@ -87,11 +113,10 @@ fun NewPlayerScreen(
                     scrollOffset = -50
                 )
             } finally {
-                viewModel.resetScrollToError()
+                newPlayerViewModel.resetScrollToError()
             }
         }
     }
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val playerGenderOptions = listOf(
         SegmentedButtonOption(
             label = "Male",
@@ -130,6 +155,7 @@ fun NewPlayerScreen(
         ),
     )
     Scaffold(
+        snackbarHost = { OperationSnackBarHost(snackBarHostState = snackBarHostState) },
         topBar = {
             MainTopAppBar(
                 title = "New player",
@@ -137,7 +163,7 @@ fun NewPlayerScreen(
                 navigationIcon = {
                     NavigateBackIconButton(onNavigateBack = {
                         onNavigateBack()
-                        viewModel.resetData()
+                        newPlayerViewModel.resetData()
                     })
                 },
                 scrollBehavior = scrollBehavior
@@ -210,7 +236,7 @@ fun NewPlayerScreen(
                 FormTextField(
                     formFieldData = uiState.playerFirstName,
                     icon = personIcon,
-                    onValueChange = viewModel::setPlayerFirstName,
+                    onValueChange = newPlayerViewModel::setPlayerFirstName,
                     label = "First name",
                     placeholder = "William",
                     required = true,
@@ -219,8 +245,8 @@ fun NewPlayerScreen(
             }
             item {
                 FormTextField(
-                    formFieldData = uiState.playerSecondName,
-                    onValueChange = viewModel::setPlayerSecondName,
+                    formFieldData = uiState.playerLastName,
+                    onValueChange = newPlayerViewModel::setPlayerLastName,
                     label = "Last name",
                     placeholder = "Smith",
                     required = true
@@ -231,7 +257,7 @@ fun NewPlayerScreen(
                 FormDateField(
                     icon = cakeIcon,
                     formFieldDataType = uiState.playerBirthdate,
-                    onDateSelected = viewModel::setPlayerBirthdate,
+                    onDateSelected = newPlayerViewModel::setPlayerBirthdate,
                     label = "Birthdate"
                 )
                 DefaultSpacer()
@@ -240,7 +266,7 @@ fun NewPlayerScreen(
                 FormTextField(
                     formFieldData = uiState.playerHeight,
                     icon = straightenIcon,
-                    onValueChange = viewModel::setPlayerHeight,
+                    onValueChange = newPlayerViewModel::setPlayerHeight,
                     label = "Height",
                     placeholder = "180 cm",
                     keyboardType = KeyboardType.Decimal,
@@ -252,7 +278,7 @@ fun NewPlayerScreen(
                 FormTextField(
                     formFieldData = uiState.playerWeight,
                     icon = weightIcon,
-                    onValueChange = viewModel::setPlayerWeight,
+                    onValueChange = newPlayerViewModel::setPlayerWeight,
                     label = "Weight",
                     placeholder = "85 kg",
                     keyboardType = KeyboardType.Decimal,
@@ -272,7 +298,7 @@ fun NewPlayerScreen(
                         }
                     },
                     label = "Country",
-                    onItemSelected = viewModel::setPlayerCountry,
+                    onItemSelected = newPlayerViewModel::setPlayerCountry,
                     options = Country.entries
                 ) { option ->
                     Row(
@@ -299,7 +325,7 @@ fun NewPlayerScreen(
                     label = "Gender",
                     selectedOption = uiState.playerGender,
                     options = playerGenderOptions,
-                    onClick = viewModel::setPlayerGender,
+                    onClick = newPlayerViewModel::setPlayerGender,
                 )
                 DefaultSpacer()
             }
@@ -308,7 +334,7 @@ fun NewPlayerScreen(
                     label = "Dominant hand",
                     selectedOption = uiState.playerDominantHand,
                     options = playerDominantHandOptions,
-                    onClick = viewModel::setPlayerDominantHand,
+                    onClick = newPlayerViewModel::setPlayerDominantHand,
                 )
                 DefaultSpacer()
             }
@@ -317,13 +343,13 @@ fun NewPlayerScreen(
                     label = "Backhand",
                     selectedOption = uiState.playerBackhand,
                     options = playerBackhandOptions,
-                    onClick = viewModel::setPlayerBackhand,
+                    onClick = newPlayerViewModel::setPlayerBackhand,
                 )
                 BigSpacer()
             }
             item {
                 Button(
-                    onClick = { viewModel.validateForm() }
+                    onClick = { newPlayerViewModel.validateForm() }
                 ) {
                     Text("Create player")
                 }
@@ -344,7 +370,9 @@ fun NewPlayerScreenPreview() {
     TennisRefereeTheme {
         NewPlayerScreen(
             onNavigateBack = {},
-            onNavigateToSettings = {}
+            onOperationSuccess = {},
+            onNavigateToSettings = {},
+            newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory)
         )
     }
 }

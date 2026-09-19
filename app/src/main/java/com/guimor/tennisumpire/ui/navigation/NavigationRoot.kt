@@ -8,12 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberDecoratedNavEntries
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.runtime.result.LocalResultEventBus
+import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
+import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerViewModel
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import kotlinx.coroutines.runBlocking
@@ -72,14 +78,28 @@ fun NavigationRoot(
             )
         }
         entry<NavRoutesRoot.NewPlayer> {
+            val resultBus = LocalResultEventBus.current
             NewPlayerScreen(
+                onOperationSuccess = { successResult ->
+                    resultBus.sendResult(
+                        resultKey = "success_result",
+                        result = successResult
+                    )
+                },
+                newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) }
             )
         }
     }
     NavDisplay(
-        entries = navigationState.toEntries(entryProvider),
+        entries = rememberDecoratedNavEntries(
+            entries = navigationState.toEntries(entryProvider),
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberResultEventBusNavEntryDecorator()
+            )
+        ),
         onBack = navigator::goBack,
         transitionSpec = {
             slideInHorizontally { it } + fadeIn() togetherWith

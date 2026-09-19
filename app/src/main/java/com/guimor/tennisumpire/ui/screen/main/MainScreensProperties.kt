@@ -1,9 +1,7 @@
 package com.guimor.tennisumpire.ui.screen.main
 
-import android.content.Context
 import androidx.navigation3.runtime.NavKey
 import com.guimor.tennisreferee.R
-import com.guimor.tennisumpire.dependency_injection.MyApplication
 import com.guimor.tennisumpire.ui.icons.addIcon
 import com.guimor.tennisumpire.ui.icons.add_notesIcon
 import com.guimor.tennisumpire.ui.icons.person_addIcon
@@ -36,30 +34,29 @@ object MainScreensProperties {
 }
 //Outside the object to get the context without problems (memory leaks)
 fun NavKey.getCurrentScreenData(): MainScreenData {
-    val context: Context = MyApplication.appModule.context
     return when (this) {
         NavRoutesMain.Matches -> MainScreenData(
-            title = context.getString(R.string.matches),
-            fabDescription = context.getString(R.string.new_match),
+            title = R.string.matches,
+            fabDescription = R.string.new_match,
             fabIcon = sportsIcon
         )
 
         NavRoutesMain.Results -> MainScreenData(
-            title = context.getString(R.string.results),
-            fabDescription = context.getString(R.string.new_result),
+            title = R.string.results,
+            fabDescription = R.string.new_result,
             fabIcon = add_notesIcon
         )
 
         NavRoutesMain.Players -> MainScreenData(
-            title = context.getString(R.string.players),
-            fabDescription = context.getString(R.string.new_player),
+            title = R.string.players,
+            fabDescription = R.string.new_player,
             fabIcon = person_addIcon
         )
 
         else -> MainScreenData(
-            title = "",
-            fabDescription = "",
-            fabIcon = addIcon
+            title = R.string.matches,
+            fabDescription = R.string.new_match,
+            fabIcon = sportsIcon
         )
     }
 }

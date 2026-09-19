@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisreferee.R
 import com.guimor.tennisumpire.ui.icons.errorIcon
-import com.guimor.tennisumpire.domain.error.getErrorMessage
 import com.guimor.tennisumpire.ui.model.FormFieldData
 
 @Composable
@@ -67,7 +66,7 @@ fun FormTextField(
             supportingText = {
                 Text(
                     if (required && formFieldData.error == null) stringResource(R.string.required)
-                    else if (formFieldData.error != null) formFieldData.error.getErrorMessage()
+                    else if (formFieldData.error != null) stringResource(formFieldData.error.messageId)
                     else ""
                 )
             },

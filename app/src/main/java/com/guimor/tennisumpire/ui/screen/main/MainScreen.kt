@@ -1,5 +1,10 @@
 package com.guimor.tennisumpire.ui.screen.main
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,8 +13,11 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,26 +28,33 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberDecoratedNavEntries
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.runtime.result.ResultEffect
+import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
+import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
+import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.icons.groupsFilledIcon
 import com.guimor.tennisumpire.ui.icons.groupsIcon
 import com.guimor.tennisumpire.ui.icons.library_booksFilledIcon
 import com.guimor.tennisumpire.ui.icons.library_booksIcon
 import com.guimor.tennisumpire.ui.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.ui.icons.sports_tennisIcon
-import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
-import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
-import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.navigation.Navigator
+import com.guimor.tennisumpire.ui.navigation.rememberNavigationState
 import com.guimor.tennisumpire.ui.navigation.toEntries
 import com.guimor.tennisumpire.ui.screen.main.MainScreensProperties.function
 import com.guimor.tennisumpire.ui.screen.main.MainScreensProperties.options
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
-import com.guimor.tennisumpire.ui.screen.main.navigation.NavigationMain
 import com.guimor.tennisumpire.ui.screen.matches.MatchesScreen
 import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
 import com.guimor.tennisumpire.ui.screen.results.ResultsScreen
-
 
 /*
 Text("On app launch, you will appear in matches screen")
@@ -69,6 +84,16 @@ fun MainScreen(
     onNavigateToNewResult: () -> Unit,
     onNavigateToNewPlayer: () -> Unit
 ) {
+    val topLevelRoutes = setOf(
+        NavRoutesMain.Matches,
+        NavRoutesMain.Results,
+        NavRoutesMain.Players
+    )
+    val navigationState = rememberNavigationState(
+        startRoute = NavRoutesMain.Matches,
+        topLevelRoutes = topLevelRoutes
+    )
+    val navigator = remember { Navigator(navigationState) }
     val navigationBarItemsData = listOf(
         BaseNavigationBarItemData(
             newRoute = NavRoutesMain.Matches,
@@ -93,9 +118,6 @@ fun MainScreen(
     val matchesScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val resultsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val playersScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val navigationState = NavigationMain.getRememberNavigationState()
-    val navigator = remember { Navigator(navigationState) }
     val entryProvider = entryProvider {
         entry<NavRoutesMain.Matches> {
             MatchesScreen(
@@ -115,16 +137,27 @@ fun MainScreen(
                 scrollBehavior = playersScrollBehavior,
                 onNavigateBack = {
                     viewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
-                }
+                },
             )
         }
+    }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    ResultEffect<OperationResult.Success>(resultKey = "success_result") { successResult ->
+        snackBarHostState.showSnackbar(
+            visuals = OperationSnackbarVisuals(
+                operationResult = successResult,
+                duration = SnackbarDuration.Short
+            ),
+        )
     }
 
     fun isScreenSelected(route: NavKey) = navigationState.topLevelRoute == route
     Scaffold(
+        snackbarHost = { OperationSnackBarHost(snackBarHostState = snackBarHostState) },
         topBar = {
             MainTopAppBar(
-                title = uiState.mainScreenData.title,
+                title = stringResource(uiState.mainScreenData.title),
                 onNavigateToSettings = { onNavigateToSettings() },
                 scrollBehavior = (navigationState.topLevelRoute).options(
                     matchesScreen = matchesScrollBehavior,
@@ -146,7 +179,7 @@ fun MainScreen(
             ) {
                 Icon(
                     imageVector = uiState.mainScreenData.fabIcon,
-                    contentDescription = uiState.mainScreenData.fabDescription,
+                    contentDescription = stringResource(uiState.mainScreenData.fabDescription),
                 )
             }
         },
@@ -173,9 +206,21 @@ fun MainScreen(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NavigationMain.GetNavDisplay(
+            NavDisplay(
                 entries = navigationState.toEntries(entryProvider),
-                onBack = navigator::goBack
+                onBack = navigator::goBack,
+                transitionSpec = {
+                    slideInHorizontally { it } + fadeIn() togetherWith
+                            slideOutHorizontally { -it } + fadeOut()
+                },
+                popTransitionSpec = {
+                    slideInHorizontally { -it } + fadeIn() togetherWith
+                            slideOutHorizontally { it } + fadeOut()
+                },
+                predictivePopTransitionSpec = {
+                    slideInHorizontally { -it } + fadeIn() togetherWith
+                            slideOutHorizontally { it } + fadeOut()
+                },
             )
         }
     }

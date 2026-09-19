@@ -1,14 +1,24 @@
 package com.guimor.tennisumpire.ui.screen.new_player
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.domain.error.DatabaseError
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
 import com.guimor.tennisumpire.domain.error.FormatError
+import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.room_database.player.Player
+import com.guimor.tennisumpire.room_database.player.PlayerRepository
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
+import com.guimor.tennisumpire.ui.model.getValueOrNull
 import com.guimor.tennisumpire.view_model.Resettable
 import com.guimor.tennisumpire.view_model.UiStateHolder
 import com.guimor.tennisumpire.view_model.ValidatableForm
@@ -18,21 +28,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class NewPlayerViewModel(
     override val _uiState: MutableStateFlow<NewPlayerUiState> = MutableStateFlow(NewPlayerUiState()),
-    override val uiState: StateFlow<NewPlayerUiState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<NewPlayerUiState> = _uiState.asStateFlow(),
+    private val playerRepository: PlayerRepository
 ) : ViewModel(),
     UiStateHolder<NewPlayerUiState>,
     Resettable,
     ValidatableForm {
     val debounceValidatePlayerFirstName = validationDebounce { validatePlayerFirstName() }
-    val debounceValidatePlayerSecondName = validationDebounce { validatePlayerSecondName() }
+    val debounceValidatePlayerLastName = validationDebounce { validatePlayerLastName() }
     val debounceValidatePlayerHeight = validationDebounce { validatePlayerHeight() }
     val debounceValidatePlayerWeight = validationDebounce { validatePlayerWeight() }
 
-    override fun resetData() { _uiState.value = NewPlayerUiState() }
+    override fun resetData() {
+        _uiState.value = NewPlayerUiState()
+    }
 
     override fun validateForm() {
         //I use null to represent the items from the screen that don't have any type of
@@ -41,14 +55,28 @@ class NewPlayerViewModel(
         ViewModelHelper.validateForm(
             null,
             ::validatePlayerFirstName,
-            ::validatePlayerSecondName,
+            ::validatePlayerLastName,
             null,
             ::validatePlayerHeight,
-            ::validatePlayerWeight
+            ::validatePlayerWeight,
+            onNoErrors = {
+                viewModelScope.launch {
+                    val operationResult = playerRepository.insertPlayer(player = createPlayer())
+                    _uiState.update { state -> state.copy(operationResult = operationResult) }
+                }
+            }
         ) { firstErrorPosition ->
-            _uiState.update { state -> state.copy(scrollToErrorSection = firstErrorPosition) } } }
+            _uiState.update { state -> state.copy(scrollToErrorSection = firstErrorPosition) }
+        }
+    }
 
-    fun resetScrollToError() { _uiState.update { state -> state.copy(scrollToErrorSection = -1) } }
+    fun resetScrollToError() {
+        _uiState.update { state -> state.copy(scrollToErrorSection = -1) }
+    }
+
+    fun resetOperationResult() {
+        _uiState.update { state -> state.copy(operationResult = null) }
+    }
 
     fun setPlayerFirstName(newValue: String) {
         _uiState.update { state ->
@@ -62,16 +90,16 @@ class NewPlayerViewModel(
         debounceValidatePlayerFirstName()
     }
 
-    fun setPlayerSecondName(newValue: String) {
+    fun setPlayerLastName(newValue: String) {
         _uiState.update { state ->
             state.copy(
-                playerSecondName = FormFieldData(
+                playerLastName = FormFieldData(
                     value = newValue,
                     error = null
                 )
             )
         }
-        debounceValidatePlayerSecondName()
+        debounceValidatePlayerLastName()
     }
 
     fun setPlayerBirthdate(newValue: LocalDate?) {
@@ -156,15 +184,15 @@ class NewPlayerViewModel(
         ) { _uiState.update { state -> state.copy(playerFirstName = it) } }
     }
 
-    fun validatePlayerSecondName(): Boolean {
+    fun validatePlayerLastName(): Boolean {
         return ViewModelHelper.isFieldError(
-            formFieldData = uiState.value.playerSecondName,
+            formFieldData = uiState.value.playerLastName,
             required = true,
             ViewModelHelper.ValidationRule(
                 condition = String::isBlank,
                 error = FormatError.IS_BLANK
             )
-        ) { _uiState.update { state -> state.copy(playerSecondName = it) } }
+        ) { _uiState.update { state -> state.copy(playerLastName = it) } }
     }
 
     //Test for type validations
@@ -201,5 +229,30 @@ class NewPlayerViewModel(
                 error = FormatError.INVALID_NUMBER
             )
         ) { _uiState.update { state -> state.copy(playerWeight = it) } }
+    }
+
+    private fun createPlayer(): Player = Player(
+        firstName = uiState.value.playerFirstName.value,
+        lastName = uiState.value.playerLastName.value,
+        birthdate = uiState.value.playerBirthdate.value,
+        height = uiState.value.playerHeight.value.getValueOrNull()
+            ?.replace(',', '.')?.toFloat(),
+        weight = uiState.value.playerWeight.value.getValueOrNull()
+            ?.replace(',', '.')?.toFloat(),
+        country = uiState.value.playerCountry,
+        gender = uiState.value.playerGender,
+        dominantHand = uiState.value.playerDominantHand,
+        backhand = uiState.value.playerBackhand
+    )
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val playerRepository = MyApplication.appModule.playerRepository
+                NewPlayerViewModel(
+                    playerRepository = playerRepository,
+                )
+            }
+        }
     }
 }

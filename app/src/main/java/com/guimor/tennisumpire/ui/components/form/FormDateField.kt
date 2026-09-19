@@ -34,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisreferee.R
 import com.guimor.tennisumpire.ui.icons.date_rangeIcon
-import com.guimor.tennisumpire.domain.error.getErrorMessage
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -86,7 +85,7 @@ fun FormDateField(
             supportingText = {
                 Text(
                     if (required && formFieldDataType.error == null) stringResource(R.string.required)
-                    else if (formFieldDataType.error != null) formFieldDataType.error.getErrorMessage()
+                    else if (formFieldDataType.error != null) stringResource(formFieldDataType.error.messageId)
                     else ""
                 )
             },
