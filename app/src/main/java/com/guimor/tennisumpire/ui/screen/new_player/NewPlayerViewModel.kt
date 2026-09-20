@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.screen.new_player
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -145,28 +146,36 @@ class NewPlayerViewModel(
         }
     }
 
-    fun setPlayerGender(newVale: PlayerGender) {
+    fun setPlayerGender(newValue: PlayerGender) {
         _uiState.update { state ->
             state.copy(
                 playerGender =
-                    if (newVale == uiState.value.playerGender) null else newVale
+                    if (newValue == uiState.value.playerGender) null else newValue
             )
         }
     }
 
-    fun setPlayerDominantHand(newVale: PlayerDominantHand) {
+    fun setPlayerDominantHand(newValue: PlayerDominantHand) {
         _uiState.update { state ->
             state.copy(
                 playerDominantHand =
-                    if (newVale == uiState.value.playerDominantHand) null else newVale
+                    if (newValue == uiState.value.playerDominantHand) null else newValue
             )
         }
     }
 
-    fun setPlayerBackhand(newVale: PlayerBackhand) {
+    fun setPlayerBackhand(newValue: PlayerBackhand) {
         _uiState.update { state ->
             state.copy(
-                playerBackhand = if (newVale == uiState.value.playerBackhand) null else newVale
+                playerBackhand = if (newValue == uiState.value.playerBackhand) null else newValue
+            )
+        }
+    }
+
+    fun setPlayerPhoto(newValue: Uri?) {
+        _uiState.update { state ->
+            state.copy(
+                playerPhoto = newValue
             )
         }
     }

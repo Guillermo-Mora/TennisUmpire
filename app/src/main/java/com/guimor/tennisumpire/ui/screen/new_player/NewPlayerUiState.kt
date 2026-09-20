@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.screen.new_player
 
+import android.net.Uri
 import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
@@ -21,5 +22,6 @@ data class NewPlayerUiState(
     val playerGender: PlayerGender? = null,
     val playerDominantHand: PlayerDominantHand? = null,
     val playerBackhand: PlayerBackhand? = null,
+    val playerPhoto: Uri? = null,
     val operationResult: OperationResult? = null
 ) : BaseUiState()

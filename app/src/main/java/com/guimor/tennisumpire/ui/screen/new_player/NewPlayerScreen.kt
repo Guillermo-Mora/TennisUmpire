@@ -2,6 +2,9 @@ package com.guimor.tennisumpire.ui.screen.new_player
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -41,11 +44,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
@@ -58,7 +63,7 @@ import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
 import com.guimor.tennisumpire.ui.components.transformation.HeightVisualTransformation
 import com.guimor.tennisumpire.ui.components.transformation.WeightVisualTransformation
-import com.guimor.tennisumpire.ui.icons.add_a_photoIcon
+import com.guimor.tennisumpire.ui.icons.add_photo_alternateIcon
 import com.guimor.tennisumpire.ui.icons.cakeIcon
 import com.guimor.tennisumpire.ui.icons.femaleIcon
 import com.guimor.tennisumpire.ui.icons.globe_location_pinIcon
@@ -195,7 +200,14 @@ fun NewPlayerScreen(
                                 color = MaterialTheme.colorScheme.surfaceContainerHighest
                             )
                     ) {
-                        Icon(
+                        uiState.playerPhoto?.let { picture ->
+                            AsyncImage(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                model = picture,
+                                contentDescription = "Player picture"
+                            )
+                        } ?: Icon(
                             modifier = Modifier
                                 .fillMaxSize(),
                             imageVector = personFilledIcon,
@@ -209,24 +221,29 @@ fun NewPlayerScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        IconButton(
-                            modifier = Modifier
-                                .size(45.dp),
-                            colors = IconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                contentColor = IconButtonDefaults.iconButtonColors().contentColor,
-                                disabledContainerColor = IconButtonDefaults.iconButtonColors().disabledContainerColor,
-                                disabledContentColor = IconButtonDefaults.iconButtonColors().disabledContentColor
-                            ),
-                            onClick = {}
-                        ) {
-                            Icon(
+                        AddPhotoAlertDialog(
+                            selectedPhoto = uiState.playerPhoto,
+                            setPhoto = newPlayerViewModel::setPlayerPhoto
+                        ) { onOpenDialog ->
+                            IconButton(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(10.dp),
-                                imageVector = add_a_photoIcon,
-                                contentDescription = "Add player picture"
-                            )
+                                    .size(45.dp),
+                                colors = IconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    contentColor = IconButtonDefaults.iconButtonColors().contentColor,
+                                    disabledContainerColor = IconButtonDefaults.iconButtonColors().disabledContainerColor,
+                                    disabledContentColor = IconButtonDefaults.iconButtonColors().disabledContentColor
+                                ),
+                                onClick = { onOpenDialog() }
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(10.dp),
+                                    imageVector = add_photo_alternateIcon,
+                                    contentDescription = "Add player picture"
+                                )
+                            }
                         }
                     }
                 }
