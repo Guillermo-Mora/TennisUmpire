@@ -9,7 +9,9 @@ import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
 import com.guimor.tennisumpire.ui.screen.players.PlayersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(
+    widthDp = 300
+)
 @Composable
 fun PlayersScreenPreview() {
     PlayersScreen(
