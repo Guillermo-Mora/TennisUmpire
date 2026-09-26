@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.room_database.player
 
+import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -26,4 +27,5 @@ data class Player (
     @ColumnInfo(name = "gender") val gender: PlayerGender?,
     @ColumnInfo(name = "dominant_hand") val dominantHand: PlayerDominantHand?,
     @ColumnInfo(name = "backhand") val backhand: PlayerBackhand?,
+    @ColumnInfo(name = "photo") val photo: Uri?
 )

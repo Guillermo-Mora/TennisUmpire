@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.icons.cakeFilledIcon
@@ -77,16 +79,22 @@ fun PlayerListCard(
                 modifier = Modifier
                     .size(35.dp)
             ) {
-                player.country?.let {
-                    Image(
-                        painter = painterResource(it.flag),
-                        contentDescription = "Player image",
-                        contentScale = ContentScale.Crop,
+                player.photo?.let {
+                    Surface(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(CircleShape)
                             .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
-                    )
+                    ) {
+                        AsyncImage(
+                            model = it,
+                            contentDescription = "Player image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                        )
+                    }
                 } ?: Icon(
                     imageVector = personFilledIcon,
                     contentDescription = "Player image",
@@ -129,9 +137,7 @@ fun PlayerListCard(
                             horizontalArrangement = Arrangement.spacedBy(
                                 space = 4.dp,
                                 alignment = Alignment.Start,
-                            ),
-                            modifier = Modifier
-
+                            )
                         ) {
                             Icon(
                                 imageVector = fiber_manual_recordFilledIcon,

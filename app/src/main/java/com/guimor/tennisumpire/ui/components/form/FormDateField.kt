@@ -32,7 +32,7 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.ui.icons.date_rangeIcon
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import java.time.LocalDate

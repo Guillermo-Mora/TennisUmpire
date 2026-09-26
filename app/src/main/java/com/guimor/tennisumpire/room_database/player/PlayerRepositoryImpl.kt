@@ -2,7 +2,9 @@ package com.guimor.tennisumpire.room_database.player
 
 import android.database.sqlite.SQLiteConstraintException
 import com.guimor.tennisumpire.domain.error.DatabaseError
+import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.error.SuccessMessageResult
 import kotlinx.coroutines.flow.Flow
 
 //Here I have to catch errors such as unique key being duplicated
@@ -13,7 +15,9 @@ class PlayerRepositoryImpl(
         return playerDao.getAllPlayers()
     }
 
-    override suspend fun insertPlayer(player: Player): OperationResult {
+    override suspend fun insertPlayer(
+        player: Player
+    ): MessageResult {
         try {
             playerDao.insertPlayer(player)
         } catch (_: SQLiteConstraintException) {
@@ -24,12 +28,14 @@ class PlayerRepositoryImpl(
             //while if its success, it will just show a toast indicating the operation
             //has been successfully completed.
         }
-        return OperationResult.Success.PLAYER_CREATED
+        return SuccessMessageResult.PLAYER_CREATED
     }
 
-    override suspend fun deletePlayer(player: Player): OperationResult {
+    override suspend fun deletePlayer(
+        player: Player
+    ): MessageResult {
         playerDao.deletePlayer(player)
         //Not implemented yet
-        return OperationResult.Success.PLAYER_DELETED
+        return SuccessMessageResult.PLAYER_DELETED
     }
 }

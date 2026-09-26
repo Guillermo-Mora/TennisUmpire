@@ -21,6 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.guimor.tennisumpire.domain.error.Error
+import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.ui.icons.check_circleIcon
 import com.guimor.tennisumpire.ui.icons.closeIcon
@@ -52,7 +54,7 @@ fun OperationSnackBarHost(
             ) {
                 Icon(
                     imageVector =
-                        if (visuals.operationResult is OperationResult.Error) errorIcon
+                        if (visuals.operationResult is Error) errorIcon
                         else check_circleIcon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background
@@ -76,7 +78,7 @@ fun OperationSnackBarHost(
 }
 
 data class OperationSnackbarVisuals (
-    val operationResult: OperationResult,
+    val operationResult: MessageResult,
     override val duration: SnackbarDuration,
     override val actionLabel: String? = null,
     override val message: String = "",

@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.domain.error.Error
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
 import com.guimor.tennisumpire.domain.error.FormatError
+import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.model.StoredIn
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
 import com.guimor.tennisumpire.ui.model.FormFieldData
@@ -60,13 +63,39 @@ class NewPlayerViewModel(
             ::validatePlayerWeight,
             onNoErrors = {
                 viewModelScope.launch {
-                    val operationResult = playerRepository.insertPlayer(player = createPlayer())
+                    val playerPhotoPersistedUri = uiState.value.playerPhotoUri
+                        ?.let { playerPhotoUri ->
+                            when (val result =
+                                //Here, I should  put imageResolution to a limit
+                                // and transform images to that limit before saving them
+                                MyApplication.appModule.appFileManager.persistFileAndGetUri(
+                                    storedIn = StoredIn.PLAYER_PHOTOS,
+                                    tempFileUri = playerPhotoUri
+                                )
+                            ) {
+                                is OperationResult.ErrorResult -> {
+                                    _uiState.update { state -> state.copy(operationResult = result.error) }
+                                    return@launch
+                                }
+
+                                is OperationResult.SuccessResult -> result.value
+                            }
+                        }
+                    val operationResult = playerRepository.insertPlayer(
+                        player = createPlayer(playerPhotoPersistedUri = playerPhotoPersistedUri)
+                    )
+                    if (operationResult is Error) {
+                        playerPhotoPersistedUri?.let {
+                            MyApplication.appModule.appFileManager.deleteFileIfExists(it)
+                        }
+                    }
                     _uiState.update { state -> state.copy(operationResult = operationResult) }
                 }
+            },
+            navigateToFirstError = { firstErrorPosition ->
+                _uiState.update { state -> state.copy(scrollToErrorSection = firstErrorPosition) }
             }
-        ) { firstErrorPosition ->
-            _uiState.update { state -> state.copy(scrollToErrorSection = firstErrorPosition) }
-        }
+        )
     }
 
     fun resetScrollToError() {
@@ -175,7 +204,7 @@ class NewPlayerViewModel(
     fun setPlayerPhoto(newValue: Uri?) {
         _uiState.update { state ->
             state.copy(
-                playerPhoto = newValue
+                playerPhotoUri = newValue
             )
         }
     }
@@ -238,7 +267,9 @@ class NewPlayerViewModel(
         ) { _uiState.update { state -> state.copy(playerWeight = it) } }
     }
 
-    private fun createPlayer(): Player = Player(
+    private fun createPlayer(
+        playerPhotoPersistedUri: Uri?
+    ): Player = Player(
         firstName = uiState.value.playerFirstName.value,
         lastName = uiState.value.playerLastName.value,
         birthdate = uiState.value.playerBirthdate.value,
@@ -249,7 +280,8 @@ class NewPlayerViewModel(
         country = uiState.value.playerCountry,
         gender = uiState.value.playerGender,
         dominantHand = uiState.value.playerDominantHand,
-        backhand = uiState.value.playerBackhand
+        backhand = uiState.value.playerBackhand,
+        photo = playerPhotoPersistedUri
     )
 
     companion object {

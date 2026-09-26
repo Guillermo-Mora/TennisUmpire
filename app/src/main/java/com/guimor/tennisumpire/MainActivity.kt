@@ -13,7 +13,7 @@ import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.preferencesDataStore
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreKeys
 import com.guimor.tennisumpire.ui.navigation.NavigationRoot
-import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
+import com.guimor.tennisumpire.ui.theme.TennisUmpireTheme
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "settings",
@@ -26,16 +26,17 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onAppLaunch(context = this)
         enableEdgeToEdge()
         setContent {
-            TennisRefereeTheme {
-                TennisRefereeApp()
+            TennisUmpireTheme {
+                TennisUmpireApp()
             }
         }
     }
 }
 
 @Composable
-fun TennisRefereeApp() {
+fun TennisUmpireApp() {
     NavigationRoot()
 }

@@ -3,10 +3,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.room.plugin)
 }
 
 android {
-    namespace = "com.guimor.tennisreferee"
+    namespace = "com.guimor.tennisumpire"
     compileSdk {
         version = release(37) {
             minorApiLevel = 1
@@ -14,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.tennisreferee"
+        applicationId = "com.guimor.tennisumpire"
         minSdk = 28
         targetSdk = 37
         versionCode = 1
@@ -37,6 +38,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+room {
+    schemaDirectory("$projectDir/roomSchemas")
 }
 
 dependencies {

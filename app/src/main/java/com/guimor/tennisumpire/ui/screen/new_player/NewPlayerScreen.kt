@@ -2,9 +2,6 @@ package com.guimor.tennisumpire.ui.screen.new_player
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.error.Success
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
@@ -75,7 +72,7 @@ import com.guimor.tennisumpire.ui.icons.sign_languageIcon
 import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
-import com.guimor.tennisumpire.ui.theme.TennisRefereeTheme
+import com.guimor.tennisumpire.ui.theme.TennisUmpireTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +80,7 @@ fun NewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     newPlayerViewModel: NewPlayerViewModel,
-    onOperationSuccess: (successResult: OperationResult.Success) -> Unit
+    onOperationSuccess: (successResult: Success) -> Unit
 ) {
     BackHandler {
         onNavigateBack()
@@ -95,7 +92,7 @@ fun NewPlayerScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
-            if (operationResult is OperationResult.Success) {
+            if (operationResult is Success) {
                 onOperationSuccess(operationResult)
                 onNavigateBack()
                 newPlayerViewModel.resetData()
@@ -200,18 +197,18 @@ fun NewPlayerScreen(
                                 color = MaterialTheme.colorScheme.surfaceContainerHighest
                             )
                     ) {
-                        uiState.playerPhoto?.let { picture ->
+                        uiState.playerPhotoUri?.let {
                             AsyncImage(
                                 modifier = Modifier
                                     .fillMaxSize(),
-                                model = picture,
-                                contentDescription = "Player picture"
+                                model = it,
+                                contentDescription = "Player photo"
                             )
                         } ?: Icon(
                             modifier = Modifier
                                 .fillMaxSize(),
                             imageVector = personFilledIcon,
-                            contentDescription = "Player picture",
+                            contentDescription = "Player photo",
                             tint = MaterialTheme.colorScheme.secondary
                         )
                     }
@@ -222,7 +219,7 @@ fun NewPlayerScreen(
                             .fillMaxSize()
                     ) {
                         AddPhotoAlertDialog(
-                            selectedPhoto = uiState.playerPhoto,
+                            selectedPhoto = uiState.playerPhotoUri,
                             setPhoto = newPlayerViewModel::setPlayerPhoto
                         ) { onOpenDialog ->
                             IconButton(
@@ -384,7 +381,7 @@ fun NewPlayerScreen(
     widthDp = 300
 )
 fun NewPlayerScreenPreview() {
-    TennisRefereeTheme {
+    TennisUmpireTheme {
         NewPlayerScreen(
             onNavigateBack = {},
             onOperationSuccess = {},

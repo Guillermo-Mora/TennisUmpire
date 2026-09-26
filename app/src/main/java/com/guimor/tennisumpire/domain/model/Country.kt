@@ -1,6 +1,6 @@
 package com.guimor.tennisumpire.domain.model
 
-import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.R
 
 enum class Country(
     val code: String,

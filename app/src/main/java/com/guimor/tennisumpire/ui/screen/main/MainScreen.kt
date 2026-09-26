@@ -29,8 +29,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.result.ResultEffect
 import androidx.navigation3.ui.NavDisplay
-import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.R
+import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.error.Success
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
@@ -139,7 +141,7 @@ fun MainScreen(
     }
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    ResultEffect<OperationResult.Success>(resultKey = "success_result") { successResult ->
+    ResultEffect<Success>(resultKey = "success_result") { successResult ->
         snackBarHostState.showSnackbar(
             visuals = OperationSnackbarVisuals(
                 operationResult = successResult,

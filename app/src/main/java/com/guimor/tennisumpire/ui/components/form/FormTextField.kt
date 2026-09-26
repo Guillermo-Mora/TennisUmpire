@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.ui.icons.errorIcon
 import com.guimor.tennisumpire.ui.model.FormFieldData
 

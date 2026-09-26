@@ -1,8 +1,8 @@
 package com.guimor.tennisumpire.domain.error
 
-import com.guimor.tennisreferee.R
+import com.guimor.tennisumpire.R
 
 
-enum class DatabaseError(override val messageId: Int) : OperationResult.Error {
+enum class DatabaseError(override val messageId: Int) : Error {
     UNIQUE_KEY_ERROR(R.string.albania)
 }

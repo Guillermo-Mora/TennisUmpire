@@ -23,16 +23,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
-import com.guimor.tennisumpire.take_photo.getImageUri
+import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.model.StoredIn
 import com.guimor.tennisumpire.ui.icons.add_a_photoIcon
 import com.guimor.tennisumpire.ui.icons.add_photo_alternateIcon
 import com.guimor.tennisumpire.ui.icons.cancelIcon
@@ -44,17 +43,26 @@ fun AddPhotoAlertDialog(
     setPhoto: (Uri?) -> Unit,
     buttonContent: @Composable (onOpenDialog: () -> Unit) -> Unit
 ) {
-    val context = LocalContext.current
     var openDialog by rememberSaveable { mutableStateOf(false) }
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri -> if (uri != null) setPhoto(uri) }
+    ) { uri ->
+        uri?.let {
+            MyApplication.appModule.appFileManager.createTempFileAndGetUri(
+                storedIn = StoredIn.CAMERA_CACHE,
+                originalFileUri = uri
+            ).also {
+                when (it) {
+                    is OperationResult.ErrorResult -> return@let
+                    is OperationResult.SuccessResult -> setPhoto(it.value)
+                }
+            }
+        }
+    }
     var cameraPhotoUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
-    ) { success ->
-        if (success) cameraPhotoUri?.let { uri -> setPhoto(uri) }
-    }
+    ) { success -> if (success) cameraPhotoUri?.let { setPhoto(cameraPhotoUri) } }
     buttonContent { openDialog = true }
     if (openDialog) {
         BasicAlertDialog(
@@ -119,10 +127,21 @@ fun AddPhotoAlertDialog(
                         }
                         TextButton(
                             onClick = {
-                                cameraPhotoUri = getImageUri(context = context)
+                                if (!MyApplication.appModule.appFileManager.deviceHasCamera())
+                                    return@TextButton
+                                cameraPhotoUri =
+                                    MyApplication.appModule.appFileManager.createTempFileAndGetUri(
+                                        storedIn = StoredIn.CAMERA_CACHE,
+                                    ).let {
+                                        when (it) {
+                                            is OperationResult.ErrorResult -> return@TextButton
+                                            is OperationResult.SuccessResult -> it.value
+                                        }
+                                    }
                                 cameraPhotoUri?.let { cameraLauncher.launch(input = it) }
-                                println("THIS DEVICE HAS NO CAMERA")
-                            }
+                                openDialog = false
+                            },
+                            enabled = MyApplication.appModule.appFileManager.deviceHasCamera()
                         ) {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),

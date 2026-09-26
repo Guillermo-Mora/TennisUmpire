@@ -1,14 +1,11 @@
 package com.guimor.tennisumpire.domain.error
 
-import com.guimor.tennisreferee.R
-
-sealed interface OperationResult {
-    val messageId: Int
-
-    sealed interface Error : OperationResult
-
-    enum class Success(override val messageId: Int) : OperationResult {
-        PLAYER_CREATED(R.string.albania),
-        PLAYER_DELETED(R.string.albania)
-    }
+sealed interface OperationResult<out T> {
+    data class SuccessResult<T>(val value: T) : OperationResult<T>
+    data class ErrorResult(val error: Error) : OperationResult<Nothing>
 }
+
+
+sealed interface MessageResult { val messageId: Int }
+sealed interface Error : MessageResult
+sealed interface Success : MessageResult

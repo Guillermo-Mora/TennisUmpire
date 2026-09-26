@@ -1,6 +1,8 @@
 package com.guimor.tennisumpire
 
+import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.error.SuccessMessageResult
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
@@ -24,7 +26,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 1,
@@ -36,7 +39,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 2,
@@ -48,7 +52,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 3,
@@ -60,7 +65,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 4,
@@ -72,7 +78,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 5,
@@ -84,7 +91,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 6,
@@ -96,7 +104,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 7,
@@ -108,7 +117,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 8,
@@ -120,7 +130,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 9,
@@ -132,7 +143,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 10,
@@ -144,7 +156,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 11,
@@ -156,7 +169,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 12,
@@ -168,7 +182,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 13,
@@ -180,7 +195,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 14,
@@ -192,7 +208,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 15,
@@ -204,7 +221,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 16,
@@ -216,7 +234,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 17,
@@ -228,7 +247,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 18,
@@ -240,7 +260,8 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.MALE,
                     dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
                 ),
                 Player(
                     uid = 19,
@@ -252,17 +273,18 @@ class FakePlayerRepository : PlayerRepository {
                     country = null,
                     gender = PlayerGender.FEMALE,
                     dominantHand = PlayerDominantHand.RIGHT,
-                    backhand = PlayerBackhand.TWO_HANDED
+                    backhand = PlayerBackhand.TWO_HANDED,
+                    photo = null
                 )
             )
         )
     }
 
-    override suspend fun insertPlayer(player: Player): OperationResult {
-        return OperationResult.Success.PLAYER_CREATED
+    override suspend fun insertPlayer(player: Player): MessageResult {
+        return SuccessMessageResult.PLAYER_CREATED
     }
 
-    override suspend fun deletePlayer(player: Player): OperationResult {
-        return OperationResult.Success.PLAYER_DELETED
+    override suspend fun deletePlayer(player: Player): MessageResult {
+        return SuccessMessageResult.PLAYER_DELETED
     }
 }

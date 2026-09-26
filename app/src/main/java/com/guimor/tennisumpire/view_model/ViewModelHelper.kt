@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.view_model
 
+import com.guimor.tennisumpire.domain.error.Error
 import com.guimor.tennisumpire.domain.error.FormatError
 import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.ui.model.FormFieldData
@@ -8,12 +9,12 @@ import com.guimor.tennisumpire.ui.model.FormFieldDataType
 object ViewModelHelper {
     data class ValidationRule(
         val condition: (fieldValue: String) -> Boolean,
-        val error: OperationResult.Error
+        val error: Error
     )
 
     data class ValidationRuleType<T>(
         val condition: (fieldValue: T) -> Boolean,
-        val error: OperationResult.Error
+        val error: Error
     )
 
     private fun validateField(

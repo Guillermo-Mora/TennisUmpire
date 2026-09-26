@@ -1,8 +1,7 @@
 package com.guimor.tennisumpire.ui.screen.main
 
 import androidx.navigation3.runtime.NavKey
-import com.guimor.tennisreferee.R
-import com.guimor.tennisumpire.ui.icons.addIcon
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.ui.icons.add_notesIcon
 import com.guimor.tennisumpire.ui.icons.person_addIcon
 import com.guimor.tennisumpire.ui.icons.sportsIcon
