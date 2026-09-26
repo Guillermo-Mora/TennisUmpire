@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.tennisreferee",
+  "applicationId": "com.guimor.tennisumpire",
   "variantName": "release",
   "elements": [
     {
