@@ -278,4 +278,6 @@
     <string name="a_player_with_this_name_already_exists">A player with this name already exists</string>
     <string name="player_deleted">Player deleted</string>
     <string name="player_created">Player created</string>
+    <string name="rules">Rules</string>
+    <string name="new_rule">New rule</string>
 </resources>

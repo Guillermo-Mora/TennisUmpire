@@ -233,8 +233,7 @@ private fun DeletePlayerAlertDialog(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                ) {
-                }
+                ) {}
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(
                         space = 16.dp,

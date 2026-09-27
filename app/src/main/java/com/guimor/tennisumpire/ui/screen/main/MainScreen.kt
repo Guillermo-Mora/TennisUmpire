@@ -37,6 +37,7 @@ import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarIte
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
+import com.guimor.tennisumpire.ui.icons.cancelIcon
 import com.guimor.tennisumpire.ui.icons.groupsFilledIcon
 import com.guimor.tennisumpire.ui.icons.groupsIcon
 import com.guimor.tennisumpire.ui.icons.library_booksFilledIcon
@@ -52,6 +53,7 @@ import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
 import com.guimor.tennisumpire.ui.screen.matches.MatchesScreen
 import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
 import com.guimor.tennisumpire.ui.screen.results.ResultsScreen
+import com.guimor.tennisumpire.ui.screen.rules.RulesScreen
 
 /*
 Text("On app launch, you will appear in matches screen")
@@ -74,17 +76,19 @@ Text("I will also add an option for exporting the data from the app database")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel { MainViewModel() },
+    mainViewModel: MainViewModel = viewModel { MainViewModel() },
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToNewMatch: () -> Unit,
     onNavigateToNewResult: () -> Unit,
-    onNavigateToNewPlayer: () -> Unit
+    onNavigateToNewPlayer: () -> Unit,
+    onNavigateToNewRule: () -> Unit,
 ) {
     val topLevelRoutes = setOf(
         NavRoutesMain.Matches,
         NavRoutesMain.Results,
-        NavRoutesMain.Players
+        NavRoutesMain.Players,
+        NavRoutesMain.Rules
     )
     val navigationState = rememberNavigationState(
         startRoute = NavRoutesMain.Matches,
@@ -109,12 +113,20 @@ fun MainScreen(
             label = stringResource(R.string.players),
             icon = groupsIcon,
             iconSelected = groupsFilledIcon
+        ),
+        //STILL TO DO
+        BaseNavigationBarItemData(
+            newRoute = NavRoutesMain.Rules,
+            label = stringResource(R.string.rules),
+            icon = cancelIcon,
+            iconSelected = cancelIcon
         )
     )
     //Scroll behavior for each individual screen
     val matchesScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val resultsScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val playersScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val rulesScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val entryProvider = entryProvider {
         entry<NavRoutesMain.Matches> {
             MatchesScreen(
@@ -125,7 +137,7 @@ fun MainScreen(
             ResultsScreen(
                 scrollBehavior = resultsScrollBehavior,
                 onNavigateBack = {
-                    viewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
+                    mainViewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
                 }
             )
         }
@@ -140,13 +152,21 @@ fun MainScreen(
                     )
                 },
                 onNavigateBack = {
-                    viewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
+                    mainViewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
                 },
+            )
+        }
+        entry<NavRoutesMain.Rules> {
+            RulesScreen(
+                scrollBehavior = rulesScrollBehavior,
+                onNavigateBack = {
+                    mainViewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
+                }
             )
         }
     }
     val snackBarHostState = remember { SnackbarHostState() }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     ResultEffect<MessageResult>(resultKey = "result") { result ->
         snackBarHostState.showSnackbar(
             visuals = OperationSnackbarVisuals(
@@ -167,6 +187,7 @@ fun MainScreen(
                     matchesScreen = matchesScrollBehavior,
                     resultsScreen = resultsScrollBehavior,
                     playersScreen = playersScrollBehavior,
+                    rulesScreen = rulesScrollBehavior,
                     empty = matchesScrollBehavior
                 )
             )
@@ -194,7 +215,7 @@ fun MainScreen(
                         currentRoute = navigationState.topLevelRoute,
                         newRoute = it.newRoute,
                         onClick = navigator::navigate,
-                        updateScreenData = viewModel::changeMainScreen,
+                        updateScreenData = mainViewModel::changeMainScreen,
                         selected = ::isScreenSelected,
                         label = it.label,
                         icon = it.icon,
@@ -228,16 +249,4 @@ fun MainScreen(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun MainScreenPreview() {
-    MainScreen(
-        onNavigateBack = {},
-        onNavigateToSettings = {},
-        onNavigateToNewMatch = {},
-        onNavigateToNewPlayer = {},
-        onNavigateToNewResult = {}
-    )
 }

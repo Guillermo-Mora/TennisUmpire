@@ -15,4 +15,8 @@ sealed interface NavRoutesMain {
     @Serializable
     data object Players :
         NavKey
+
+    @Serializable
+    data object Rules :
+        NavKey
 }

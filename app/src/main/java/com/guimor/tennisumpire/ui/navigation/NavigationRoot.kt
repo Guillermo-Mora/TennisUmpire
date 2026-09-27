@@ -59,7 +59,9 @@ fun NavigationRoot(
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
                 onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
                 onNavigateToNewResult = { navigator.navigate(NavRoutesRoot.NewResult) },
-                onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) }
+                onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) },
+                //STILL TO IMPLEMENT
+                onNavigateToNewRule = {}
             )
         }
         entry<NavRoutesRoot.Settings> {
