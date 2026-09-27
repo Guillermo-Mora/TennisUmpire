@@ -274,4 +274,8 @@
     <string name="file_doesn_t_exists">File doesn\'t exists</string>
     <string name="file_can_t_be_moved">File can\'t be moved</string>
     <string name="directory_for_the_file_coudn_t_be_created">Directory for the file coudn\'t be created</string>
+    <string name="player_no_longer_exists">Player no longer exists</string>
+    <string name="a_player_with_this_name_already_exists">A player with this name already exists</string>
+    <string name="player_deleted">Player deleted</string>
+    <string name="player_created">Player created</string>
 </resources>

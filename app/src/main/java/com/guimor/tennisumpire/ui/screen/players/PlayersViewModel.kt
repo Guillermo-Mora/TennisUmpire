@@ -7,11 +7,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
 import com.guimor.tennisumpire.room_database.player.PlayerRepository
-import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class PlayersViewModel(
     private val playerRepository: PlayerRepository,
@@ -32,6 +33,32 @@ class PlayersViewModel(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PlayersUiState()
     )
+
+    fun toggleAddPlayerToFavourites(playerUid: Int) {
+        viewModelScope.launch {
+            playerRepository.toggleAddPlayerToFavourites(playerUid)
+        }
+    }
+
+    fun deletePlayer(playerUid: Int) {
+        viewModelScope.launch {
+            playerRepository.deletePlayer(playerUid).also { messageResult ->
+                _uiState.update { state ->
+                    state.copy(
+                        messageResult = messageResult
+                    )
+                }
+            }
+        }
+    }
+
+    fun resetMessageResult() {
+        _uiState.update { state ->
+            state.copy(
+                messageResult = null
+            )
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

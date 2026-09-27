@@ -21,6 +21,6 @@ fun PlayersScreenPreview() {
             PlayersViewModel(
                 playerRepository = FakePlayerRepository()
             )
-        }
+        },
     )
 }

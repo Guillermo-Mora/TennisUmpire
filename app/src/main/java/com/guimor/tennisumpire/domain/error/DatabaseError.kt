@@ -4,5 +4,6 @@ import com.guimor.tennisumpire.R
 
 
 enum class DatabaseError(override val messageId: Int) : Error {
-    UNIQUE_KEY_ERROR(R.string.albania)
+    PLAYER_ALREADY_EXISTS(R.string.a_player_with_this_name_already_exists),
+    PLAYER_NOT_EXISTS(R.string.player_no_longer_exists)
 }

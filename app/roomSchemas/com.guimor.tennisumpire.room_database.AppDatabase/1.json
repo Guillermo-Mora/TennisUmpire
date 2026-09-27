@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "605dca0a729c38d7b6ba6bea45c38141",
+    "identityHash": "75bc6182bc75ff3411b72fb65fd577f6",
     "entities": [
       {
         "tableName": "Player",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `birthdate` TEXT, `height` REAL, `weight` REAL, `country` TEXT, `gender` TEXT, `dominant_hand` TEXT, `backhand` TEXT, `photo` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `birthdate` TEXT, `height` REAL, `weight` REAL, `country` TEXT, `gender` TEXT, `dominant_hand` TEXT, `backhand` TEXT, `photo` TEXT, `favourite` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -65,6 +65,12 @@
             "fieldPath": "photo",
             "columnName": "photo",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "favourite",
+            "columnName": "favourite",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -89,7 +95,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '605dca0a729c38d7b6ba6bea45c38141')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75bc6182bc75ff3411b72fb65fd577f6')"
     ]
   }
 }

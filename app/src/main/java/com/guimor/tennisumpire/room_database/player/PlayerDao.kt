@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,6 +15,9 @@ interface PlayerDao {
     @Insert
     suspend fun insertPlayer(player: Player)
 
-    @Delete
-    suspend fun deletePlayer(player: Player)
+    @Query("DELETE FROM player WHERE uid = :playerUid")
+    suspend fun deletePlayer(playerUid: Int): Int
+
+    @Query("UPDATE player SET favourite = NOT favourite WHERE uid = :playerUid")
+    suspend fun toggleAddPlayerToFavourites(playerUid: Int)
 }

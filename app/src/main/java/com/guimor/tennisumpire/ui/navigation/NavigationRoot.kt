@@ -80,10 +80,10 @@ fun NavigationRoot(
         entry<NavRoutesRoot.NewPlayer> {
             val resultBus = LocalResultEventBus.current
             NewPlayerScreen(
-                onOperationSuccess = { successResult ->
+                onOperationSuccess = { result ->
                     resultBus.sendResult(
-                        resultKey = "success_result",
-                        result = successResult
+                        resultKey = "result",
+                        result = result
                     )
                 },
                 newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),

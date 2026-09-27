@@ -23,7 +23,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.icons.article_personIcon
-import com.guimor.tennisumpire.ui.icons.cancelIcon
 import com.guimor.tennisumpire.ui.icons.delete_foreverIcon
 import com.guimor.tennisumpire.ui.icons.editIcon
 import com.guimor.tennisumpire.ui.icons.warningIcon
@@ -48,11 +46,13 @@ import com.guimor.tennisumpire.ui.icons.warningIcon
 @Composable
 fun PlayerCardBottomSheet(
     player: Player,
+    onClickToggleAddPlayerToFavourites: () -> Unit,
+    onClickDeletePlayer: () -> Unit,
     button: @Composable (onOpenBottomSheet: () -> Unit) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     var showDeleteAlertDialog by rememberSaveable { mutableStateOf(false) }
-    var showBottomSheet by rememberSaveable { mutableStateOf(true) }
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     button { showBottomSheet = true }
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -60,13 +60,14 @@ fun PlayerCardBottomSheet(
             onDismissRequest = { showBottomSheet = false }
         ) {
             PlayerListCard(
-                player = player,
-                interactiveMode = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                player = player,
+                interactiveMode = false,
+                onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() }
             )
             Surface(
                 shape = RoundedCornerShape(16.dp),
@@ -111,109 +112,11 @@ fun PlayerCardBottomSheet(
             }
         }
         if (showDeleteAlertDialog) {
-            BasicAlertDialog(
-                onDismissRequest = { showDeleteAlertDialog = false }
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .wrapContentHeight(),
-                    shape = MaterialTheme.shapes.large,
-                    tonalElevation = AlertDialogDefaults.TonalElevation,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(
-                            space = 16.dp,
-                            alignment = Alignment.CenterVertically
-                        )
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(
-                                space = 8.dp,
-                                alignment = Alignment.CenterVertically
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Icon(
-                                imageVector = warningIcon,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(26.dp)
-                            )
-                            Text(
-                                text = "Permanently delete player ",
-                                fontSize = 22.sp
-                            )
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "${player.firstName} ${player.lastName}",
-                                    fontSize = 22.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(
-                                        weight = 1f,
-                                        fill = false
-                                    )
-                                )
-                                Text(
-                                    text = "?",
-                                    fontSize = 22.sp
-                                )
-                            }
-                            Text(
-                                "If you press delete, the player will be permanently deleted"
-                            )
-                        }
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                space = 16.dp,
-                                alignment = Alignment.End
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            OutlinedButton(
-                                onClick = {
-                                    //
-                                    showDeleteAlertDialog = false
-                                },
-                            ) {
-                                Text("Cancel")
-                            }
-                            OutlinedButton(
-                                onClick = {
-                                    //
-                                    showDeleteAlertDialog = false
-                                },
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colorScheme.error
-                                ),
-                                colors = ButtonColors(
-                                    containerColor = ButtonDefaults.outlinedButtonColors().containerColor,
-                                    contentColor = MaterialTheme.colorScheme.error,
-                                    disabledContainerColor = ButtonDefaults.outlinedButtonColors().disabledContainerColor,
-                                    disabledContentColor = ButtonDefaults.outlinedButtonColors().disabledContentColor
-                                )
-                            ) {
-                                Text("Delete")
-                            }
-                        }
-                    }
-                }
-            }
+            DeletePlayerAlertDialog(
+                onDismissRequest = { showDeleteAlertDialog = false },
+                playerFullName = "${player.firstName} ${player.lastName}",
+                onClickDeletePlayer = { onClickDeletePlayer() }
+            )
         }
     }
 }
@@ -250,7 +153,125 @@ private fun PlayerCardBottomSheetButton(
                 imageVector = icon,
                 contentDescription = null
             )
-            Text(text)
+            Text(
+                text = text,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                fontSize = 12.sp
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DeletePlayerAlertDialog(
+    onDismissRequest: () -> Unit,
+    playerFullName: String,
+    onClickDeletePlayer: () -> Unit
+) {
+    BasicAlertDialog(
+        onDismissRequest = { onDismissRequest() }
+    ) {
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight(),
+            shape = MaterialTheme.shapes.large,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 16.dp,
+                    alignment = Alignment.CenterVertically
+                )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp,
+                        alignment = Alignment.CenterVertically
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Icon(
+                        imageVector = warningIcon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(26.dp)
+                    )
+                    Text(
+                        text = "Permanently delete player ",
+                        fontSize = 22.sp
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = playerFullName,
+                            fontSize = 22.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(
+                                weight = 1f,
+                                fill = false
+                            )
+                        )
+                        Text(
+                            text = "?",
+                            fontSize = 22.sp
+                        )
+                    }
+                    Text(
+                        "If you press delete, the player will be permanently deleted"
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        space = 16.dp,
+                        alignment = Alignment.End
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            onDismissRequest()
+                        },
+                    ) {
+                        Text("Cancel")
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            onClickDeletePlayer().also { operationResult ->
+                                operationResult
+                            }
+                            onDismissRequest()
+                        },
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.error
+                        ),
+                        colors = ButtonColors(
+                            containerColor = ButtonDefaults.outlinedButtonColors().containerColor,
+                            contentColor = MaterialTheme.colorScheme.error,
+                            disabledContainerColor = ButtonDefaults.outlinedButtonColors().disabledContainerColor,
+                            disabledContentColor = ButtonDefaults.outlinedButtonColors().disabledContentColor
+                        )
+                    ) {
+                        Text("Delete")
+                    }
+                }
+            }
         }
     }
 }

@@ -6,5 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlayerRepository {
     fun getAllPlayers(): Flow<List<Player>>
     suspend fun insertPlayer(player: Player): MessageResult
-    suspend fun deletePlayer(player: Player): MessageResult
+    suspend fun deletePlayer(playerUid: Int): MessageResult
+
+    suspend fun toggleAddPlayerToFavourites(playerUid: Int)
 }

@@ -284,7 +284,9 @@ class FakePlayerRepository : PlayerRepository {
         return SuccessMessageResult.PLAYER_CREATED
     }
 
-    override suspend fun deletePlayer(player: Player): MessageResult {
+    override suspend fun deletePlayer(playerUid: Int): MessageResult {
         return SuccessMessageResult.PLAYER_DELETED
     }
+
+    override suspend fun toggleAddPlayerToFavourites(playerUid: Int) {}
 }

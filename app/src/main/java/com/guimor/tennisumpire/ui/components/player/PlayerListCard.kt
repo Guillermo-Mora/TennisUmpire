@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +40,8 @@ import com.guimor.tennisumpire.ui.icons.fiber_manual_recordFilledIcon
 import com.guimor.tennisumpire.ui.icons.maleIcon
 import com.guimor.tennisumpire.ui.icons.more_vertIcon
 import com.guimor.tennisumpire.ui.icons.personFilledIcon
+import com.guimor.tennisumpire.ui.icons.starFilledIcon
+import com.guimor.tennisumpire.ui.icons.starIcon
 import java.time.LocalDate
 import java.time.Period
 
@@ -47,6 +50,8 @@ fun PlayerListCard(
     modifier: Modifier = Modifier,
     player: Player,
     interactiveMode: Boolean = true,
+    onClickToggleAddPlayerToFavourites: () -> Unit,
+    onClickDeletePlayer: (() -> Unit)? = null,
 ) {
     val playerAge =
         player.birthdate?.let { playerBirthdate ->
@@ -73,7 +78,7 @@ fun PlayerListCard(
                     horizontal = 10.dp,
                     vertical = 10.dp
                 )
-                .weight(5f)
+                .weight(6f)
         ) {
             Box(
                 modifier = Modifier
@@ -232,25 +237,43 @@ fun PlayerListCard(
                 }
             }
         }
-        if (interactiveMode) {
-            Row(
-                horizontalArrangement = Arrangement.End,
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .weight(if (interactiveMode) 2f else 1f)
+        ) {
+            IconButton(
+                onClick = { onClickToggleAddPlayerToFavourites() },
                 modifier = Modifier
                     .weight(1f)
             ) {
+                Icon(
+                    imageVector =
+                        if (player.favourite) starFilledIcon
+                        else starIcon,
+                    contentDescription = "Toggle add to favourites",
+                    tint =
+                        if (player.favourite) MaterialTheme.colorScheme.tertiary
+                        else LocalContentColor.current,
+                )
+            }
+            if (interactiveMode) {
                 PlayerCardBottomSheet(
                     player = player,
-                    { onOpenBottomSheet ->
-                        IconButton(
-                            onClick = { onOpenBottomSheet() }
-                        ) {
-                            Icon(
-                                imageVector = more_vertIcon,
-                                contentDescription = "Player options"
-                            )
-                        }
+                    onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() },
+                    onClickDeletePlayer = { onClickDeletePlayer?.invoke() }
+                ) { onOpenBottomSheet ->
+                    IconButton(
+                        onClick = { onOpenBottomSheet() },
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = more_vertIcon,
+                            contentDescription = "Player options"
+                        )
                     }
-                )
+                }
             }
         }
     }

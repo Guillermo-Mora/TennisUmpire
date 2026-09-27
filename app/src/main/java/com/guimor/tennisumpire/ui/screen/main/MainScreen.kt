@@ -27,12 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.result.LocalResultEventBus
 import androidx.navigation3.runtime.result.ResultEffect
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.domain.error.OperationResult
-import com.guimor.tennisumpire.domain.error.Success
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
@@ -131,8 +130,15 @@ fun MainScreen(
             )
         }
         entry<NavRoutesMain.Players> {
+            val resultBus = LocalResultEventBus.current
             PlayersScreen(
                 scrollBehavior = playersScrollBehavior,
+                onOperationResult = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                },
                 onNavigateBack = {
                     viewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
                 },
@@ -141,10 +147,10 @@ fun MainScreen(
     }
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    ResultEffect<Success>(resultKey = "success_result") { successResult ->
+    ResultEffect<MessageResult>(resultKey = "result") { result ->
         snackBarHostState.showSnackbar(
             visuals = OperationSnackbarVisuals(
-                operationResult = successResult,
+                operationResult = result,
                 duration = SnackbarDuration.Short
             ),
         )
