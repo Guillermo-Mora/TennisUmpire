@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -47,7 +44,9 @@ import java.time.Period
 
 @Composable
 fun PlayerListCard(
-    player: Player
+    modifier: Modifier = Modifier,
+    player: Player,
+    interactiveMode: Boolean = true,
 ) {
     val playerAge =
         player.birthdate?.let { playerBirthdate ->
@@ -56,11 +55,12 @@ fun PlayerListCard(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
+        modifier = if (interactiveMode) Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+        else modifier
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(
@@ -232,17 +232,24 @@ fun PlayerListCard(
                 }
             }
         }
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier
-                .weight(1f)
-        ) {
-            IconButton(
-                onClick = {}
+        if (interactiveMode) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .weight(1f)
             ) {
-                Icon(
-                    imageVector = more_vertIcon,
-                    contentDescription = "Player options"
+                PlayerCardBottomSheet(
+                    player = player,
+                    { onOpenBottomSheet ->
+                        IconButton(
+                            onClick = { onOpenBottomSheet() }
+                        ) {
+                            Icon(
+                                imageVector = more_vertIcon,
+                                contentDescription = "Player options"
+                            )
+                        }
+                    }
                 )
             }
         }
