@@ -252,9 +252,7 @@ private fun DeletePlayerAlertDialog(
                     }
                     OutlinedButton(
                         onClick = {
-                            onClickDeletePlayer().also { operationResult ->
-                                operationResult
-                            }
+                            onClickDeletePlayer()
                             onDismissRequest()
                         },
                         border = BorderStroke(

@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.guimor.tennisumpire.domain.error.Error
 import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.OperationResult
@@ -50,7 +52,9 @@ fun OperationSnackBarHost(
                 .padding(start = 16.dp)
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .weight(8f)
             ) {
                 Icon(
                     imageVector =
@@ -61,17 +65,26 @@ fun OperationSnackBarHost(
                 )
                 Text(
                     text = stringResource(visuals.operationResult.messageId),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 12.sp
                 )
             }
-            IconButton(
-                onClick = { snackBarHostState.currentSnackbarData?.dismiss() }
+            Row(
+                modifier = Modifier
+                    .weight(2f),
+                horizontalArrangement = Arrangement.End
             ) {
-                Icon(
-                    imageVector = closeIcon,
-                    contentDescription = "Close message",
-                    tint = MaterialTheme.colorScheme.background
-                )
+                IconButton(
+                    onClick = { snackBarHostState.currentSnackbarData?.dismiss() },
+                ) {
+                    Icon(
+                        imageVector = closeIcon,
+                        contentDescription = "Close message",
+                        tint = MaterialTheme.colorScheme.background
+                    )
+                }
             }
         }
     }
