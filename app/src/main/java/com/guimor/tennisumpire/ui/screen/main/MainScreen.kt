@@ -5,7 +5,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,6 +17,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
@@ -37,11 +41,15 @@ import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarIte
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
+import com.guimor.tennisumpire.ui.icons.assignmentFilledIcon
+import com.guimor.tennisumpire.ui.icons.assignmentIcon
 import com.guimor.tennisumpire.ui.icons.cancelIcon
 import com.guimor.tennisumpire.ui.icons.groupsFilledIcon
 import com.guimor.tennisumpire.ui.icons.groupsIcon
 import com.guimor.tennisumpire.ui.icons.library_booksFilledIcon
 import com.guimor.tennisumpire.ui.icons.library_booksIcon
+import com.guimor.tennisumpire.ui.icons.scoreboardFilledIcon
+import com.guimor.tennisumpire.ui.icons.scoreboardIcon
 import com.guimor.tennisumpire.ui.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.ui.icons.sports_tennisIcon
 import com.guimor.tennisumpire.ui.navigation.Navigator
@@ -105,8 +113,8 @@ fun MainScreen(
         BaseNavigationBarItemData(
             newRoute = NavRoutesMain.Results,
             label = stringResource(R.string.results),
-            icon = library_booksIcon,
-            iconSelected = library_booksFilledIcon
+            icon = scoreboardIcon,
+            iconSelected = scoreboardFilledIcon
         ),
         BaseNavigationBarItemData(
             newRoute = NavRoutesMain.Players,
@@ -118,8 +126,8 @@ fun MainScreen(
         BaseNavigationBarItemData(
             newRoute = NavRoutesMain.Rules,
             label = stringResource(R.string.rules),
-            icon = cancelIcon,
-            iconSelected = cancelIcon
+            icon = assignmentIcon,
+            iconSelected = assignmentFilledIcon
         )
     )
     //Scroll behavior for each individual screen
@@ -199,13 +207,28 @@ fun MainScreen(
                         matchesScreen = { onNavigateToNewMatch() },
                         resultsScreen = { onNavigateToNewResult() },
                         playersScreen = { onNavigateToNewPlayer() },
+                        rulesScreen = { onNavigateToNewRule() }
                     )
                 }
             ) {
-                Icon(
-                    imageVector = uiState.mainScreenData.fabIcon,
-                    contentDescription = stringResource(uiState.mainScreenData.fabDescription),
-                )
+                val fabIconText = uiState.mainScreenData.fabIconText
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        space = 8.dp,
+                        alignment = Alignment.CenterHorizontally
+                    ),
+                    modifier = Modifier
+                        .padding(horizontal = fabIconText?.let { 10.dp } ?: 0.dp)
+                ) {
+                    Icon(
+                        imageVector = uiState.mainScreenData.fabIcon,
+                        contentDescription = stringResource(uiState.mainScreenData.fabDescription),
+                    )
+                    fabIconText?.let { fabIconText ->
+                        Text(stringResource(fabIconText))
+                    }
+                }
             }
         },
         bottomBar = {

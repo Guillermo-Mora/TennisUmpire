@@ -20,6 +20,7 @@ import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerViewModel
+import com.guimor.tennisumpire.ui.screen.new_rule.NewRuleScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import kotlinx.coroutines.runBlocking
@@ -60,8 +61,7 @@ fun NavigationRoot(
                 onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
                 onNavigateToNewResult = { navigator.navigate(NavRoutesRoot.NewResult) },
                 onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) },
-                //STILL TO IMPLEMENT
-                onNavigateToNewRule = {}
+                onNavigateToNewRule = { navigator.navigate(NavRoutesRoot.NewRule) }
             )
         }
         entry<NavRoutesRoot.Settings> {
@@ -91,6 +91,11 @@ fun NavigationRoot(
                 newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) }
+            )
+        }
+        entry<NavRoutesRoot.NewRule> {
+            NewRuleScreen(
+                onNavigateBack = navigator::goBack
             )
         }
     }

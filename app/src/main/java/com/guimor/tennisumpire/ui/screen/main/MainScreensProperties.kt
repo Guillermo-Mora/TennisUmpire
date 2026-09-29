@@ -2,12 +2,13 @@ package com.guimor.tennisumpire.ui.screen.main
 
 import androidx.navigation3.runtime.NavKey
 import com.guimor.tennisumpire.R
-import com.guimor.tennisumpire.ui.icons.addIcon
 import com.guimor.tennisumpire.ui.icons.add_notesIcon
+import com.guimor.tennisumpire.ui.icons.assignment_addFilledIcon
+import com.guimor.tennisumpire.ui.icons.high_chairFilledIcon
 import com.guimor.tennisumpire.ui.icons.person_addIcon
 import com.guimor.tennisumpire.ui.icons.sportsIcon
+import com.guimor.tennisumpire.ui.icons.sports_tennisFilledIcon
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
-import com.guimor.tennisumpire.ui.screen.rules.RulesScreen
 
 object MainScreensProperties {
     fun NavKey.function(
@@ -43,7 +44,8 @@ fun NavKey.getCurrentScreenData(): MainScreenData {
         NavRoutesMain.Matches -> MainScreenData(
             title = R.string.matches,
             fabDescription = R.string.new_match,
-            fabIcon = sportsIcon
+            fabIcon = sports_tennisFilledIcon,
+            fabIconText = R.string.new_match
         )
 
         NavRoutesMain.Results -> MainScreenData(
@@ -61,7 +63,7 @@ fun NavKey.getCurrentScreenData(): MainScreenData {
         NavRoutesMain.Rules -> MainScreenData(
             title = R.string.rules,
             fabDescription = R.string.new_rule,
-            fabIcon = addIcon
+            fabIcon = assignment_addFilledIcon
         )
 
         else -> MainScreenData(

@@ -4,5 +4,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 data class MainScreenData(
     val title: Int,
     val fabDescription: Int,
-    val fabIcon: ImageVector
+    val fabIcon: ImageVector,
+    val fabIconText: Int? = null
 )
