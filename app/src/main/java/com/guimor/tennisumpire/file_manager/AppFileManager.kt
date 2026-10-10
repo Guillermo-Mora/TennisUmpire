@@ -84,8 +84,7 @@ class AppFileManager(
 
     fun persistFileAndGetUri(
         storedIn: StoredIn,
-        tempFileUri: Uri,
-        fileName: String
+        tempFileUri: Uri
     ): OperationResult<Uri> {
         val storageDir = getStorageDir(storedIn).let {
             when (it) {
@@ -96,7 +95,7 @@ class AppFileManager(
         val file =
             File(
                 storageDir,
-                "${fileName}.jpg"
+                "${getCurrentTimeStamp()}.jpg"
             )
         val input = try {
             context.contentResolver.openInputStream(tempFileUri)

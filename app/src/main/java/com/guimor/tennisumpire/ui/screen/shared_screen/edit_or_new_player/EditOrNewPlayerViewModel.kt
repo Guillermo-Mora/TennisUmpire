@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.new_player
+package com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -8,20 +8,19 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
 import com.guimor.tennisumpire.domain.error.Error
+import com.guimor.tennisumpire.domain.error.FormatError
+import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
-import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
-import com.guimor.tennisumpire.domain.error.FormatError
-import com.guimor.tennisumpire.domain.error.OperationResult
 import com.guimor.tennisumpire.domain.model.StoredIn
+import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import com.guimor.tennisumpire.ui.model.getValueOrNull
-import com.guimor.tennisumpire.view_model.Resettable
 import com.guimor.tennisumpire.view_model.UiStateHolder
 import com.guimor.tennisumpire.view_model.ValidatableForm
 import com.guimor.tennisumpire.view_model.ViewModelHelper
@@ -33,23 +32,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class NewPlayerViewModel(
-    override val _uiState: MutableStateFlow<NewPlayerUiState> = MutableStateFlow(NewPlayerUiState()),
-    override val uiState: StateFlow<NewPlayerUiState> = _uiState.asStateFlow(),
-    private val playerRepository: PlayerRepositoryImpl
+class EditOrNewPlayerViewModel(
+    override val _uiState: MutableStateFlow<EditOrNewPlayerUiState> = MutableStateFlow(EditOrNewPlayerUiState()),
+    override val uiState: StateFlow<EditOrNewPlayerUiState> = _uiState.asStateFlow(),
+    private val playerRepository: PlayerRepositoryImpl,
+    private val playerUid: Int? = null
 ) : ViewModel(),
-    UiStateHolder<NewPlayerUiState>,
-    Resettable,
+    UiStateHolder<EditOrNewPlayerUiState>,
     ValidatableForm {
     val debounceValidatePlayerFirstName = validationDebounce { validatePlayerFirstName() }
     val debounceValidatePlayerLastName = validationDebounce { validatePlayerLastName() }
     val debounceValidatePlayerHeight = validationDebounce { validatePlayerHeight() }
     val debounceValidatePlayerWeight = validationDebounce { validatePlayerWeight() }
-
-    override fun resetData() {
-        _uiState.value = NewPlayerUiState()
-    }
-
     override fun validateForm() {
         //I use null to represent the items from the screen that don't have any type of
         //validation. I think this is the best way to do it, as I don't have to manually
@@ -66,12 +60,11 @@ class NewPlayerViewModel(
                     val playerPhotoPersistedUri = uiState.value.playerPhotoUri
                         ?.let { playerPhotoUri ->
                             when (val result =
-                                //Here, I should  put imageResolution to a limit
+                            //Here, I should  put imageResolution to a limit
                                 // and transform images to that limit before saving them
                                 MyApplication.appModule.appFileManager.persistFileAndGetUri(
                                     storedIn = StoredIn.PLAYER_PHOTOS,
                                     tempFileUri = playerPhotoUri,
-                                    fileName = "${uiState.value.playerFirstName}${uiState.value.playerLastName}"
                                 )
                             ) {
                                 is OperationResult.ErrorResult -> {
@@ -82,12 +75,22 @@ class NewPlayerViewModel(
                                 is OperationResult.SuccessResult -> result.value
                             }
                         }
-                    val operationResult = playerRepository.insertPlayer(
-                        player = createPlayer(playerPhotoPersistedUri = playerPhotoPersistedUri)
-                    )
+                    val operationResult = if (playerUid != null) {
+                        playerRepository.editPlayer(
+                            player = createPlayer(playerPhotoPersistedUri = playerPhotoPersistedUri)
+                        )
+                    } else {
+                        playerRepository.insertPlayer(
+                            player = createPlayer(playerPhotoPersistedUri = playerPhotoPersistedUri)
+                        )
+                    }
                     if (operationResult is Error) {
                         playerPhotoPersistedUri?.let {
                             MyApplication.appModule.appFileManager.deleteFileIfExists(it)
+                        }
+                    } else {
+                        uiState.value.oldPlayerEditPhotoUri?.let { oldPlayerEditPhotoUri ->
+                            MyApplication.appModule.appFileManager.deleteFileIfExists(oldPlayerEditPhotoUri)
                         }
                     }
                     _uiState.update { state -> state.copy(operationResult = operationResult) }
@@ -271,6 +274,7 @@ class NewPlayerViewModel(
     private fun createPlayer(
         playerPhotoPersistedUri: Uri?
     ): Player = Player(
+        uid = playerUid?: 0,
         firstName = uiState.value.playerFirstName.value,
         lastName = uiState.value.playerLastName.value,
         birthdate = uiState.value.playerBirthdate.value,
@@ -285,12 +289,39 @@ class NewPlayerViewModel(
         photo = playerPhotoPersistedUri
     )
 
+    //In case we are editing, I access the player values and set them in the ui state.
+    init {
+        playerUid?.let { playerUid ->
+            viewModelScope.launch {
+                val player = playerRepository.getPlayer(playerUid)
+                _uiState.update { state ->
+                    state.copy(
+                        playerFirstName = FormFieldData(value = player.firstName),
+                        playerLastName = FormFieldData(value = player.lastName),
+                        playerBirthdate = FormFieldDataType(value = player.birthdate),
+                        playerHeight = FormFieldData(value = player.height?.toString() ?: ""),
+                        playerWeight = FormFieldData(value = player.weight?.toString() ?: ""),
+                        playerCountry = player.country,
+                        playerGender = player.gender,
+                        playerDominantHand = player.dominantHand,
+                        playerBackhand = player.backhand,
+                        playerPhotoUri = player.photo,
+                        oldPlayerEditPhotoUri = player.photo
+                    )
+                }
+            }
+        }
+    }
+
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        fun Factory(
+            playerUid: Int? = null,
+        ): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val playerRepository = MyApplication.appModule.playerRepository
-                NewPlayerViewModel(
+                EditOrNewPlayerViewModel(
                     playerRepository = playerRepository,
+                    playerUid = playerUid
                 )
             }
         }

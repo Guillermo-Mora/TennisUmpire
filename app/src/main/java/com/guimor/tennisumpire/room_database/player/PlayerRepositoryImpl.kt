@@ -24,6 +24,12 @@ class PlayerRepositoryImpl(
         return SuccessMessageResult.PLAYER_CREATED
     }
 
+    override suspend fun getPlayer(
+        playerUid: Int
+    ): Player {
+        return playerDao.getPlayer(playerUid)
+    }
+
     override suspend fun deletePlayer(
         playerUid: Int
     ): MessageResult {
@@ -31,6 +37,17 @@ class PlayerRepositoryImpl(
             return if (deletedRows >= 1) SuccessMessageResult.PLAYER_DELETED
             else DatabaseError.PLAYER_NOT_EXISTS
         }
+    }
+
+    override suspend fun editPlayer(
+        player: Player
+    ): MessageResult {
+        try {
+            playerDao.editPlayer(player)
+        } catch (_: SQLiteConstraintException) {
+            return DatabaseError.PLAYER_ALREADY_EXISTS
+        }
+        return SuccessMessageResult.PLAYER_EDITED
     }
 
     override suspend fun toggleAddPlayerToFavourites(playerUid: Int) {

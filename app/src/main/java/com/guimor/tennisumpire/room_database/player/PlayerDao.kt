@@ -15,8 +15,14 @@ interface PlayerDao {
     @Insert
     suspend fun insertPlayer(player: Player)
 
+    @Query("SELECT * FROM player WHERE uid = :playerUid")
+    suspend fun getPlayer(playerUid: Int): Player
+
     @Query("DELETE FROM player WHERE uid = :playerUid")
     suspend fun deletePlayer(playerUid: Int): Int
+
+    @Update
+    suspend fun editPlayer(player: Player)
 
     @Query("UPDATE player SET favourite = NOT favourite WHERE uid = :playerUid")
     suspend fun toggleAddPlayerToFavourites(playerUid: Int)

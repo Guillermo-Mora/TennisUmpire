@@ -5,23 +5,25 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.result.LocalResultEventBus
 import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
-import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerViewModel
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
 import com.guimor.tennisumpire.ui.screen.new_rule.NewRuleScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
@@ -93,7 +95,7 @@ fun NavigationRoot(
                         result = result
                     )
                 },
-                newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
+                newPlayerViewModel = viewModel(factory = EditOrNewPlayerViewModel.Factory()),
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
             )
@@ -108,10 +110,12 @@ fun NavigationRoot(
                         result = result
                     )
                 },
-                editPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
+                editPlayerViewModel = viewModel(
+                    factory = EditOrNewPlayerViewModel
+                        .Factory(playerUid = playerUid),
+                ),
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
-                playerUid = playerUid,
             )
         }
         entry<NavRoutesRoot.NewRule> {
@@ -125,6 +129,9 @@ fun NavigationRoot(
             entries = navigationState.toEntries(entryProvider),
             entryDecorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator(),
+                //Each entry with its own ViewModelStoreOwner. So ViewModels get destroyed on
+                // back navigation (When it gets cleared from the backstack)
+                rememberViewModelStoreNavEntryDecorator(),
                 rememberResultEventBusNavEntryDecorator()
             )
         ),

@@ -70,21 +70,19 @@ import com.guimor.tennisumpire.ui.icons.sign_languageIcon
 import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
-import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditOrNewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    editPlayerViewModel: NewPlayerViewModel,
+    editPlayerViewModel: EditOrNewPlayerViewModel,
     onOperationSuccess: (successResult: Success) -> Unit,
     title: String,
     buttonText: String,
 ) {
     BackHandler {
         onNavigateBack()
-        editPlayerViewModel.resetData()
     }
     val uiState by editPlayerViewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
@@ -95,7 +93,6 @@ fun EditOrNewPlayerScreen(
             if (operationResult is Success) {
                 onOperationSuccess(operationResult)
                 onNavigateBack()
-                editPlayerViewModel.resetData()
             } else {
                 snackBarHostState.showSnackbar(
                     visuals = OperationSnackbarVisuals(
@@ -165,7 +162,6 @@ fun EditOrNewPlayerScreen(
                 navigationIcon = {
                     NavigateBackIconButton(onNavigateBack = {
                         onNavigateBack()
-                        editPlayerViewModel.resetData()
                     })
                 },
                 scrollBehavior = scrollBehavior

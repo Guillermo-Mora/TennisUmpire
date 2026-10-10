@@ -6,13 +6,14 @@ import androidx.compose.ui.res.stringResource
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.error.Success
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerScreen
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    newPlayerViewModel: NewPlayerViewModel,
+    newPlayerViewModel: EditOrNewPlayerViewModel,
     onOperationSuccess: (successResult: Success) -> Unit,
 ) {
     EditOrNewPlayerScreen(

@@ -119,7 +119,10 @@ fun PlayerCardBottomSheet(
             DeletePlayerAlertDialog(
                 onDismissRequest = { showDeleteAlertDialog = false },
                 playerFullName = "${player.firstName} ${player.lastName}",
-                onClickDeletePlayer = { onClickDeletePlayer() }
+                onClickDeletePlayer = {
+                    onClickDeletePlayer()
+                    showBottomSheet = false
+                }
             )
         }
     }
