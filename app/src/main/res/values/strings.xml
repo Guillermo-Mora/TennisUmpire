@@ -280,4 +280,7 @@
     <string name="player_created">Player created</string>
     <string name="rules">Rules</string>
     <string name="new_rule">New rule</string>
+    <string name="edit_player">Edit player</string>
+    <string name="create_player">Create player</string>
+    <string name="save_changes">Save changes</string>
 </resources>

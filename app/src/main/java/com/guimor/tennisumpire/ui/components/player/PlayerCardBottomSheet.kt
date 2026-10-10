@@ -48,6 +48,7 @@ fun PlayerCardBottomSheet(
     player: Player,
     onClickToggleAddPlayerToFavourites: () -> Unit,
     onClickDeletePlayer: () -> Unit,
+    onClickEditPlayer: () -> Unit,
     button: @Composable (onOpenBottomSheet: () -> Unit) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -67,7 +68,7 @@ fun PlayerCardBottomSheet(
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh),
                 player = player,
                 interactiveMode = false,
-                onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() }
+                onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() },
             )
             Surface(
                 shape = RoundedCornerShape(16.dp),
@@ -102,7 +103,10 @@ fun PlayerCardBottomSheet(
                             .weight(1f)
                     )
                     PlayerCardBottomSheetButton(
-                        onClick = {},
+                        onClick = {
+                            onClickEditPlayer()
+                            showBottomSheet = false
+                        },
                         icon = editIcon,
                         text = "Edit",
                         modifier = Modifier

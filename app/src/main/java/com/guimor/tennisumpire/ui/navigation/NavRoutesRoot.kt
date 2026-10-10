@@ -29,6 +29,12 @@ sealed interface NavRoutesRoot {
         NavKey
 
     @Serializable
+    data class EditPlayer(
+        val playerUid: Int
+    ) :
+        NavKey
+
+    @Serializable
     data object NewRule :
         NavKey
 

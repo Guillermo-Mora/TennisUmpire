@@ -70,7 +70,8 @@ class NewPlayerViewModel(
                                 // and transform images to that limit before saving them
                                 MyApplication.appModule.appFileManager.persistFileAndGetUri(
                                     storedIn = StoredIn.PLAYER_PHOTOS,
-                                    tempFileUri = playerPhotoUri
+                                    tempFileUri = playerPhotoUri,
+                                    fileName = "${uiState.value.playerFirstName}${uiState.value.playerLastName}"
                                 )
                             ) {
                                 is OperationResult.ErrorResult -> {

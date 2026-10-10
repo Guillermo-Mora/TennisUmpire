@@ -21,6 +21,7 @@ import com.guimor.tennisumpire.ui.components.player.PlayerListCard
 @Composable
 fun PlayersScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToEditPlayer: (playerUid: Int) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: PlayersViewModel = viewModel(factory = PlayersViewModel.Factory),
     onOperationResult: (result: MessageResult) -> Unit,
@@ -46,7 +47,8 @@ fun PlayersScreen(
                         playerUid = player.uid
                     )
                 },
-                onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) }
+                onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
+                onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
             )
         }
     }

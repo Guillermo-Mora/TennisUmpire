@@ -52,6 +52,7 @@ fun PlayerListCard(
     interactiveMode: Boolean = true,
     onClickToggleAddPlayerToFavourites: () -> Unit,
     onClickDeletePlayer: (() -> Unit)? = null,
+    onClickEditPlayer: (() -> Unit)? = null
 ) {
     val playerAge =
         player.birthdate?.let { playerBirthdate ->
@@ -261,7 +262,8 @@ fun PlayerListCard(
                 PlayerCardBottomSheet(
                     player = player,
                     onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() },
-                    onClickDeletePlayer = { onClickDeletePlayer?.invoke() }
+                    onClickDeletePlayer = { onClickDeletePlayer?.invoke() },
+                    onClickEditPlayer = { onClickEditPlayer?.invoke() }
                 ) { onOpenBottomSheet ->
                     IconButton(
                         onClick = { onOpenBottomSheet() },

@@ -6,6 +6,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
@@ -13,8 +14,9 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.result.LocalResultEventBus
 import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
+import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
@@ -61,6 +63,9 @@ fun NavigationRoot(
                 onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
                 onNavigateToNewResult = { navigator.navigate(NavRoutesRoot.NewResult) },
                 onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) },
+                onNavigateToEditPlayer = { playerId ->
+                    navigator.navigate(NavRoutesRoot.EditPlayer(playerId))
+                },
                 onNavigateToNewRule = { navigator.navigate(NavRoutesRoot.NewRule) }
             )
         }
@@ -90,7 +95,23 @@ fun NavigationRoot(
                 },
                 newPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
                 onNavigateBack = navigator::goBack,
-                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) }
+                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
+            )
+        }
+        entry<NavRoutesRoot.EditPlayer> { navEntry ->
+            val resultBus = LocalResultEventBus.current
+            val playerUid = navEntry.playerUid
+            EditPlayerScreen(
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                },
+                editPlayerViewModel = viewModel(factory = NewPlayerViewModel.Factory),
+                onNavigateBack = navigator::goBack,
+                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
+                playerUid = playerUid,
             )
         }
         entry<NavRoutesRoot.NewRule> {

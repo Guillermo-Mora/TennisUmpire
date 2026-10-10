@@ -8,20 +8,21 @@ import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerUiState
 import com.guimor.tennisumpire.ui_state.BaseUiState
 import java.time.LocalDate
 
 data class NewPlayerUiState(
-    val scrollToErrorSection: Int = -1,
-    val playerFirstName: FormFieldData = FormFieldData(),
-    val playerLastName: FormFieldData = FormFieldData(),
-    val playerBirthdate: FormFieldDataType<LocalDate> = FormFieldDataType(),
-    val playerHeight: FormFieldData = FormFieldData(),
-    val playerWeight: FormFieldData = FormFieldData(),
-    val playerCountry: Country? = null,
-    val playerGender: PlayerGender? = null,
-    val playerDominantHand: PlayerDominantHand? = null,
-    val playerBackhand: PlayerBackhand? = null,
-    val playerPhotoUri: Uri? = null,
-    val operationResult: MessageResult? = null
-) : BaseUiState()
+    override val scrollToErrorSection: Int = -1,
+    override val playerFirstName: FormFieldData = FormFieldData(),
+    override val playerLastName: FormFieldData = FormFieldData(),
+    override val playerBirthdate: FormFieldDataType<LocalDate> = FormFieldDataType(),
+    override val playerHeight: FormFieldData = FormFieldData(),
+    override val playerWeight: FormFieldData = FormFieldData(),
+    override val playerCountry: Country? = null,
+    override val playerGender: PlayerGender? = null,
+    override val playerDominantHand: PlayerDominantHand? = null,
+    override val playerBackhand: PlayerBackhand? = null,
+    override val playerPhotoUri: Uri? = null,
+    override val operationResult: MessageResult? = null
+) : EditOrNewPlayerUiState, BaseUiState()

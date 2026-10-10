@@ -56,7 +56,7 @@ class AppFileManager(
         val file =
             File(
                 storageDir,
-                "JPEG_${getCurrentTimeStamp()}_.jpg"
+                "${getCurrentTimeStamp()}.jpg"
             )
         val input = try {
             context.contentResolver.openInputStream(originalFileUri)
@@ -84,7 +84,8 @@ class AppFileManager(
 
     fun persistFileAndGetUri(
         storedIn: StoredIn,
-        tempFileUri: Uri
+        tempFileUri: Uri,
+        fileName: String
     ): OperationResult<Uri> {
         val storageDir = getStorageDir(storedIn).let {
             when (it) {
@@ -95,7 +96,7 @@ class AppFileManager(
         val file =
             File(
                 storageDir,
-                "JPEG_${getCurrentTimeStamp()}_.jpg"
+                "${fileName}.jpg"
             )
         val input = try {
             context.contentResolver.openInputStream(tempFileUri)

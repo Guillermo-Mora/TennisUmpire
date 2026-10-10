@@ -90,6 +90,7 @@ fun MainScreen(
     onNavigateToNewMatch: () -> Unit,
     onNavigateToNewResult: () -> Unit,
     onNavigateToNewPlayer: () -> Unit,
+    onNavigateToEditPlayer: (playerUid: Int) -> Unit,
     onNavigateToNewRule: () -> Unit,
 ) {
     val topLevelRoutes = setOf(
@@ -162,6 +163,7 @@ fun MainScreen(
                 onNavigateBack = {
                     mainViewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
                 },
+                onNavigateToEditPlayer = { playerUid -> onNavigateToEditPlayer(playerUid) }
             )
         }
         entry<NavRoutesMain.Rules> {
