@@ -5,10 +5,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -26,6 +23,8 @@ import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
 import com.guimor.tennisumpire.ui.screen.new_rule.NewRuleScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
+import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
+import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import kotlinx.coroutines.runBlocking
 
@@ -65,8 +64,11 @@ fun NavigationRoot(
                 onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
                 onNavigateToNewResult = { navigator.navigate(NavRoutesRoot.NewResult) },
                 onNavigateToNewPlayer = { navigator.navigate(NavRoutesRoot.NewPlayer) },
-                onNavigateToEditPlayer = { playerId ->
-                    navigator.navigate(NavRoutesRoot.EditPlayer(playerId))
+                onNavigateToEditPlayer = { playerUid ->
+                    navigator.navigate(NavRoutesRoot.EditPlayer(playerUid))
+                },
+                onNavigateToPlayerProfile = { playerUid ->
+                    navigator.navigate(NavRoutesRoot.PlayerProfile(playerUid))
                 },
                 onNavigateToNewRule = { navigator.navigate(NavRoutesRoot.NewRule) }
             )
@@ -116,6 +118,16 @@ fun NavigationRoot(
                 ),
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
+            )
+        }
+        entry<NavRoutesRoot.PlayerProfile> { navEntry ->
+            val playerUid = navEntry.playerUid
+            PlayerProfileScreen(
+                onNavigateBack = navigator::goBack,
+                playerProfileViewModel = viewModel(
+                    factory = PlayerProfileViewModel
+                        .Factory(playerUid = playerUid)
+                )
             )
         }
         entry<NavRoutesRoot.NewRule> {

@@ -2,6 +2,7 @@ package com.guimor.tennisumpire.ui.components.player
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,8 @@ fun PlayerListCard(
     interactiveMode: Boolean = true,
     onClickToggleAddPlayerToFavourites: () -> Unit,
     onClickDeletePlayer: (() -> Unit)? = null,
-    onClickEditPlayer: (() -> Unit)? = null
+    onClickEditPlayer: (() -> Unit)? = null,
+    onClickPlayerProfile: (() -> Unit)? = null
 ) {
     val playerAge =
         player.birthdate?.let { playerBirthdate ->
@@ -66,6 +68,9 @@ fun PlayerListCard(
             .padding(4.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            .clickable(
+                onClick = { onClickPlayerProfile?.invoke() }
+            )
         else modifier
     ) {
         Row(
@@ -90,7 +95,6 @@ fun PlayerListCard(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(CircleShape)
-                            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
                     ) {
                         AsyncImage(
                             model = it,
@@ -99,6 +103,7 @@ fun PlayerListCard(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape)
+                                .background(color = MaterialTheme.colorScheme.background)
                         )
                     }
                 } ?: Icon(
@@ -263,7 +268,8 @@ fun PlayerListCard(
                     player = player,
                     onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() },
                     onClickDeletePlayer = { onClickDeletePlayer?.invoke() },
-                    onClickEditPlayer = { onClickEditPlayer?.invoke() }
+                    onClickEditPlayer = { onClickEditPlayer?.invoke() },
+                    onClickPlayerProfile = { onClickPlayerProfile?.invoke() }
                 ) { onOpenBottomSheet ->
                     IconButton(
                         onClick = { onOpenBottomSheet() },

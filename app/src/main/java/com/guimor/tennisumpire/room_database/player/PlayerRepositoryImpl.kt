@@ -30,6 +30,10 @@ class PlayerRepositoryImpl(
         return playerDao.getPlayer(playerUid)
     }
 
+    override fun getPlayerFlow(playerUid: Int): Flow<Player> {
+        return playerDao.getPlayerFlow(playerUid)
+    }
+
     override suspend fun deletePlayer(
         playerUid: Int
     ): MessageResult {

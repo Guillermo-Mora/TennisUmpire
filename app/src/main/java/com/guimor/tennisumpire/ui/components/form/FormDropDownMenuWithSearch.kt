@@ -76,7 +76,6 @@ fun <T>FormDropDownMenuWithSearch(
     required: Boolean = false,
     menuItem: @Composable (T) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     var expanded by rememberSaveable { mutableStateOf(false) }
     var searchValue by rememberSaveable { mutableStateOf("") }
