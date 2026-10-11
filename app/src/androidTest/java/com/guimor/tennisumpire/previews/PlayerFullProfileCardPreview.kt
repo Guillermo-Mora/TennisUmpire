@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.previews
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,9 @@ import com.guimor.tennisumpire.ui.components.player.PlayerFullProfileCard
 import java.time.LocalDate
 
 @Composable
-@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 private fun PlayerFullProfileCardPreview() {
     MaterialTheme {
         Scaffold { paddingValues ->

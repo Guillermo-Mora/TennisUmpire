@@ -1,6 +1,5 @@
 package com.guimor.tennisumpire.ui.components.player
 
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,20 +25,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import com.guimor.tennisumpire.domain.model.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.icons.femaleIcon
-import com.guimor.tennisumpire.ui.icons.front_handIcon
 import com.guimor.tennisumpire.ui.icons.maleIcon
 import com.guimor.tennisumpire.ui.icons.pan_toolIcon
 import com.guimor.tennisumpire.ui.icons.sign_languageIcon
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 @Composable
 fun PlayerFullProfileCard(
@@ -49,7 +45,7 @@ fun PlayerFullProfileCard(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        color = MaterialTheme.colorScheme.surfaceContainer,
         shape = RoundedCornerShape(16.dp),
     ) {
         Column(

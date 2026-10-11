@@ -284,4 +284,6 @@
     <string name="create_player">Create player</string>
     <string name="save_changes">Save changes</string>
     <string name="player_edited">Player edited</string>
+    <string name="details">Details</string>
+    <string name="statistics">Statistics</string>
 </resources>
