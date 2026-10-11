@@ -36,7 +36,11 @@ fun PlayerCardBottomSheetPreview() {
                     dominantHand = PlayerDominantHand.LEFT,
                     backhand = PlayerBackhand.ONE_HANDED,
                     photo = null
-                )
+                ),
+                onClickToggleAddPlayerToFavourites = {},
+                onClickDeletePlayer = {},
+                onClickEditPlayer = {},
+                onClickPlayerProfile = {}
             ) {
             }
         }

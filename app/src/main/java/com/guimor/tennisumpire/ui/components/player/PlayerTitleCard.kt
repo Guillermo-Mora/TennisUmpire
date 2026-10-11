@@ -187,32 +187,3 @@ fun PlayerTitleCard(
         }
     }
 }
-
-@Composable
-@Preview
-fun PlayerCardPreview() {
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-        ) {
-            PlayerTitleCard(
-                player = Player(
-                    uid = 200,
-                    firstName = "Guillermo",
-                    lastName = "Mora",
-                    birthdate = LocalDate.of(2005, 10, 27),
-                    height = 183f,
-                    weight = 68f,
-                    country = null,
-                    gender = PlayerGender.MALE,
-                    dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED,
-                    photo = null,
-                    favourite = false
-                ),
-                onClickToggleAddPlayerToFavourites = {}
-            )
-        }
-    }
-}

@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.guimor.tennisumpire.ui.components.player.PlayerFullProfileCard
 import com.guimor.tennisumpire.ui.components.player.PlayerTitleCard
 import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
 import com.guimor.tennisumpire.ui.components.top_bar.TitleCustomTopAppBar
@@ -65,13 +66,11 @@ fun PlayerProfileScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
                 .fillMaxWidth()
+                .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            repeat(100){
-                Text("test")
-            }
+            PlayerFullProfileCard(player = uiState.player)
         }
     }
 }

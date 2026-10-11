@@ -22,5 +22,8 @@ fun PlayersScreenPreview() {
                 playerRepository = FakePlayerRepository()
             )
         },
+        onNavigateToEditPlayer = {},
+        onNavigateToPlayerProfile = {},
+        onOperationResult = {},
     )
 }

@@ -284,8 +284,46 @@ class FakePlayerRepository : PlayerRepository {
         return SuccessMessageResult.PLAYER_CREATED
     }
 
+    override suspend fun getPlayer(playerUid: Int): Player {
+        return Player(
+            uid = 19,
+            firstName = "Nina",
+            lastName = "Larsson",
+            birthdate = LocalDate.of(2005, 9, 7),
+            height = 179f,
+            weight = 67f,
+            country = null,
+            gender = PlayerGender.FEMALE,
+            dominantHand = PlayerDominantHand.RIGHT,
+            backhand = PlayerBackhand.TWO_HANDED,
+            photo = null
+        )
+    }
+
+    override fun getPlayerFlow(playerUid: Int): Flow<Player> {
+        return flowOf(
+            Player(
+                uid = 19,
+                firstName = "Nina",
+                lastName = "Larsson",
+                birthdate = LocalDate.of(2005, 9, 7),
+                height = 179f,
+                weight = 67f,
+                country = null,
+                gender = PlayerGender.FEMALE,
+                dominantHand = PlayerDominantHand.RIGHT,
+                backhand = PlayerBackhand.TWO_HANDED,
+                photo = null
+            )
+        )
+    }
+
     override suspend fun deletePlayer(playerUid: Int): MessageResult {
         return SuccessMessageResult.PLAYER_DELETED
+    }
+
+    override suspend fun editPlayer(player: Player): MessageResult {
+        return SuccessMessageResult.PLAYER_EDITED
     }
 
     override suspend fun toggleAddPlayerToFavourites(playerUid: Int) {}
