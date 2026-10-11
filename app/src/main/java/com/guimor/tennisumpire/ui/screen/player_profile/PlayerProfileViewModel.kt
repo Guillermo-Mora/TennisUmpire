@@ -40,16 +40,6 @@ class PlayerProfileViewModel(
         }
     }
 
-    init {
-        viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(
-                    player = playerRepository.getPlayer(playerUid)
-                )
-            }
-        }
-    }
-
     companion object {
         fun Factory(
             playerUid: Int,
