@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.players
+package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 
 import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.room_database.player.Player

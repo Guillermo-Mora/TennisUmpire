@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.matches
+package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.matches
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

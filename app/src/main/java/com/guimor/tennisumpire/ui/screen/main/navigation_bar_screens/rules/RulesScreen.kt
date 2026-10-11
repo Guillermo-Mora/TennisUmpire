@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.rules
+package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.rules
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues

@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.players
+package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues

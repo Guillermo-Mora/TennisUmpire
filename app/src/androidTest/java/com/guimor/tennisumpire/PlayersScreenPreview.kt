@@ -5,8 +5,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
-import com.guimor.tennisumpire.ui.screen.players.PlayersViewModel
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players.PlayersScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players.PlayersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(

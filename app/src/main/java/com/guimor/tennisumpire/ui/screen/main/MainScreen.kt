@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,11 +42,8 @@ import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisu
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.icons.assignmentFilledIcon
 import com.guimor.tennisumpire.ui.icons.assignmentIcon
-import com.guimor.tennisumpire.ui.icons.cancelIcon
 import com.guimor.tennisumpire.ui.icons.groupsFilledIcon
 import com.guimor.tennisumpire.ui.icons.groupsIcon
-import com.guimor.tennisumpire.ui.icons.library_booksFilledIcon
-import com.guimor.tennisumpire.ui.icons.library_booksIcon
 import com.guimor.tennisumpire.ui.icons.scoreboardFilledIcon
 import com.guimor.tennisumpire.ui.icons.scoreboardIcon
 import com.guimor.tennisumpire.ui.icons.sports_tennisFilledIcon
@@ -58,10 +54,10 @@ import com.guimor.tennisumpire.ui.navigation.toEntries
 import com.guimor.tennisumpire.ui.screen.main.MainScreensProperties.function
 import com.guimor.tennisumpire.ui.screen.main.MainScreensProperties.options
 import com.guimor.tennisumpire.ui.screen.main.navigation.NavRoutesMain
-import com.guimor.tennisumpire.ui.screen.matches.MatchesScreen
-import com.guimor.tennisumpire.ui.screen.players.PlayersScreen
-import com.guimor.tennisumpire.ui.screen.results.ResultsScreen
-import com.guimor.tennisumpire.ui.screen.rules.RulesScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.matches.MatchesScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players.PlayersScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.results.ResultsScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.rules.RulesScreen
 
 /*
 Text("On app launch, you will appear in matches screen")

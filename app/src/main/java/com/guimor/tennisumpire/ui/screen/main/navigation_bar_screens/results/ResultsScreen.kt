@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.results
+package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.results
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
