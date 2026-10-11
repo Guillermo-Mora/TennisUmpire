@@ -12,6 +12,7 @@ nav3Core = "1.2.0-rc01"
 lifecycleViewmodelNav3 = "2.11.0"
 kotlinSerialization = "2.4.20"
 kotlinxSerializationCore = "1.11.0"
+pagingCompose = "3.5.2"
 ui = "1.12.1"
 foundationLayout = "1.12.1"
 dataStore = "1.2.1"
@@ -20,6 +21,7 @@ ksp = "2.3.4"
 coil = "3.6.3"
 
 [libraries]
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 io-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 io-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

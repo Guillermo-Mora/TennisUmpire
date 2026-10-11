@@ -14,8 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.guimor.tennisumpire.domain.error.MessageResult
+import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.components.player.PlayerListCard
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +31,9 @@ fun PlayersScreen(
     viewModel: PlayersViewModel = viewModel(factory = PlayersViewModel.Factory),
     onOperationResult: (result: MessageResult) -> Unit,
 ) {
+    //Importante saber esto para más adelante
+    //Si añades búsqueda o filtros: deberás recrear el Pager con flatMapLatest
+    // sobre el texto de búsqueda, y pasar el parámetro al DAO.
     BackHandler { onNavigateBack() }
     val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(uiState.messageResult) {
@@ -35,23 +42,30 @@ fun PlayersScreen(
             viewModel.resetMessageResult()
         }
     }
+    val players = viewModel.players.collectAsLazyPagingItems()
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
-        items(uiState.players) { player ->
-            PlayerListCard(
-                player = player,
-                onClickToggleAddPlayerToFavourites = {
-                    viewModel.toggleAddPlayerToFavourites(
-                        playerUid = player.uid
-                    )
-                },
-                onClickPlayerProfile = { onNavigateToPlayerProfile(player.uid)},
-                onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
-                onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
-            )
+        items(
+            count = players.itemCount,
+            key = players.itemKey { it.uid }
+        ) { index ->
+            val player = players[index]
+            player?.let { player ->
+                PlayerListCard(
+                    player = player,
+                    onClickToggleAddPlayerToFavourites = {
+                        viewModel.toggleAddPlayerToFavourites(
+                            playerUid = player.uid
+                        )
+                    },
+                    onClickPlayerProfile = { onNavigateToPlayerProfile(player.uid) },
+                    onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
+                    onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
+                )
+            }
         }
     }
 }

@@ -5,10 +5,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -18,21 +25,12 @@ class PlayersViewModel(
     private val playerRepository: PlayerRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlayersUiState())
-    private val _players = playerRepository.getAllPlayers()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = emptyList()
-        )
-    val uiState = combine(_uiState, _players) { uiState, players ->
-        uiState.copy(
-            players = players
-        )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = PlayersUiState()
-    )
+    val uiState = _uiState.asStateFlow()
+    val players: Flow<PagingData<Player>> = Pager(
+        config = PagingConfig(pageSize = 50) )
+    { playerRepository.getAllPlayers() }
+        .flow
+        .cachedIn(viewModelScope)
 
     fun toggleAddPlayerToFavourites(playerUid: Int) {
         viewModelScope.launch {

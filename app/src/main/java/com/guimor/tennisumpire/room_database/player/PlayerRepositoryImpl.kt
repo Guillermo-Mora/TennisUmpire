@@ -1,6 +1,7 @@
 package com.guimor.tennisumpire.room_database.player
 
 import android.database.sqlite.SQLiteConstraintException
+import androidx.paging.PagingSource
 import com.guimor.tennisumpire.domain.error.DatabaseError
 import com.guimor.tennisumpire.domain.error.MessageResult
 import com.guimor.tennisumpire.domain.error.SuccessMessageResult
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 class PlayerRepositoryImpl(
     val playerDao: PlayerDao
 ) : PlayerRepository {
-    override fun getAllPlayers(): Flow<List<Player>> {
+    override fun getAllPlayers(): PagingSource<Int, Player> {
         return playerDao.getAllPlayers()
     }
 
