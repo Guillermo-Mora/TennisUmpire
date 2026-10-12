@@ -18,6 +18,8 @@ All these features are currently in progress of being implemented:
 - Responsive layout adapted for landscape or portrait use.
 - Multilanguage.
 - Local database to store all players, results and matches data.
+- Create native iOS version of the App (only if it has active users)
+- Smartwatch App for managing live score with your watch. (only if it has active users, and would be one of the last things to implement)
 
 ## Technologies and Languages
 - Android
