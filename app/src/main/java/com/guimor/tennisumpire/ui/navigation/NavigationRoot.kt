@@ -16,6 +16,7 @@ import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorat
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
+import com.guimor.tennisumpire.ui.screen.edit_rule.EditRuleScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
@@ -132,6 +133,11 @@ fun NavigationRoot(
         }
         entry<NavRoutesRoot.NewRule> {
             NewRuleScreen(
+                onNavigateBack = navigator::goBack
+            )
+        }
+        entry<NavRoutesRoot.EditRule> {
+            EditRuleScreen(
                 onNavigateBack = navigator::goBack
             )
         }

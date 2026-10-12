@@ -41,11 +41,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
@@ -78,31 +81,38 @@ fun EditOrNewRuleScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     editOrNewRuleViewModel: EditOrNewRuleViewModel,
-    onOperationSuccess: (successResult: SuccessResult) -> Unit,
+    onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
     title: String,
     buttonText: String,
 ) {
     BackHandler {
         onNavigateBack()
     }
-    /*
-    val uiState by editPlayerViewModel.uiState.collectAsState()
+    val uiState by editOrNewRuleViewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
-            if (operationResult is Success) {
-                onOperationSuccess(operationResult)
+            if (operationResult is SuccessResult) {
+                onOperationSuccess(
+                    operationResult.toResultWithUiText(
+                        R.string.rule,
+                        "ruleName"//uiState.ruleName
+                    )
+                )
                 onNavigateBack()
             } else {
                 snackBarHostState.showSnackbar(
                     visuals = OperationSnackbarVisuals(
-                        operationResult = operationResult,
+                        resultWithUiText = operationResult.toResultWithUiText(
+                            R.string.rule,
+                            "ruleName"//uiState.ruleName
+                        ),
                         duration = SnackbarDuration.Short,
                     ),
                 )
-                editPlayerViewModel.resetOperationResult()
+                editOrNewRuleViewModel.resetOperationResult()
             }
         }
     }
@@ -114,7 +124,7 @@ fun EditOrNewRuleScreen(
                     scrollOffset = -50
                 )
             } finally {
-                editPlayerViewModel.resetScrollToError()
+                editOrNewRuleViewModel.resetScrollToError()
             }
         }
     }
