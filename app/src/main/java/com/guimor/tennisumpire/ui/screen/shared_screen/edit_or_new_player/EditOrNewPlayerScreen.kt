@@ -96,10 +96,10 @@ fun EditOrNewPlayerScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
+            val playerAbbreviatedName = "${
+                uiState.playerFirstName.value.first().uppercase()
+            }. ${uiState.playerLastName.value}"
             if (operationResult is SuccessResult) {
-                val playerAbbreviatedName = "${
-                    uiState.playerFirstName.value.first().uppercase()
-                }. ${uiState.playerLastName.value}"
                 onOperationSuccess(
                     operationResult.toResultWithUiText(
                         R.string.player,
@@ -110,7 +110,10 @@ fun EditOrNewPlayerScreen(
             } else {
                 snackBarHostState.showSnackbar(
                     visuals = OperationSnackbarVisuals(
-                        resultWithUiText = operationResult.toResultWithUiText(),
+                        resultWithUiText = operationResult.toResultWithUiText(
+                            R.string.player,
+                            playerAbbreviatedName
+                        ),
                         duration = SnackbarDuration.Short,
                     ),
                 )
