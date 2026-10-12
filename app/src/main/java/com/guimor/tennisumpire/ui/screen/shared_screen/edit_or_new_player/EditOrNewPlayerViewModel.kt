@@ -7,13 +7,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
-import com.guimor.tennisumpire.domain.error.Error
-import com.guimor.tennisumpire.domain.error.FormatError
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.FormatError
+import com.guimor.tennisumpire.domain.operation_result.OperationResult
 import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.domain.model.StoredIn
 import com.guimor.tennisumpire.domain.validation.ValidationRules.isNotNumberGreaterThanZero
 import com.guimor.tennisumpire.room_database.player.Player
@@ -67,12 +66,12 @@ class EditOrNewPlayerViewModel(
                                     tempFileUri = playerPhotoUri,
                                 )
                             ) {
-                                is OperationResult.ErrorResult -> {
+                                is OperationResult.ErrorOperation -> {
                                     _uiState.update { state -> state.copy(operationResult = result.error) }
                                     return@launch
                                 }
 
-                                is OperationResult.SuccessResult -> result.value
+                                is OperationResult.SuccessOperation -> result.value
                             }
                         }
                     val operationResult = if (playerUid != null) {

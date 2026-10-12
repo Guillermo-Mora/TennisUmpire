@@ -6,9 +6,9 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import java.time.LocalDate
 
 @Entity(

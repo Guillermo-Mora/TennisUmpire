@@ -1,11 +1,11 @@
 package com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player
 
 import android.net.Uri
-import com.guimor.tennisumpire.domain.error.MessageResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import com.guimor.tennisumpire.ui_state.BaseUiState
@@ -24,5 +24,5 @@ data class EditOrNewPlayerUiState(
     val playerDominantHand: PlayerDominantHand? = null,
     val playerBackhand: PlayerBackhand? = null,
     val playerPhotoUri: Uri? = null,
-    val operationResult: MessageResult? = null
+    val operationResult: ResultType? = null
 ) : BaseUiState()

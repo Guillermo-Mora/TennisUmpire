@@ -1,11 +1,10 @@
 package com.guimor.tennisumpire
 
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.domain.error.OperationResult
-import com.guimor.tennisumpire.domain.error.SuccessMessageResult
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
+import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerRepository
 import kotlinx.coroutines.flow.Flow
@@ -280,8 +279,8 @@ class FakePlayerRepository : PlayerRepository {
         )
     }
 
-    override suspend fun insertPlayer(player: Player): MessageResult {
-        return SuccessMessageResult.PLAYER_CREATED
+    override suspend fun insertPlayer(player: Player): ResultType {
+        return DatabaseSuccess.REGISTRY_CREATED
     }
 
     override suspend fun getPlayer(playerUid: Int): Player {
@@ -318,12 +317,12 @@ class FakePlayerRepository : PlayerRepository {
         )
     }
 
-    override suspend fun deletePlayer(playerUid: Int): MessageResult {
-        return SuccessMessageResult.PLAYER_DELETED
+    override suspend fun deletePlayer(playerUid: Int): ResultType {
+        return DatabaseSuccess.REGISTRY_DELETED
     }
 
-    override suspend fun editPlayer(player: Player): MessageResult {
-        return SuccessMessageResult.PLAYER_EDITED
+    override suspend fun editPlayer(player: Player): ResultType {
+        return DatabaseSuccess.REGISTRY_EDITED
     }
 
     override suspend fun toggleAddPlayerToFavourites(playerUid: Int) {}

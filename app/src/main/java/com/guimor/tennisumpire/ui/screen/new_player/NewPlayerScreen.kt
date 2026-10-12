@@ -4,7 +4,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.guimor.tennisumpire.R
-import com.guimor.tennisumpire.domain.error.Success
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.UiText
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerScreen
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
 
@@ -14,13 +15,13 @@ fun NewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     newPlayerViewModel: EditOrNewPlayerViewModel,
-    onOperationSuccess: (successResult: Success) -> Unit,
+    onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
 ) {
     EditOrNewPlayerScreen(
         onNavigateBack = { onNavigateBack() },
         onNavigateToSettings = { onNavigateToSettings() },
         editPlayerViewModel = newPlayerViewModel,
-        onOperationSuccess = { successResult -> onOperationSuccess(successResult) },
+        onOperationSuccess = { resultWithUiText -> onOperationSuccess(resultWithUiText) },
         title = stringResource(R.string.new_player),
         buttonText = stringResource(R.string.create_player)
     )

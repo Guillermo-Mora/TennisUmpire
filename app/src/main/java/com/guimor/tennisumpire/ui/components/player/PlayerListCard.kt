@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.icons.cakeFilledIcon
 import com.guimor.tennisumpire.ui.icons.femaleIcon

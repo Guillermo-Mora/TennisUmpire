@@ -3,7 +3,6 @@ package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -16,10 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.room_database.player.Player
+import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.ui.components.player.PlayerListCard
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +26,7 @@ fun PlayersScreen(
     onNavigateToPlayerProfile: (playerUid: Int) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: PlayersViewModel = viewModel(factory = PlayersViewModel.Factory),
-    onOperationResult: (result: MessageResult) -> Unit,
+    onOperationResult: (result: ResultType) -> Unit,
 ) {
     //Importante saber esto para más adelante
     //Si añades búsqueda o filtros: deberás recrear el Pager con flatMapLatest

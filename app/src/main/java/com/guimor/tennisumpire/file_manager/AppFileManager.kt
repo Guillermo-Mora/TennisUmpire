@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
-import com.guimor.tennisumpire.domain.error.FileManagerError
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.FileManagerError
+import com.guimor.tennisumpire.domain.operation_result.OperationResult
 import com.guimor.tennisumpire.domain.model.StoredIn
 import java.io.File
 import java.io.FileNotFoundException
@@ -22,8 +21,8 @@ class AppFileManager(
     ): OperationResult<Uri> {
         val storageDir = getStorageDir(storedIn).let {
             when (it) {
-                is OperationResult.ErrorResult -> return it
-                is OperationResult.SuccessResult -> it.value
+                is OperationResult.ErrorOperation -> return it
+                is OperationResult.SuccessOperation -> it.value
             }
         }
         val file = File.createTempFile(
@@ -38,9 +37,9 @@ class AppFileManager(
                 file
             )
         } catch (_: IllegalArgumentException) {
-            return OperationResult.ErrorResult(FileManagerError.FILE_DOESNT_EXISTS)
+            return OperationResult.ErrorOperation(FileManagerError.FILE_DOESNT_EXISTS)
         }
-        return OperationResult.SuccessResult(uri)
+        return OperationResult.SuccessOperation(uri)
     }
 
     fun createTempFileAndGetUri(
@@ -49,8 +48,8 @@ class AppFileManager(
     ): OperationResult<Uri> {
         val storageDir = getStorageDir(storedIn).let {
             when (it) {
-                is OperationResult.ErrorResult -> return it
-                is OperationResult.SuccessResult -> it.value
+                is OperationResult.ErrorOperation -> return it
+                is OperationResult.SuccessOperation -> it.value
             }
         }
         val file =
@@ -61,11 +60,11 @@ class AppFileManager(
         val input = try {
             context.contentResolver.openInputStream(originalFileUri)
         } catch (_: FileNotFoundException) {
-            return OperationResult.ErrorResult(FileManagerError.FILE_DOESNT_EXISTS)
+            return OperationResult.ErrorOperation(FileManagerError.FILE_DOESNT_EXISTS)
         }
         input.use { inputStream ->
             file.outputStream().use { outputStream ->
-                inputStream?.copyTo(outputStream) ?: return OperationResult.ErrorResult(
+                inputStream?.copyTo(outputStream) ?: return OperationResult.ErrorOperation(
                     FileManagerError.FILE_DOESNT_EXISTS
                 )
             }
@@ -77,9 +76,9 @@ class AppFileManager(
                 file
             )
         } catch (_: IllegalArgumentException) {
-            return OperationResult.ErrorResult(FileManagerError.FILE_DOESNT_EXISTS)
+            return OperationResult.ErrorOperation(FileManagerError.FILE_DOESNT_EXISTS)
         }
-        return OperationResult.SuccessResult(uri)
+        return OperationResult.SuccessOperation(uri)
     }
 
     fun persistFileAndGetUri(
@@ -88,8 +87,8 @@ class AppFileManager(
     ): OperationResult<Uri> {
         val storageDir = getStorageDir(storedIn).let {
             when (it) {
-                is OperationResult.ErrorResult -> return it
-                is OperationResult.SuccessResult -> it.value
+                is OperationResult.ErrorOperation -> return it
+                is OperationResult.SuccessOperation -> it.value
             }
         }
         val file =
@@ -100,11 +99,11 @@ class AppFileManager(
         val input = try {
             context.contentResolver.openInputStream(tempFileUri)
         } catch (_: FileNotFoundException) {
-            return OperationResult.ErrorResult(FileManagerError.FILE_DOESNT_EXISTS)
+            return OperationResult.ErrorOperation(FileManagerError.FILE_DOESNT_EXISTS)
         }
         input.use { inputStream ->
             file.outputStream().use { outputStream ->
-                inputStream?.copyTo(outputStream) ?: return OperationResult.ErrorResult(
+                inputStream?.copyTo(outputStream) ?: return OperationResult.ErrorOperation(
                     FileManagerError.FILE_DOESNT_EXISTS
                 )
             }
@@ -116,9 +115,9 @@ class AppFileManager(
                 file
             )
         } catch (_: IllegalArgumentException) {
-            return OperationResult.ErrorResult(FileManagerError.FILE_DOESNT_EXISTS)
+            return OperationResult.ErrorOperation(FileManagerError.FILE_DOESNT_EXISTS)
         }
-        return OperationResult.SuccessResult(uri)
+        return OperationResult.SuccessOperation(uri)
     }
 
     fun deleteFileIfExists(
@@ -141,9 +140,9 @@ class AppFileManager(
             storedIn.pathName
         ).also {
             if (!it.exists())
-                if (!it.mkdirs()) return OperationResult.ErrorResult(FileManagerError.CANT_CREATE_FILE_DIRECTORY)
+                if (!it.mkdirs()) return OperationResult.ErrorOperation(FileManagerError.CANT_CREATE_DIRECTORY)
         }
-        return OperationResult.SuccessResult(file)
+        return OperationResult.SuccessOperation(file)
     }
 
     fun deviceHasCamera() =

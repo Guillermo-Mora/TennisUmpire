@@ -9,9 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.components.player.PlayerFullProfileCard
 import java.time.LocalDate

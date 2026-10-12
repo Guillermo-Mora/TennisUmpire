@@ -1,16 +1,15 @@
 package com.guimor.tennisumpire.ui.model
 
-import com.guimor.tennisumpire.domain.error.Error
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.ErrorResult
 
 data class FormFieldData(
     val value: String = "",
-    val error: Error? = null
+    val error: ErrorResult? = null
 )
 
 data class FormFieldDataType<T>(
     val value: T? = null,
-    val error: Error? = null
+    val error: ErrorResult? = null
 )
 
 fun String.getValueOrNull(): String? {

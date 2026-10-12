@@ -2,9 +2,9 @@ package com.guimor.tennisumpire.room_database.player
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.paging.PagingSource
-import com.guimor.tennisumpire.domain.error.DatabaseError
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.domain.error.SuccessMessageResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseError
+import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
+import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
 import kotlinx.coroutines.flow.Flow
 
 class PlayerRepositoryImpl(
@@ -16,13 +16,13 @@ class PlayerRepositoryImpl(
 
     override suspend fun insertPlayer(
         player: Player
-    ): MessageResult {
+    ): ResultType {
         try {
             playerDao.insertPlayer(player)
         } catch (_: SQLiteConstraintException) {
-            return DatabaseError.PLAYER_ALREADY_EXISTS
+            return DatabaseError.REGISTRY_ALREADY_EXISTS
         }
-        return SuccessMessageResult.PLAYER_CREATED
+        return DatabaseSuccess.REGISTRY_CREATED
     }
 
     override suspend fun getPlayer(
@@ -37,22 +37,22 @@ class PlayerRepositoryImpl(
 
     override suspend fun deletePlayer(
         playerUid: Int
-    ): MessageResult {
+    ): ResultType {
         playerDao.deletePlayer(playerUid).also { deletedRows ->
-            return if (deletedRows >= 1) SuccessMessageResult.PLAYER_DELETED
-            else DatabaseError.PLAYER_NOT_EXISTS
+            return if (deletedRows >= 1) DatabaseSuccess.REGISTRY_DELETED
+            else DatabaseError.REGISTRY_NOT_EXISTS
         }
     }
 
     override suspend fun editPlayer(
         player: Player
-    ): MessageResult {
+    ): ResultType {
         try {
             playerDao.editPlayer(player)
         } catch (_: SQLiteConstraintException) {
-            return DatabaseError.PLAYER_ALREADY_EXISTS
+            return DatabaseError.REGISTRY_ALREADY_EXISTS
         }
-        return SuccessMessageResult.PLAYER_EDITED
+        return DatabaseSuccess.REGISTRY_EDITED
     }
 
     override suspend fun toggleAddPlayerToFavourites(playerUid: Int) {

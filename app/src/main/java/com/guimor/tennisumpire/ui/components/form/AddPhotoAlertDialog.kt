@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.guimor.tennisumpire.dependency_injection.MyApplication
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.operation_result.OperationResult
 import com.guimor.tennisumpire.domain.model.StoredIn
 import com.guimor.tennisumpire.ui.icons.add_a_photoIcon
 import com.guimor.tennisumpire.ui.icons.add_photo_alternateIcon
@@ -53,8 +53,8 @@ fun AddPhotoAlertDialog(
                 originalFileUri = uri
             ).also {
                 when (it) {
-                    is OperationResult.ErrorResult -> return@let
-                    is OperationResult.SuccessResult -> setPhoto(it.value)
+                    is OperationResult.ErrorOperation -> return@let
+                    is OperationResult.SuccessOperation -> setPhoto(it.value)
                 }
             }
         }
@@ -134,8 +134,8 @@ fun AddPhotoAlertDialog(
                                         storedIn = StoredIn.CAMERA_CACHE,
                                     ).let {
                                         when (it) {
-                                            is OperationResult.ErrorResult -> return@TextButton
-                                            is OperationResult.SuccessResult -> it.value
+                                            is OperationResult.ErrorOperation -> return@TextButton
+                                            is OperationResult.SuccessOperation -> it.value
                                         }
                                     }
                                 cameraPhotoUri?.let { cameraLauncher.launch(input = it) }

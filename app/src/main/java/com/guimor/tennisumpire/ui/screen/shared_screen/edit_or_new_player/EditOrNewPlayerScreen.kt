@@ -41,11 +41,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.guimor.tennisumpire.domain.error.Success
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
+import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.UiText
+import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.toUiText
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
@@ -78,7 +83,7 @@ fun EditOrNewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     editPlayerViewModel: EditOrNewPlayerViewModel,
-    onOperationSuccess: (successResult: Success) -> Unit,
+    onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
     title: String,
     buttonText: String,
 ) {
@@ -91,13 +96,21 @@ fun EditOrNewPlayerScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
-            if (operationResult is Success) {
-                onOperationSuccess(operationResult)
+            if (operationResult is SuccessResult) {
+                val playerAbbreviatedName = "${
+                    uiState.playerFirstName.value.first().uppercase()
+                }. ${uiState.playerLastName.value}"
+                onOperationSuccess(
+                    operationResult.toResultWithUiText(
+                        R.string.player,
+                        playerAbbreviatedName
+                    )
+                )
                 onNavigateBack()
             } else {
                 snackBarHostState.showSnackbar(
                     visuals = OperationSnackbarVisuals(
-                        operationResult = operationResult,
+                        resultWithUiText = operationResult.toResultWithUiText(),
                         duration = SnackbarDuration.Short,
                     ),
                 )

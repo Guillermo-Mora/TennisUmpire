@@ -274,16 +274,18 @@
     <string name="file_doesn_t_exists">File doesn\'t exists</string>
     <string name="file_can_t_be_moved">File can\'t be moved</string>
     <string name="directory_for_the_file_coudn_t_be_created">Directory for the file coudn\'t be created</string>
-    <string name="player_no_longer_exists">Player no longer exists</string>
-    <string name="a_player_with_this_name_already_exists">A player with this name already exists</string>
-    <string name="player_deleted">Player deleted</string>
-    <string name="player_created">Player created</string>
+    <string name="no_longer_exists">%1$s no longer exists</string>
+    <string name="already_exists">%1$s already exists</string>
+    <string name="registry_deleted">%1$s deleted</string>
+    <string name="registry_created">%1$s created</string>
     <string name="rules">Rules</string>
     <string name="new_rule">New rule</string>
     <string name="edit_player">Edit player</string>
     <string name="create_player">Create player</string>
     <string name="save_changes">Save changes</string>
-    <string name="player_edited">Player edited</string>
+    <string name="registry_edited">%1$s edited</string>
     <string name="details">Details</string>
     <string name="statistics">Statistics</string>
+    <string name="can_t_create_directory">Can\'t create directory</string>
+    <string name="player">Player %1$s</string>
 </resources>

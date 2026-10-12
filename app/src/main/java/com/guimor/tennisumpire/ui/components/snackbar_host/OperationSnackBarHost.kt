@@ -19,13 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.guimor.tennisumpire.domain.error.Error
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.value
 import com.guimor.tennisumpire.ui.icons.check_circleIcon
 import com.guimor.tennisumpire.ui.icons.closeIcon
 import com.guimor.tennisumpire.ui.icons.errorIcon
@@ -58,13 +56,13 @@ fun OperationSnackBarHost(
             ) {
                 Icon(
                     imageVector =
-                        if (visuals.operationResult is Error) errorIcon
+                        if (visuals.resultWithUiText.resultType is Error) errorIcon
                         else check_circleIcon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background
                 )
                 Text(
-                    text = stringResource(visuals.operationResult.messageId),
+                    text = visuals.resultWithUiText.uiText.value,
                     color = MaterialTheme.colorScheme.background,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -91,7 +89,7 @@ fun OperationSnackBarHost(
 }
 
 data class OperationSnackbarVisuals (
-    val operationResult: MessageResult,
+    val resultWithUiText: ResultWithUiText,
     override val duration: SnackbarDuration,
     override val actionLabel: String? = null,
     override val message: String = "",
