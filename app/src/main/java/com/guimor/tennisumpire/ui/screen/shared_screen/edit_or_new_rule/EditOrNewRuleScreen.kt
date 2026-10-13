@@ -1,34 +1,22 @@
 package com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule
 
-import android.widget.NumberPicker
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -39,29 +27,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import com.guimor.tennisumpire.R
-import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.player.PlayerGender
-import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
+import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.*
+import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
+import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakStartsOn
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
 import com.guimor.tennisumpire.room_database.rule.FakeRuleRepository
-import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
-import com.guimor.tennisumpire.ui.components.form.FormDateField
-import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
+import com.guimor.tennisumpire.ui.components.form.FormInformativeText
 import com.guimor.tennisumpire.ui.components.form.FormNumberPicker
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.form.FormTextField
@@ -71,21 +52,7 @@ import com.guimor.tennisumpire.ui.components.spacer.BigSpacer
 import com.guimor.tennisumpire.ui.components.spacer.DefaultSpacer
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
-import com.guimor.tennisumpire.ui.components.transformation.HeightVisualTransformation
-import com.guimor.tennisumpire.ui.components.transformation.WeightVisualTransformation
-import com.guimor.tennisumpire.ui.icons.add_photo_alternateIcon
 import com.guimor.tennisumpire.ui.icons.assignmentIcon
-import com.guimor.tennisumpire.ui.icons.cakeIcon
-import com.guimor.tennisumpire.ui.icons.femaleIcon
-import com.guimor.tennisumpire.ui.icons.globe_location_pinIcon
-import com.guimor.tennisumpire.ui.icons.maleIcon
-import com.guimor.tennisumpire.ui.icons.pan_toolIcon
-import com.guimor.tennisumpire.ui.icons.personFilledIcon
-import com.guimor.tennisumpire.ui.icons.personIcon
-import com.guimor.tennisumpire.ui.icons.settingsIcon
-import com.guimor.tennisumpire.ui.icons.sign_languageIcon
-import com.guimor.tennisumpire.ui.icons.straightenIcon
-import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -142,14 +109,56 @@ fun EditOrNewRuleScreen(
     }
     val ruleSetsQuantityTypeOptions = listOf(
         SegmentedButtonOption(
-            selected = false,
             label = stringResource(R.string.best_of),
             value = BEST_OF
         ),
         SegmentedButtonOption(
-            selected = false,
             label = stringResource(R.string.fixed_quantity),
             value = FIXED_QUANTITY
+        ),
+    )
+    val ruleGlobalSetTypeOptions = listOf(
+        SegmentedButtonOption(
+            label = stringResource(R.string.games),
+            value = RuleSetType.GAMES
+        ),
+        SegmentedButtonOption(
+            label = stringResource(R.string.tiebreak),
+            value = RuleSetType.TIEBREAK
+        ),
+    )
+    val ruleGlobalOnGameDeuceOptions = listOf(
+        SegmentedButtonOption(
+            label = stringResource(R.string.advantage),
+            value = RuleOnGameDeuce.ADVANTAGE
+        ),
+        SegmentedButtonOption(
+            label = stringResource(R.string.golden_point),
+            value = RuleOnGameDeuce.GOLDEN_POINT
+        ),
+        SegmentedButtonOption(
+            label = stringResource(R.string.star_point),
+            value = RuleOnGameDeuce.STAR_POINT
+        ),
+    )
+    val ruleGlobalTiebreakStartsOnOptions = listOf(
+        SegmentedButtonOption(
+            label = "Maximum games draw",
+            value = RuleTiebreakStartsOn.MAX_GAMES_EQUALITY
+        ),
+        SegmentedButtonOption(
+            label = "No tiebreak",
+            value = RuleTiebreakStartsOn.NO_TIEBREAK
+        ),
+    )
+    val ruleGlobalTiebreakDeciderOptions = listOf(
+        SegmentedButtonOption(
+            label = "Two points difference",
+            value = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+        ),
+        SegmentedButtonOption(
+            label = "Golden point",
+            value = RuleTiebreakDecider.GOLDEN_POINT
         ),
     )
     Scaffold(
@@ -200,19 +209,86 @@ fun EditOrNewRuleScreen(
             FormNumberPicker(
                 formFieldData = uiState.ruleSetsQuantity,
                 onValueChange = {},
-                label = null,//
-                placeHolder = "3"
+                placeHolder = "3",
             )
-            BigSpacer()
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Sets rule",
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            DefaultSpacer()
+            HorizontalDivider()
+            DefaultSpacer()
+            SectionHeaderText("Sets rules")
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Sets type",
+                selectedOption = uiState.ruleGlobalSetType,
+                options = ruleGlobalSetTypeOptions,
+                onClick = {},
+            )
+            DefaultSpacer()
+            FormNumberPicker(
+                formFieldData = uiState.ruleGlobalGamesPerSet,
+                onValueChange = {},
+                label = "Games per set",
+                placeHolder = "6"
+            )
+            DefaultSpacer()
+            HorizontalDivider()
+            DefaultSpacer()
+            SectionHeaderText("Games rules")
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "On 40-40",
+                selectedOption = uiState.ruleGlobalOnGameDeuce,
+                options = ruleGlobalOnGameDeuceOptions,
+                onClick = {},
+            )
+            DefaultSpacer()
+            FormInformativeText(
+                title = "How they work",
+                text = """- Golden point: the winner of the next point wins the game.
+                    |- Star point: on the third deuce, golden point is played.
+                """.trimMargin()
+            )
+            DefaultSpacer()
+            HorizontalDivider()
+            DefaultSpacer()
+            SectionHeaderText("Tiebreaks rules")
+            DefaultSpacer()
+            //THIS SHOULD BE INSDE THE SET RULES
+            //AND BE CALLED: SET WINNER ON GAMES DRAW: TIEBREAK OR 2 GAMES DIFFERENCE
+            //THIS WOULD BE MUCH MORE INTUITIVE TO UNDERSTAND AND READ
+            //AND I WOULDN'T NEED TO ADD ANY EXPLANATION
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Tiebreak starts on",
+                selectedOption = uiState.ruleGlobalTiebreakStartsOn,
+                options = ruleGlobalTiebreakStartsOnOptions,
+                onClick = {},
+            )
+            DefaultSpacer()
+            FormInformativeText(
+                text = "No tiebreak: 2 games difference for winning the set."
+            )
+            //
+            //
+            //
+            DefaultSpacer()
+            FormNumberPicker(
+                formFieldData = uiState.ruleGlobalGamesPerSet,
+                onValueChange = {},
+                label = "Points per tiebreak",
+                placeHolder = "7"
+            )
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Tiebreak winner on points draw",
+                selectedOption = uiState.ruleGlobalTiebreakDecider,
+                options = ruleGlobalTiebreakDeciderOptions,
+                onClick = {},
+            )
+            DefaultSpacer()
+            HorizontalDivider()
+            DefaultSpacer()
+            //Deciding set boolean selector here
+            //Deciding set rules will appear here if deciding set different boolean selector
+            // is set to true.
             BigSpacer()
             Button(
                 onClick = {}
@@ -225,7 +301,21 @@ fun EditOrNewRuleScreen(
 }
 
 @Composable
-@Preview
+private fun SectionHeaderText(
+    text: String
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = text,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}
+
+@Composable
+@Preview(
+    heightDp = 2000
+)
 fun EditOrNewRuleScreenPreview() {
     MaterialTheme {
         EditOrNewRuleScreen(

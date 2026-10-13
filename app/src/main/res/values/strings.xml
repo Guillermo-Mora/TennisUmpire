@@ -291,4 +291,10 @@
     <string name="rule">Rule %1$s</string>
     <string name="best_of">Best of</string>
     <string name="fixed_quantity">Fixed quantity</string>
+    <string name="info">Info</string>
+    <string name="games">Games</string>
+    <string name="tiebreak">Tiebreak</string>
+    <string name="advantage">Advantage</string>
+    <string name="golden_point">Golden point</string>
+    <string name="star_point">Star point</string>
 </resources>

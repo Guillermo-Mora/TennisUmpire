@@ -37,7 +37,7 @@ import com.guimor.tennisumpire.ui.model.FormFieldData
 fun FormNumberPicker(
     formFieldData: FormFieldData,
     onValueChange: (newValue: String) -> Unit,
-    label: String?,
+    label: String? = null,
     placeHolder: String,
     keyboardType: KeyboardType = KeyboardType.Number,
 ) {
