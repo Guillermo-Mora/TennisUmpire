@@ -44,7 +44,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.Country
@@ -56,6 +58,7 @@ import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.*
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
+import com.guimor.tennisumpire.room_database.rule.FakeRuleRepository
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
@@ -218,5 +221,23 @@ fun EditOrNewRuleScreen(
             }
             DefaultSpacer()
         }
+    }
+}
+
+@Composable
+@Preview
+fun EditOrNewRuleScreenPreview() {
+    MaterialTheme {
+        EditOrNewRuleScreen(
+            onNavigateBack = {},
+            editOrNewRuleViewModel = viewModel {
+                EditOrNewRuleViewModel(
+                    ruleRepository = FakeRuleRepository()
+                )
+            },
+            onOperationSuccess = {},
+            title = "New Rule",
+            buttonText = "Create rule"
+        )
     }
 }

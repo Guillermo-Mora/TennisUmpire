@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -34,13 +36,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.icons.article_personIcon
 import com.guimor.tennisumpire.ui.icons.delete_foreverIcon
 import com.guimor.tennisumpire.ui.icons.editIcon
 import com.guimor.tennisumpire.ui.icons.warningIcon
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -279,6 +286,39 @@ private fun DeletePlayerAlertDialog(
                         Text("Delete")
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun PlayerCardBottomSheetPreview() {
+    Scaffold { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            PlayerCardBottomSheet(
+                player = Player(
+                    uid = 0,
+                    firstName = "Guillermo",
+                    lastName = "Mora",
+                    birthdate = LocalDate.of(2025, 10, 27),
+                    height = 183f,
+                    weight = 68f,
+                    country = null,
+                    gender = PlayerGender.MALE,
+                    dominantHand = PlayerDominantHand.LEFT,
+                    backhand = PlayerBackhand.ONE_HANDED,
+                    photo = null
+                ),
+                onClickToggleAddPlayerToFavourites = {},
+                onClickDeletePlayer = {},
+                onClickEditPlayer = {},
+                onClickPlayerProfile = {}
+            ) {
             }
         }
     }

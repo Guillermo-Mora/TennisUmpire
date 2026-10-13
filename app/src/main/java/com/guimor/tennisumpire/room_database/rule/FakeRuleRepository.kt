@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire
+package com.guimor.tennisumpire.room_database.rule
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -9,9 +9,6 @@ import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakStartsOn
 import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
-import com.guimor.tennisumpire.room_database.rule.Rule
-import com.guimor.tennisumpire.room_database.rule.RuleRepository
-import com.guimor.tennisumpire.room_database.rule.SetRules
 
 class FakeRuleRepository: RuleRepository {
     override fun getAllRules(): PagingSource<Int, Rule> {

@@ -1,11 +1,15 @@
 package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -20,6 +25,7 @@ import androidx.paging.compose.itemKey
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
+import com.guimor.tennisumpire.room_database.player.FakePlayerRepository
 import com.guimor.tennisumpire.ui.components.player.PlayerListCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,6 +81,31 @@ fun PlayersScreen(
                     Spacer(Modifier.height(84.dp))
                 }
             }
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(
+    widthDp = 300
+)
+@Composable
+fun PlayersScreenPreview() {
+    MaterialTheme {
+        Scaffold {
+            PlayersScreen(
+                onNavigateBack = { },
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                viewModel = viewModel {
+                    PlayersViewModel(
+                        playerRepository = FakePlayerRepository()
+                    )
+                },
+                onNavigateToEditPlayer = {},
+                onNavigateToPlayerProfile = {},
+                onOperationResult = {},
+            )
         }
     }
 }

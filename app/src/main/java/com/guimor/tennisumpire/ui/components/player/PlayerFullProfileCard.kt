@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.components.player
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
@@ -187,4 +190,37 @@ private fun TextOneLine(
         overflow = TextOverflow.Ellipsis,
         maxLines = 1
     )
+}
+
+@Composable
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+private fun PlayerFullProfileCardPreview() {
+    MaterialTheme {
+        Scaffold { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
+            ) {
+                PlayerFullProfileCard(
+                    player = Player(
+                        uid = 200,
+                        firstName = "SDKLFSJFKLDSJ LSDKJFKLSDJFDSLKFJDLKSJDFSLKFJSDLK FSDLKFDJSKLFJDSLKFSJLFSKJFSLKJLKJLKJLKJ",
+                        lastName = "SEKLRFJD FLKDSJFLKDSF DSKLFJSLKDJFDSLKSDJFLKSDJFSDLKSFJDLKSFJFDSKLJSFDKLJ",
+                        birthdate = LocalDate.of(2005, 10, 27),
+                        height = 183.76567567576576f,
+                        weight = 688.765765765765765f,
+                        country = null,
+                        gender = PlayerGender.MALE,
+                        dominantHand = PlayerDominantHand.LEFT,
+                        backhand = PlayerBackhand.ONE_HANDED,
+                        photo = null,
+                        favourite = false
+                    ),
+                )
+            }
+        }
+    }
 }
