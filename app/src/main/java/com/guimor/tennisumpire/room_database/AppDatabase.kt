@@ -8,10 +8,15 @@ import com.guimor.tennisumpire.room_database.converter.LocalDateConverter
 import com.guimor.tennisumpire.room_database.converter.UriConverter
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerDao
+import com.guimor.tennisumpire.room_database.rule.Rule
+import com.guimor.tennisumpire.room_database.rule.RuleDao
 
 @Database(
     version = 1,
-    entities = [Player::class],
+    entities = [
+        Player::class,
+        Rule::class
+    ],
     exportSchema = true,
     autoMigrations = [
         //AutoMigration(from = 1, to = 2)
@@ -23,4 +28,5 @@ import com.guimor.tennisumpire.room_database.player.PlayerDao
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
+    abstract fun ruleDao(): RuleDao
 }

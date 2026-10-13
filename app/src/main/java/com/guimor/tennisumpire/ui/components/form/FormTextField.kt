@@ -38,6 +38,8 @@ fun FormTextField(
     required: Boolean = false
 ) {
     Row(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
             alignment = Alignment.CenterHorizontally
@@ -94,7 +96,7 @@ fun FormTextField(
             ),
             visualTransformation = visualTransformation ?: VisualTransformation.None,
             modifier = Modifier
-                .widthIn(max = 300.dp)
+                .widthIn(max = 500.dp)
                 .fillMaxWidth()
         )
     }

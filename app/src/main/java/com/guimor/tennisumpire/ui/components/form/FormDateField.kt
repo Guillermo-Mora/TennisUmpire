@@ -52,6 +52,8 @@ fun FormDateField(
     var selectedDate by rememberSaveable { mutableStateOf<Long?>(null) }
     var showModal by rememberSaveable { mutableStateOf(false) }
     Row(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
             alignment = Alignment.CenterHorizontally
@@ -95,7 +97,7 @@ fun FormDateField(
             isError = formFieldDataType.error != null,
             singleLine = true,
             modifier = Modifier
-                .widthIn(max = 300.dp)
+                .widthIn(max = 500.dp)
                 .fillMaxWidth()
                 .pointerInput(selectedDate) {
                     awaitEachGesture {

@@ -2,10 +2,13 @@ package com.guimor.tennisumpire.ui.components.form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -16,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 import kotlin.collections.forEachIndexed
 
@@ -36,7 +41,7 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             Text(label)
@@ -44,9 +49,15 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
                 modifier = Modifier
                     .height(8.dp)
             )
-            SingleChoiceSegmentedButtonRow {
+            SingleChoiceSegmentedButtonRow(
+                modifier = Modifier.fillMaxWidth(),
+                //
+            ) {
                 options.forEachIndexed { index, option ->
                     SegmentedButton(
+                        //I still have to work on this. As currently, the segmented buttons can
+                        // infinitely grow horizontally. But I still don't know how to solve this issue.
+                        //contentPadding = PaddingValues(horizontal = 30.dp),
                         selected = option.value == selectedOption,
                         onClick = { onClick(option.value) },
                         shape = SegmentedButtonDefaults.itemShape(
@@ -55,12 +66,17 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
                         ),
                         icon = { SegmentedButtonDefaults.Icon(active = option.value == selectedOption) },
                         label = {
-                            Icon(
-                                imageVector = option.icon,
-                                contentDescription = option.label,
-                                modifier = if (option.mirrorIcon)
-                                    Modifier.scale(scaleX = -1f, scaleY = 1f)
-                                else Modifier
+                            option.icon?.let { icon ->
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = option.label,
+                                    modifier = if (option.mirrorIcon)
+                                        Modifier.scale(scaleX = -1f, scaleY = 1f)
+                                    else Modifier
+                                )
+                            } ?:
+                            Text(
+                                text = option.label
                             )
                         }
                     )

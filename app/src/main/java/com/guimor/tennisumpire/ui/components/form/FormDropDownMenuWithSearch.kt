@@ -85,6 +85,8 @@ fun <T>FormDropDownMenuWithSearch(
     ) searchFilter(searchValue, options)
     else options
     Row(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
             alignment = Alignment.CenterHorizontally
@@ -106,7 +108,7 @@ fun <T>FormDropDownMenuWithSearch(
                 if (expanded) searchValue = ""
             },
             modifier = Modifier
-                .widthIn(max = 300.dp)
+                .widthIn(max = 500.dp)
                 .fillMaxWidth()
         ) {
             TextField(
@@ -162,7 +164,7 @@ fun <T>FormDropDownMenuWithSearch(
                 )
                 LazyColumn(
                     modifier = Modifier
-                        .width(300.dp)
+                        .width(500.dp)
                         .height(200.dp)
                 ) {
                     if (!required) {

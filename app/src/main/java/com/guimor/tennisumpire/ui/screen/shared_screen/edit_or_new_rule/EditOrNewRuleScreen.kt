@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +49,7 @@ import com.guimor.tennisumpire.domain.model.Country
 import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.player.PlayerGender
+import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
@@ -63,6 +67,7 @@ import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
 import com.guimor.tennisumpire.ui.components.transformation.HeightVisualTransformation
 import com.guimor.tennisumpire.ui.components.transformation.WeightVisualTransformation
 import com.guimor.tennisumpire.ui.icons.add_photo_alternateIcon
+import com.guimor.tennisumpire.ui.icons.assignmentIcon
 import com.guimor.tennisumpire.ui.icons.cakeIcon
 import com.guimor.tennisumpire.ui.icons.femaleIcon
 import com.guimor.tennisumpire.ui.icons.globe_location_pinIcon
@@ -70,6 +75,7 @@ import com.guimor.tennisumpire.ui.icons.maleIcon
 import com.guimor.tennisumpire.ui.icons.pan_toolIcon
 import com.guimor.tennisumpire.ui.icons.personFilledIcon
 import com.guimor.tennisumpire.ui.icons.personIcon
+import com.guimor.tennisumpire.ui.icons.settingsIcon
 import com.guimor.tennisumpire.ui.icons.sign_languageIcon
 import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
@@ -79,7 +85,6 @@ import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 @Composable
 fun EditOrNewRuleScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToSettings: () -> Unit,
     editOrNewRuleViewModel: EditOrNewRuleViewModel,
     onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
     title: String,
@@ -128,41 +133,16 @@ fun EditOrNewRuleScreen(
             }
         }
     }
-    val playerGenderOptions = listOf(
+    val ruleSetsQuantityTypeOptions = listOf(
         SegmentedButtonOption(
-            label = "Male",
-            icon = maleIcon,
-            value = PlayerGender.MALE
+            selected = false,
+            label = "Best of",
+            value = RuleSetsQuantityType.BEST_OF
         ),
         SegmentedButtonOption(
-            label = "Female",
-            icon = femaleIcon,
-            value = PlayerGender.FEMALE
-        ),
-    )
-    val playerDominantHandOptions = listOf(
-        SegmentedButtonOption(
-            label = "Left",
-            icon = pan_toolIcon,
-            mirrorIcon = true,
-            value = PlayerDominantHand.LEFT
-        ),
-        SegmentedButtonOption(
-            label = "Right",
-            icon = pan_toolIcon,
-            value = PlayerDominantHand.RIGHT
-        ),
-    )
-    val playerBackhandOptions = listOf(
-        SegmentedButtonOption(
-            label = "Two-handed",
-            icon = sign_languageIcon,
-            value = PlayerBackhand.TWO_HANDED
-        ),
-        SegmentedButtonOption(
-            label = "One-handed",
-            icon = pan_toolIcon,
-            value = PlayerBackhand.ONE_HANDED
+            selected = false,
+            label = "Fixed quantity",
+            value = RuleSetsQuantityType.FIXED_QUANTITY
         ),
     )
     Scaffold(
@@ -170,7 +150,6 @@ fun EditOrNewRuleScreen(
         topBar = {
             MainTopAppBar(
                 title = title,
-                onNavigateToSettings = { onNavigateToSettings() },
                 navigationIcon = {
                     NavigateBackIconButton(onNavigateBack = {
                         onNavigateBack()
@@ -183,204 +162,40 @@ fun EditOrNewRuleScreen(
             .fillMaxWidth()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
-        LazyColumn(
-            state = lazyListState,
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
-                .imePadding(),
+                .imePadding()
+                .verticalScroll(
+                    state = rememberScrollState(),
+                ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                Box(
-                    modifier = Modifier
-                        .size(120.dp)
-                ) {
-                    Surface(
-                        shape = CircleShape,
-                        modifier = Modifier
-                            .border(
-                                width = 1.5.dp,
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest
-                            )
-                    ) {
-                        uiState.playerPhotoUri?.let {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                model = it,
-                                contentDescription = "Player photo",
-                                contentScale = ContentScale.Crop
-                            )
-                        } ?: Icon(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            imageVector = personFilledIcon,
-                            contentDescription = "Player photo",
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        AddPhotoAlertDialog(
-                            selectedPhoto = uiState.playerPhotoUri,
-                            setPhoto = editPlayerViewModel::setPlayerPhoto
-                        ) { onOpenDialog ->
-                            IconButton(
-                                modifier = Modifier
-                                    .size(45.dp),
-                                colors = IconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                    contentColor = IconButtonDefaults.iconButtonColors().contentColor,
-                                    disabledContainerColor = IconButtonDefaults.iconButtonColors().disabledContainerColor,
-                                    disabledContentColor = IconButtonDefaults.iconButtonColors().disabledContentColor
-                                ),
-                                onClick = { onOpenDialog() }
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(10.dp),
-                                    imageVector = add_photo_alternateIcon,
-                                    contentDescription = "Add player picture"
-                                )
-                            }
-                        }
-                    }
-                }
-                BigSpacer()
+            DefaultSpacer()
+            FormTextField(
+                formFieldData = uiState.ruleName,
+                icon = assignmentIcon,
+                onValueChange = {}, //editPlayerViewModel::setPlayerFirstName,
+                label = "Rule name",
+                placeholder = "My rule",
+                required = false //required = true,
+            )
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Sets quantity type",
+                selectedOption = uiState.ruleSetsQuantityType,
+                options = ruleSetsQuantityTypeOptions,
+                onClick = {},
+            )
+            BigSpacer()
+            Button(
+                onClick = {}
+            ) {
+                Text(buttonText)
             }
-            item {
-                FormTextField(
-                    formFieldData = uiState.playerFirstName,
-                    icon = personIcon,
-                    onValueChange = editPlayerViewModel::setPlayerFirstName,
-                    label = "First name",
-                    placeholder = "William",
-                    required = true,
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormTextField(
-                    formFieldData = uiState.playerLastName,
-                    onValueChange = editPlayerViewModel::setPlayerLastName,
-                    label = "Last name",
-                    placeholder = "Smith",
-                    required = true
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormDateField(
-                    icon = cakeIcon,
-                    formFieldDataType = uiState.playerBirthdate,
-                    onDateSelected = editPlayerViewModel::setPlayerBirthdate,
-                    label = "Birthdate"
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormTextField(
-                    formFieldData = uiState.playerHeight,
-                    icon = straightenIcon,
-                    onValueChange = editPlayerViewModel::setPlayerHeight,
-                    label = "Height",
-                    placeholder = "180 cm",
-                    keyboardType = KeyboardType.Decimal,
-                    visualTransformation = HeightVisualTransformation()
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormTextField(
-                    formFieldData = uiState.playerWeight,
-                    icon = weightIcon,
-                    onValueChange = editPlayerViewModel::setPlayerWeight,
-                    label = "Weight",
-                    placeholder = "85 kg",
-                    keyboardType = KeyboardType.Decimal,
-                    visualTransformation = WeightVisualTransformation()
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormDropDownMenuWithSearch(
-                    value = uiState.playerCountry?.let { stringResource(it.displayName) },
-                    valueIcon = uiState.playerCountry?.let { painterResource(it.flag) },
-                    icon = globe_location_pinIcon,
-                    searchFilter = { searchValue, list ->
-                        list.filter {
-                            stringResource(it.displayName)
-                                .contains(searchValue.trim(), ignoreCase = true)
-                        }
-                    },
-                    label = "Country",
-                    onItemSelected = editPlayerViewModel::setPlayerCountry,
-                    options = Country.entries
-                ) { option ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            space = 8.dp,
-                            alignment = Alignment.Start
-                        )
-                    ) {
-                        Image(
-                            painter = painterResource(option.flag),
-                            contentDescription = null,
-                        )
-                        Text(
-                            text = stringResource(option.displayName),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
-                DefaultSpacer()
-            }
-            item {
-                FormSingleChoiceSegmentedButtonRow(
-                    label = "Gender",
-                    selectedOption = uiState.playerGender,
-                    options = playerGenderOptions,
-                    onClick = editPlayerViewModel::setPlayerGender,
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormSingleChoiceSegmentedButtonRow(
-                    label = "Dominant hand",
-                    selectedOption = uiState.playerDominantHand,
-                    options = playerDominantHandOptions,
-                    onClick = editPlayerViewModel::setPlayerDominantHand,
-                )
-                DefaultSpacer()
-            }
-            item {
-                FormSingleChoiceSegmentedButtonRow(
-                    label = "Backhand",
-                    selectedOption = uiState.playerBackhand,
-                    options = playerBackhandOptions,
-                    onClick = editPlayerViewModel::setPlayerBackhand,
-                )
-                BigSpacer()
-            }
-            item {
-                Button(
-                    onClick = { editPlayerViewModel.validateForm() }
-                ) {
-                    Text(buttonText)
-                }
-                DefaultSpacer()
-            }
+            DefaultSpacer()
         }
     }
-
-     */
 }

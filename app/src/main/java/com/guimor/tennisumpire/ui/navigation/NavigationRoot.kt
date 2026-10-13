@@ -27,6 +27,7 @@ import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule.EditOrNewRuleViewModel
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -132,8 +133,19 @@ fun NavigationRoot(
             )
         }
         entry<NavRoutesRoot.NewRule> {
+            val resultBus = LocalResultEventBus.current
             NewRuleScreen(
-                onNavigateBack = navigator::goBack
+                onNavigateBack = navigator::goBack,
+                newRuleViewModel = viewModel(
+                    factory = EditOrNewRuleViewModel
+                        .Factory()
+                ),
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                }
             )
         }
         entry<NavRoutesRoot.EditRule> {

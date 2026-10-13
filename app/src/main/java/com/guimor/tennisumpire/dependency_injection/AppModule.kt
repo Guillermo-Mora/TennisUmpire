@@ -9,11 +9,13 @@ import com.guimor.tennisumpire.file_manager.AppFileManager
 import com.guimor.tennisumpire.preferences_data_store.UserPreferencesRepository
 import com.guimor.tennisumpire.room_database.AppDatabase
 import com.guimor.tennisumpire.room_database.player.PlayerRepositoryImpl
+import com.guimor.tennisumpire.room_database.rule.RuleRepositoryImpl
 
 interface AppModule {
     val db : AppDatabase
     val userPreferencesRepository: UserPreferencesRepository
     val playerRepository: PlayerRepositoryImpl
+    val ruleRepository: RuleRepositoryImpl
     val appFileManager: AppFileManager
 }
 
@@ -31,6 +33,9 @@ class AppModuleImpl(
         UserPreferencesRepository(dataStore = appContext.dataStore)
     override val playerRepository: PlayerRepositoryImpl = PlayerRepositoryImpl(
         playerDao = db.playerDao()
+    )
+    override val ruleRepository: RuleRepositoryImpl = RuleRepositoryImpl(
+        ruleDao = db.ruleDao()
     )
     override val appFileManager: AppFileManager =
         AppFileManager(context = appContext)
