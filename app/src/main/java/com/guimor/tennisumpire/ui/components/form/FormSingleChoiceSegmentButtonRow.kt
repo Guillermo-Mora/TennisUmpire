@@ -27,7 +27,7 @@ import kotlin.collections.forEachIndexed
 
 @Composable
 fun <T>FormSingleChoiceSegmentedButtonRow(
-    label: String,
+    label: String? = null,
     selectedOption: T?,
     options: List<SegmentedButtonOption<T>>,
     onClick: (optionValue: T) -> Unit,
@@ -44,7 +44,7 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(label)
+            label?.let { label -> Text(label) }
             Spacer(
                 modifier = Modifier
                     .height(8.dp)

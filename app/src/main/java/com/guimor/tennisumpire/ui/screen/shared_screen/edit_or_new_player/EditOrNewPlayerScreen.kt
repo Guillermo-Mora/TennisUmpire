@@ -275,6 +275,7 @@ fun EditOrNewPlayerScreen(
             item {
                 FormTextField(
                     formFieldData = uiState.playerLastName,
+                    iconSpace = true,
                     onValueChange = editPlayerViewModel::setPlayerLastName,
                     label = "Last name",
                     placeholder = "Smith",

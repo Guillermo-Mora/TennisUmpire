@@ -15,21 +15,21 @@ data class EditOrNewRuleUiState(
     //Rules
     val ruleName: FormFieldData = FormFieldData(),
     val ruleSetsQuantityType: RuleSetsQuantityType? = null,
-    val ruleSetsQuantity: Int? = null,
+    val ruleSetsQuantity: FormFieldData = FormFieldData(),
     //Sets rules
     val ruleGlobalSetType: RuleSetType? = null,
-    val ruleGlobalGamesPerSet: Int? = null,
+    val ruleGlobalGamesPerSet: FormFieldData = FormFieldData(),
     val ruleGlobalOnGameDeuce: RuleOnGameDeuce? = null,
     val ruleGlobalTiebreakStartsOn: RuleTiebreakStartsOn? = null,
-    val ruleGlobalPointsPerTiebreak: Int? = null,
+    val ruleGlobalPointsPerTiebreak: FormFieldData = FormFieldData(),
     val ruleGlobalTiebreakDecider: RuleTiebreakDecider? = null,
     //Check for enabling deciding set rules
     val areDecidingSetRulesDifferent: Boolean = false,
     //Deciding set rules
     val ruleDecidingSetType: RuleSetType? = null,
-    val ruleDecidingGamesPerSet: Int? = null,
+    val ruleDecidingGamesPerSet: FormFieldData = FormFieldData(),
     val ruleDecidingOnGameDeuce: RuleOnGameDeuce? = null,
     val ruleDecidingTiebreakStartsOn: RuleTiebreakStartsOn? = null,
-    val ruleDecidingPointsPerTiebreak: Int? = null,
+    val ruleDecidingPointsPerTiebreak: FormFieldData = FormFieldData(),
     val ruleDecidingTiebreakDecider: RuleTiebreakDecider? = null,
 ): BaseUiState()

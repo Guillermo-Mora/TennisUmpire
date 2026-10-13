@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule
 
+import android.widget.NumberPicker
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -50,12 +52,14 @@ import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
 import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
+import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.*
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
+import com.guimor.tennisumpire.ui.components.form.FormNumberPicker
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.form.FormTextField
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
@@ -136,13 +140,13 @@ fun EditOrNewRuleScreen(
     val ruleSetsQuantityTypeOptions = listOf(
         SegmentedButtonOption(
             selected = false,
-            label = "Best of",
-            value = RuleSetsQuantityType.BEST_OF
+            label = stringResource(R.string.best_of),
+            value = BEST_OF
         ),
         SegmentedButtonOption(
             selected = false,
-            label = "Fixed quantity",
-            value = RuleSetsQuantityType.FIXED_QUANTITY
+            label = stringResource(R.string.fixed_quantity),
+            value = FIXED_QUANTITY
         ),
     )
     Scaffold(
@@ -184,11 +188,28 @@ fun EditOrNewRuleScreen(
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
-                label = "Sets quantity type",
+                label = "Sets quantity",
                 selectedOption = uiState.ruleSetsQuantityType,
                 options = ruleSetsQuantityTypeOptions,
                 onClick = {},
             )
+            DefaultSpacer()
+            FormNumberPicker(
+                formFieldData = uiState.ruleSetsQuantity,
+                onValueChange = {},
+                label = null,//
+                placeHolder = "3"
+            )
+            BigSpacer()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Sets rule",
+                    fontWeight = FontWeight.Bold
+                )
+            }
             BigSpacer()
             Button(
                 onClick = {}

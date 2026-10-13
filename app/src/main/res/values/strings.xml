@@ -289,4 +289,6 @@
     <string name="can_t_create_directory">Can\'t create directory</string>
     <string name="player">Player %1$s</string>
     <string name="rule">Rule %1$s</string>
+    <string name="best_of">Best of</string>
+    <string name="fixed_quantity">Fixed quantity</string>
 </resources>
