@@ -337,64 +337,73 @@ fun EditOrNewRuleScreen(
                         onClick = editOrNewRuleViewModel::setDecidingSetType,
                     )
                     DefaultSpacer()
-                    FormNumberPicker(
-                        value = uiState.ruleDecidingGamesPerSet,
-                        onValueChange = editOrNewRuleViewModel::setDecidingGamesPerSet,
-                        label = "Games per set",
-                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingGamesPerSet),
-                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingGamesPerSet),
-                    )
-                    DefaultSpacer()
-                    FormSingleChoiceSegmentedButtonRow(
-                        label = "Set decider on max games draw",
-                        selectedOption = uiState.ruleDecidingSetDecider,
-                        options = ruleGlobalTiebreakStartsOnOptions,
-                        onClick = editOrNewRuleViewModel::setDecidingSetDecider,
-                    )
-                    DefaultSpacer()
+                    if (uiState.ruleDecidingSetType == RuleSetType.GAMES) {
+                        FormNumberPicker(
+                            value = uiState.ruleDecidingGamesPerSet,
+                            onValueChange = editOrNewRuleViewModel::setDecidingGamesPerSet,
+                            label = "Games per set",
+                            enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingGamesPerSet),
+                            enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingGamesPerSet),
+                        )
+                        DefaultSpacer()
+                        FormSingleChoiceSegmentedButtonRow(
+                            label = "Set decider on max games draw",
+                            selectedOption = uiState.ruleDecidingSetDecider,
+                            options = ruleGlobalTiebreakStartsOnOptions,
+                            onClick = editOrNewRuleViewModel::setDecidingSetDecider,
+                        )
+                        DefaultSpacer()
+                    }
                 }
                 HorizontalDivider()
-                RuleSection {
-                    DefaultSpacer()
-                    SectionHeaderText("Deciding set - Games rules")
-                    DefaultSpacer()
-                    FormSingleChoiceSegmentedButtonRow(
-                        label = "On 40-40",
-                        selectedOption = uiState.ruleDecidingOnGameDeuce,
-                        options = ruleGlobalOnGameDeuceOptions,
-                        onClick = editOrNewRuleViewModel::setDecidingOnGameDeuce,
-                    )
-                    DefaultSpacer()
-                    FormInformativeText(
-                        title = "How they work",
-                        text = """- Golden point: the winner of the next point wins the game.
-                    |- Star point: on the third deuce, golden point is played.
-                """.trimMargin()
-                    )
-                    DefaultSpacer()
+                if (uiState.ruleDecidingSetType == RuleSetType.GAMES) {
+                    RuleSection {
+                        DefaultSpacer()
+                        SectionHeaderText("Deciding set - Games rules")
+                        DefaultSpacer()
+                        FormSingleChoiceSegmentedButtonRow(
+                            label = "On 40-40",
+                            selectedOption = uiState.ruleDecidingOnGameDeuce,
+                            options = ruleGlobalOnGameDeuceOptions,
+                            onClick = editOrNewRuleViewModel::setDecidingOnGameDeuce,
+                        )
+                        DefaultSpacer()
+                        FormInformativeText(
+                            title = "How they work",
+                            text = """- Golden point: the winner of the next point wins the game.
+                            |- Star point: on the third deuce, golden point is played.
+                            """.trimMargin()
+                        )
+                        DefaultSpacer()
+                    }
                 }
-                HorizontalDivider()
-                RuleSection {
-                    DefaultSpacer()
-                    SectionHeaderText("Deciding set - Tiebreaks rules")
-                    DefaultSpacer()
-                    FormNumberPicker(
-                        value = uiState.ruleDecidingPointsPerTiebreak,
-                        onValueChange = editOrNewRuleViewModel::setDecidingPointsPerTiebreak,
-                        label = "Points per tiebreak",
-                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingPointsPerTiebreak),
-                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingPointsPerTiebreak),
-                    )
-                    DefaultSpacer()
-                    FormSingleChoiceSegmentedButtonRow(
-                        label = "Tiebreak winner on points draw",
-                        selectedOption = uiState.ruleDecidingTiebreakDecider,
-                        options = ruleGlobalTiebreakDeciderOptions,
-                        onClick = editOrNewRuleViewModel::setDecidingTiebreakDecider,
-                    )
-                    DefaultSpacer()
+                if (
+                    uiState.ruleDecidingSetDecider == RuleSetDecider.TIEBREAK ||
+                    uiState.ruleDecidingSetType == RuleSetType.TIEBREAK
+                ) {
+                    HorizontalDivider()
+                    RuleSection {
+                        DefaultSpacer()
+                        SectionHeaderText("Deciding set - Tiebreaks rules")
+                        DefaultSpacer()
+                        FormNumberPicker(
+                            value = uiState.ruleDecidingPointsPerTiebreak,
+                            onValueChange = editOrNewRuleViewModel::setDecidingPointsPerTiebreak,
+                            label = "Points per tiebreak",
+                            enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingPointsPerTiebreak),
+                            enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingPointsPerTiebreak),
+                        )
+                        DefaultSpacer()
+                        FormSingleChoiceSegmentedButtonRow(
+                            label = "Tiebreak winner on points draw",
+                            selectedOption = uiState.ruleDecidingTiebreakDecider,
+                            options = ruleGlobalTiebreakDeciderOptions,
+                            onClick = editOrNewRuleViewModel::setDecidingTiebreakDecider,
+                        )
+                        DefaultSpacer()
+                    }
+                    HorizontalDivider()
                 }
-                HorizontalDivider()
             }
             BigSpacer()
             Button(
