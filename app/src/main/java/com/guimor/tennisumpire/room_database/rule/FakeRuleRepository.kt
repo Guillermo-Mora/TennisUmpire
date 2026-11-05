@@ -3,10 +3,10 @@ package com.guimor.tennisumpire.room_database.rule
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
-import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakStartsOn
 import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 
@@ -41,7 +41,7 @@ class FakeRuleRepository: RuleRepository {
                 setType = RuleSetType.GAMES,
                 gamesPerSet = 6,
                 onGameDeuce = RuleOnGameDeuce.ADVANTAGE,
-                tiebreakStartsOn = RuleTiebreakStartsOn.MAX_GAMES_EQUALITY,
+                setDecider = RuleSetDecider.TIEBREAK,
                 pointsPerTiebreak = 7,
                 tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
             ),

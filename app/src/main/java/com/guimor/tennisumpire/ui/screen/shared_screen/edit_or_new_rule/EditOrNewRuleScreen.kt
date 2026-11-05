@@ -34,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
-import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.*
+import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
+import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.BEST_OF
+import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.FIXED_QUANTITY
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
-import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakStartsOn
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
@@ -45,6 +47,7 @@ import com.guimor.tennisumpire.room_database.rule.FakeRuleRepository
 import com.guimor.tennisumpire.ui.components.form.FormInformativeText
 import com.guimor.tennisumpire.ui.components.form.FormNumberPicker
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
+import com.guimor.tennisumpire.ui.components.form.FormSwitch
 import com.guimor.tennisumpire.ui.components.form.FormTextField
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
@@ -77,7 +80,7 @@ fun EditOrNewRuleScreen(
                 onOperationSuccess(
                     operationResult.toResultWithUiText(
                         R.string.rule,
-                        "ruleName"//uiState.ruleName
+                        uiState.ruleName.value
                     )
                 )
                 onNavigateBack()
@@ -86,7 +89,7 @@ fun EditOrNewRuleScreen(
                     visuals = OperationSnackbarVisuals(
                         resultWithUiText = operationResult.toResultWithUiText(
                             R.string.rule,
-                            "ruleName"//uiState.ruleName
+                            uiState.ruleName.value
                         ),
                         duration = SnackbarDuration.Short,
                     ),
@@ -143,12 +146,12 @@ fun EditOrNewRuleScreen(
     )
     val ruleGlobalTiebreakStartsOnOptions = listOf(
         SegmentedButtonOption(
-            label = "Maximum games draw",
-            value = RuleTiebreakStartsOn.MAX_GAMES_EQUALITY
+            label = "Tiebreak",
+            value = RuleSetDecider.TIEBREAK
         ),
         SegmentedButtonOption(
-            label = "No tiebreak",
-            value = RuleTiebreakStartsOn.NO_TIEBREAK
+            label = "2 games difference",
+            value = RuleSetDecider.TWO_GAMES_DIFFERENCE
         ),
     )
     val ruleGlobalTiebreakDeciderOptions = listOf(
@@ -182,7 +185,6 @@ fun EditOrNewRuleScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
                 .imePadding()
                 .verticalScroll(
                     state = rememberScrollState(),
@@ -190,105 +192,199 @@ fun EditOrNewRuleScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DefaultSpacer()
-            FormTextField(
-                formFieldData = uiState.ruleName,
-                icon = assignmentIcon,
-                onValueChange = {}, //editPlayerViewModel::setPlayerFirstName,
-                label = "Rule name",
-                placeholder = "My rule",
-                required = false //required = true,
-            )
-            DefaultSpacer()
-            FormSingleChoiceSegmentedButtonRow(
-                label = "Sets quantity",
-                selectedOption = uiState.ruleSetsQuantityType,
-                options = ruleSetsQuantityTypeOptions,
-                onClick = {},
-            )
-            DefaultSpacer()
-            FormNumberPicker(
-                formFieldData = uiState.ruleSetsQuantity,
-                onValueChange = {},
-                placeHolder = "3",
-            )
-            DefaultSpacer()
+            RuleSection {
+                FormTextField(
+                    formFieldData = uiState.ruleName,
+                    icon = assignmentIcon,
+                    onValueChange = editOrNewRuleViewModel::setRuleName,
+                    label = "Rule name",
+                    placeholder = "My rule",
+                    required = true
+                )
+                DefaultSpacer()
+                FormSingleChoiceSegmentedButtonRow(
+                    label = "Sets quantity",
+                    selectedOption = uiState.ruleSetsQuantityType,
+                    options = ruleSetsQuantityTypeOptions,
+                    onClick = editOrNewRuleViewModel::setSetsQuantityType,
+                )
+                DefaultSpacer()
+                FormNumberPicker(
+                    value = uiState.ruleSetsQuantity,
+                    onValueChange = editOrNewRuleViewModel::setSetsQuantity,
+                    enabledRemove = editOrNewRuleViewModel.canDecrementSets(uiState.ruleSetsQuantity),
+                    enabledAdd = editOrNewRuleViewModel.canIncrementSets(uiState.ruleSetsQuantity),
+                    incrementQuantity = if (uiState.ruleSetsQuantityType == RuleSetsQuantityType.BEST_OF) 2
+                    else 1,
+                    decrementQuantity = if (uiState.ruleSetsQuantityType == RuleSetsQuantityType.BEST_OF) 2
+                    else 1
+                    )
+                DefaultSpacer()
+            }
             HorizontalDivider()
-            DefaultSpacer()
-            SectionHeaderText("Sets rules")
-            DefaultSpacer()
-            FormSingleChoiceSegmentedButtonRow(
-                label = "Sets type",
-                selectedOption = uiState.ruleGlobalSetType,
-                options = ruleGlobalSetTypeOptions,
-                onClick = {},
-            )
-            DefaultSpacer()
-            FormNumberPicker(
-                formFieldData = uiState.ruleGlobalGamesPerSet,
-                onValueChange = {},
-                label = "Games per set",
-                placeHolder = "6"
-            )
-            DefaultSpacer()
-            HorizontalDivider()
-            DefaultSpacer()
-            SectionHeaderText("Games rules")
-            DefaultSpacer()
-            FormSingleChoiceSegmentedButtonRow(
-                label = "On 40-40",
-                selectedOption = uiState.ruleGlobalOnGameDeuce,
-                options = ruleGlobalOnGameDeuceOptions,
-                onClick = {},
-            )
-            DefaultSpacer()
-            FormInformativeText(
-                title = "How they work",
-                text = """- Golden point: the winner of the next point wins the game.
+            RuleSection {
+                DefaultSpacer()
+                SectionHeaderText("Sets rules")
+                DefaultSpacer()
+                FormSingleChoiceSegmentedButtonRow(
+                    label = "Sets type",
+                    selectedOption = uiState.ruleGlobalSetType,
+                    options = ruleGlobalSetTypeOptions,
+                    onClick = editOrNewRuleViewModel::setSetsType,
+                )
+                DefaultSpacer()
+                if (uiState.ruleGlobalSetType == RuleSetType.GAMES) {
+                    FormNumberPicker(
+                        value = uiState.ruleGlobalGamesPerSet,
+                        onValueChange = editOrNewRuleViewModel::setGamesPerSet,
+                        label = "Games per set",
+                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleGlobalGamesPerSet),
+                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleGlobalGamesPerSet),
+                    )
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "Set decider on maximum games draw",
+                        selectedOption = uiState.ruleGlobalSetDecider,
+                        options = ruleGlobalTiebreakStartsOnOptions,
+                        onClick = editOrNewRuleViewModel::setSetDecider,
+                    )
+                    DefaultSpacer()
+                }
+            }
+            if (uiState.ruleGlobalSetType == RuleSetType.GAMES) {
+                HorizontalDivider()
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Games rules")
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "On 40-40",
+                        selectedOption = uiState.ruleGlobalOnGameDeuce,
+                        options = ruleGlobalOnGameDeuceOptions,
+                        onClick = editOrNewRuleViewModel::setOnGameDeuce,
+                    )
+                    DefaultSpacer()
+                    FormInformativeText(
+                        title = "How they work",
+                        text = """- Golden point: the winner of the next point wins the game.
                     |- Star point: on the third deuce, golden point is played.
                 """.trimMargin()
-            )
-            DefaultSpacer()
+                    )
+                    DefaultSpacer()
+                }
+            }
+            if (uiState.ruleGlobalSetDecider == RuleSetDecider.TIEBREAK
+                || uiState.ruleGlobalSetType == RuleSetType.TIEBREAK
+            ) {
+                HorizontalDivider()
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Tiebreaks rules")
+                    DefaultSpacer()
+                    FormNumberPicker(
+                        value = uiState.ruleGlobalPointsPerTiebreak,
+                        onValueChange = editOrNewRuleViewModel::setPointsPerTiebreak,
+                        label = "Points per tiebreak",
+                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleGlobalPointsPerTiebreak),
+                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleGlobalPointsPerTiebreak),
+                    )
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "Tiebreak winner on maximum points draw",
+                        selectedOption = uiState.ruleGlobalTiebreakDecider,
+                        options = ruleGlobalTiebreakDeciderOptions,
+                        onClick = editOrNewRuleViewModel::setTiebreakDecider,
+                    )
+                    DefaultSpacer()
+                }
+            }
             HorizontalDivider()
-            DefaultSpacer()
-            SectionHeaderText("Tiebreaks rules")
-            DefaultSpacer()
-            //THIS SHOULD BE INSDE THE SET RULES
-            //AND BE CALLED: SET WINNER ON GAMES DRAW: TIEBREAK OR 2 GAMES DIFFERENCE
-            //THIS WOULD BE MUCH MORE INTUITIVE TO UNDERSTAND AND READ
-            //AND I WOULDN'T NEED TO ADD ANY EXPLANATION
-            FormSingleChoiceSegmentedButtonRow(
-                label = "Tiebreak starts on",
-                selectedOption = uiState.ruleGlobalTiebreakStartsOn,
-                options = ruleGlobalTiebreakStartsOnOptions,
-                onClick = {},
-            )
-            DefaultSpacer()
-            FormInformativeText(
-                text = "No tiebreak: 2 games difference for winning the set."
-            )
-            //
-            //
-            //
-            DefaultSpacer()
-            FormNumberPicker(
-                formFieldData = uiState.ruleGlobalGamesPerSet,
-                onValueChange = {},
-                label = "Points per tiebreak",
-                placeHolder = "7"
-            )
-            DefaultSpacer()
-            FormSingleChoiceSegmentedButtonRow(
-                label = "Tiebreak winner on points draw",
-                selectedOption = uiState.ruleGlobalTiebreakDecider,
-                options = ruleGlobalTiebreakDeciderOptions,
-                onClick = {},
-            )
-            DefaultSpacer()
+            RuleSection {
+                DefaultSpacer()
+                SectionHeaderText("Deciding set")
+                DefaultSpacer()
+                FormSwitch(
+                    label = "Deciding set rules are different",
+                    checked = uiState.areDecidingSetRulesDifferent,
+                    enabled = uiState.ruleSetsQuantityType == BEST_OF &&
+                            uiState.ruleSetsQuantity > 1,
+                    onCheckedChange = editOrNewRuleViewModel::setDecidingSet
+                )
+                DefaultSpacer()
+            }
             HorizontalDivider()
-            DefaultSpacer()
-            //Deciding set boolean selector here
-            //Deciding set rules will appear here if deciding set different boolean selector
-            // is set to true.
+            //Deciding set rules
+            if (uiState.areDecidingSetRulesDifferent) {
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Deciding set - Set rules")
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "Set type",
+                        selectedOption = uiState.ruleDecidingSetType,
+                        options = ruleGlobalSetTypeOptions,
+                        onClick = editOrNewRuleViewModel::setDecidingSetType,
+                    )
+                    DefaultSpacer()
+                    FormNumberPicker(
+                        value = uiState.ruleDecidingGamesPerSet,
+                        onValueChange = editOrNewRuleViewModel::setDecidingGamesPerSet,
+                        label = "Games per set",
+                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingGamesPerSet),
+                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingGamesPerSet),
+                    )
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "Set decider on max games draw",
+                        selectedOption = uiState.ruleDecidingSetDecider,
+                        options = ruleGlobalTiebreakStartsOnOptions,
+                        onClick = editOrNewRuleViewModel::setDecidingSetDecider,
+                    )
+                    DefaultSpacer()
+                }
+                HorizontalDivider()
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Deciding set - Games rules")
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "On 40-40",
+                        selectedOption = uiState.ruleDecidingOnGameDeuce,
+                        options = ruleGlobalOnGameDeuceOptions,
+                        onClick = editOrNewRuleViewModel::setDecidingOnGameDeuce,
+                    )
+                    DefaultSpacer()
+                    FormInformativeText(
+                        title = "How they work",
+                        text = """- Golden point: the winner of the next point wins the game.
+                    |- Star point: on the third deuce, golden point is played.
+                """.trimMargin()
+                    )
+                    DefaultSpacer()
+                }
+                HorizontalDivider()
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Deciding set - Tiebreaks rules")
+                    DefaultSpacer()
+                    FormNumberPicker(
+                        value = uiState.ruleDecidingPointsPerTiebreak,
+                        onValueChange = editOrNewRuleViewModel::setDecidingPointsPerTiebreak,
+                        label = "Points per tiebreak",
+                        enabledRemove = editOrNewRuleViewModel.canDecrementNumber(uiState.ruleDecidingPointsPerTiebreak),
+                        enabledAdd = editOrNewRuleViewModel.canIncrementNumber(uiState.ruleDecidingPointsPerTiebreak),
+                    )
+                    DefaultSpacer()
+                    FormSingleChoiceSegmentedButtonRow(
+                        label = "Tiebreak winner on points draw",
+                        selectedOption = uiState.ruleDecidingTiebreakDecider,
+                        options = ruleGlobalTiebreakDeciderOptions,
+                        onClick = editOrNewRuleViewModel::setDecidingTiebreakDecider,
+                    )
+                    DefaultSpacer()
+                }
+                HorizontalDivider()
+            }
             BigSpacer()
             Button(
                 onClick = {}
@@ -308,15 +404,21 @@ private fun SectionHeaderText(
         Text(
             text = text,
             fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
 
 @Composable
+private fun RuleSection(
+    content: @Composable () -> Unit
+) { Column(modifier = Modifier.padding(horizontal = 16.dp)) { content() } }
+
+@Composable
 @Preview(
-    heightDp = 2000
+    heightDp = 3000
 )
-fun EditOrNewRuleScreenPreview() {
+private fun EditOrNewRuleScreenPreview() {
     MaterialTheme {
         EditOrNewRuleScreen(
             onNavigateBack = {},

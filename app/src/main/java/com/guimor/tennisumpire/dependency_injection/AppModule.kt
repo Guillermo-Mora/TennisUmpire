@@ -22,13 +22,13 @@ interface AppModule {
 class AppModuleImpl(
     private val appContext: Context
 ) : AppModule {
-    //Same repository for all app, as the value is only instantiated once
-    // With get() = I could do new repositories for each time I need them, but in this
-    // case I want to use the same, so just '='.
     override val db = Room.databaseBuilder<AppDatabase>(
         context = appContext,
         name = "tennis-umpire-db"
     ).setDriver(AndroidSQLiteDriver()).build()
+    //Same repository for all app, as the value is only instantiated once
+    // With get() = I could do new repositories for each time I need them, but in this
+    // case I want to use the same, so just '='.
     override val userPreferencesRepository: UserPreferencesRepository =
         UserPreferencesRepository(dataStore = appContext.dataStore)
     override val playerRepository: PlayerRepositoryImpl = PlayerRepositoryImpl(
