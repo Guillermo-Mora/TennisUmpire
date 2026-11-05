@@ -34,13 +34,11 @@ import androidx.navigation3.runtime.result.LocalResultEventBus
 import androidx.navigation3.runtime.result.ResultEffect
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.R
-import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
-import com.guimor.tennisumpire.domain.ui_messages.UiText
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItem
 import com.guimor.tennisumpire.ui.components.navigation_bar.BaseNavigationBarItemData
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
-import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarVisuals
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.icons.assignmentFilledIcon
 import com.guimor.tennisumpire.ui.icons.assignmentIcon
@@ -179,7 +177,7 @@ fun MainScreen(
     val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
     ResultEffect<ResultWithUiText>(resultKey = "result") { result ->
         snackBarHostState.showSnackbar(
-            visuals = OperationSnackbarVisuals(
+            visuals = OperationSnackBarVisuals(
                 resultWithUiText = result,
                 duration = SnackbarDuration.Short
             ),

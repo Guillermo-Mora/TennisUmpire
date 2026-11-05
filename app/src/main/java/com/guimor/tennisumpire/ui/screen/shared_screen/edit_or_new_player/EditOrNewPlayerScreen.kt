@@ -48,16 +48,14 @@ import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
 import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
-import com.guimor.tennisumpire.domain.ui_messages.UiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
-import com.guimor.tennisumpire.domain.ui_messages.toUiText
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.form.FormTextField
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
-import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarVisuals
 import com.guimor.tennisumpire.ui.components.spacer.BigSpacer
 import com.guimor.tennisumpire.ui.components.spacer.DefaultSpacer
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
@@ -109,7 +107,7 @@ fun EditOrNewPlayerScreen(
                 onNavigateBack()
             } else {
                 snackBarHostState.showSnackbar(
-                    visuals = OperationSnackbarVisuals(
+                    visuals = OperationSnackBarVisuals(
                         resultWithUiText = operationResult.toResultWithUiText(
                             R.string.player,
                             playerAbbreviatedName
