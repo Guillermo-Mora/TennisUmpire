@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +40,7 @@ fun FormTextField(
     placeholder: String? = null,
     keyboardType: KeyboardType = KeyboardOptions.Default.keyboardType,
     visualTransformation: VisualTransformation? = null,
-    required: Boolean = false
+    required: Boolean = false,
 ) {
     Row(
         modifier = Modifier

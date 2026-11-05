@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -24,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -57,6 +61,7 @@ import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
 import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
 import com.guimor.tennisumpire.ui.icons.assignmentIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +79,7 @@ fun EditOrNewRuleScreen(
     val lazyListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
             if (operationResult is SuccessResult) {
@@ -164,6 +170,7 @@ fun EditOrNewRuleScreen(
             value = RuleTiebreakDecider.GOLDEN_POINT
         ),
     )
+    val ruleNameRequester = remember { BringIntoViewRequester() }
     Scaffold(
         snackbarHost = { OperationSnackBarHost(snackBarHostState = snackBarHostState) },
         topBar = {
@@ -199,7 +206,11 @@ fun EditOrNewRuleScreen(
                     onValueChange = editOrNewRuleViewModel::setRuleName,
                     label = "Rule name",
                     placeholder = "My rule",
-                    required = true
+                    required = true,
+                    modifier = Modifier
+                        .widthIn(max = 500.dp)
+                        .fillMaxWidth()
+                        .bringIntoViewRequester(ruleNameRequester)
                 )
                 DefaultSpacer()
                 FormSingleChoiceSegmentedButtonRow(
@@ -218,7 +229,7 @@ fun EditOrNewRuleScreen(
                     else 1,
                     decrementQuantity = if (uiState.ruleSetsQuantityType == RuleSetsQuantityType.BEST_OF) 2
                     else 1
-                    )
+                )
                 DefaultSpacer()
             }
             HorizontalDivider()
@@ -290,7 +301,7 @@ fun EditOrNewRuleScreen(
                     )
                     DefaultSpacer()
                     FormSingleChoiceSegmentedButtonRow(
-                        label = "Tiebreak winner on maximum points draw",
+                        label = "Tiebreak winner on points draw",
                         selectedOption = uiState.ruleGlobalTiebreakDecider,
                         options = ruleGlobalTiebreakDeciderOptions,
                         onClick = editOrNewRuleViewModel::setTiebreakDecider,
@@ -387,7 +398,16 @@ fun EditOrNewRuleScreen(
             }
             BigSpacer()
             Button(
-                onClick = {}
+                onClick = {
+                    val firstError = editOrNewRuleViewModel.validateForm()
+                    when (firstError) {
+                        RequestableFieldsIDs.RULE_NAME -> {
+                            scope.launch { ruleNameRequester.bringIntoView() }
+                        }
+
+                        else -> {}
+                    }
+                }
             ) {
                 Text(buttonText)
             }

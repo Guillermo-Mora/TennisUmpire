@@ -10,8 +10,12 @@ import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
+import com.guimor.tennisumpire.domain.operation_result.result_type.FormatError
 import com.guimor.tennisumpire.room_database.rule.RuleRepository
 import com.guimor.tennisumpire.ui.model.FormFieldData
+import com.guimor.tennisumpire.view_model.ValidatableForm
+import com.guimor.tennisumpire.view_model.ViewModelHelper
+import com.guimor.tennisumpire.view_model.validationDebounce
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -52,6 +56,8 @@ class EditOrNewRuleViewModel(
     }
 
     //Normal rules
+
+    private val debounceValidateRuleName = validationDebounce { validateRuleName() }
     fun setRuleName(newName: String) {
         _uiState.update { state ->
             state.copy(
@@ -61,6 +67,18 @@ class EditOrNewRuleViewModel(
                 )
             )
         }
+        debounceValidateRuleName()
+    }
+
+    private fun validateRuleName(): Boolean {
+        return ViewModelHelper.isFieldError(
+            formFieldData = uiState.value.ruleName,
+            required = true,
+            ViewModelHelper.ValidationRule(
+                condition = String::isBlank,
+                error = FormatError.IS_BLANK
+            )
+        ) { _uiState.update { state -> state.copy(ruleName = it) } }
     }
 
     fun setSetsQuantityType(setsQuantityType: RuleSetsQuantityType) {
@@ -184,7 +202,7 @@ class EditOrNewRuleViewModel(
     fun setDecidingPointsPerTiebreak(newValue: Int) {
         _uiState.update { state ->
             state.copy(
-                ruleDecidingPointsPerTiebreak =newValue
+                ruleDecidingPointsPerTiebreak = newValue
             )
         }
     }
@@ -197,9 +215,15 @@ class EditOrNewRuleViewModel(
         }
     }
 
+    fun validateForm(): RequestableFieldsIDs? {
+        var firstErrorFieldID: RequestableFieldsIDs? = null
+        if (validateRuleName()) firstErrorFieldID = RequestableFieldsIDs.RULE_NAME
+        return firstErrorFieldID
+    }
+
     companion object {
-        const val MAX_NUMBER: Int = 21
-        const val MIN_NUMBER: Int = 1
+        private const val MAX_NUMBER: Int = 21
+        private const val MIN_NUMBER: Int = 1
         fun Factory(
             ruleUid: Int? = null,
         ): ViewModelProvider.Factory = viewModelFactory {
