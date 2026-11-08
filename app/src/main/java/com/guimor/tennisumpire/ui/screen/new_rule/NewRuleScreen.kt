@@ -19,7 +19,7 @@ fun NewRuleScreen(
     EditOrNewRuleScreen(
         onNavigateBack = { onNavigateBack() },
         editOrNewRuleViewModel = newRuleViewModel,
-        onOperationSuccess = {resultWithUiText -> onOperationSuccess(resultWithUiText)},
+        onOperationSuccess = { resultWithUiText -> onOperationSuccess(resultWithUiText) },
         title = "New rule",
         buttonText = "Create rule"
     )

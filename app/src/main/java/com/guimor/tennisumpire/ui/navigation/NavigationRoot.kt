@@ -149,8 +149,19 @@ fun NavigationRoot(
             )
         }
         entry<NavRoutesRoot.EditRule> {
+            val resultBus = LocalResultEventBus.current
             EditRuleScreen(
-                onNavigateBack = navigator::goBack
+                onNavigateBack = navigator::goBack,
+                editRuleViewModel = viewModel(
+                    factory = EditOrNewRuleViewModel
+                        .Factory()
+                ),
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                }
             )
         }
     }

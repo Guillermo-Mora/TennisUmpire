@@ -44,7 +44,6 @@ import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.BEST_OF
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.FIXED_QUANTITY
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
-import com.guimor.tennisumpire.domain.operation_result.result_type.ErrorResult
 import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText

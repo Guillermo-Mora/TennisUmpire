@@ -225,9 +225,12 @@ class EditOrNewRuleViewModel(
         if (validateRuleName()) firstErrorFieldID = RequestableFieldsIDs.RULE_NAME
         if (firstErrorFieldID != null) return firstErrorFieldID
         viewModelScope.launch {
-            val operationResult: ResultType = ruleRepository.insertRule(
-                getCleanedRule(uiState.value)
-            )
+            val rule = getCleanedRule(uiState.value)
+            val operationResult: ResultType =
+                if (ruleUid != null)
+                    ruleRepository.editRule(rule)
+                else
+                    ruleRepository.insertRule(rule)
             _uiState.update { state -> state.copy(operationResult = operationResult) }
         }
         return null
