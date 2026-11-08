@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.components.form
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,21 +24,27 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisumpire.R
+import com.guimor.tennisumpire.domain.ui_messages.toUiText
+import com.guimor.tennisumpire.domain.ui_messages.value
 import com.guimor.tennisumpire.ui.icons.errorIcon
 import com.guimor.tennisumpire.ui.model.FormFieldData
 
 @Composable
 fun FormTextField(
+    @SuppressLint("ModifierParameter") modifier: Modifier? = null,
     icon: ImageVector? = null,
+    iconSpace: Boolean? = false,
     formFieldData: FormFieldData,
     onValueChange: (newValue: String) -> Unit,
-    label: String,
-    placeholder: String,
+    label: String? = null,
+    placeholder: String? = null,
     keyboardType: KeyboardType = KeyboardOptions.Default.keyboardType,
     visualTransformation: VisualTransformation? = null,
-    required: Boolean = false
+    required: Boolean = false,
 ) {
     Row(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
             alignment = Alignment.CenterHorizontally
@@ -49,7 +58,8 @@ fun FormTextField(
                 imageVector = it,
                 contentDescription = null,
             )
-        } ?: Spacer(
+        }
+        if (iconSpace == true) Spacer(
             modifier = Modifier
                 .size(24.dp)
         )
@@ -57,16 +67,18 @@ fun FormTextField(
             value = formFieldData.value,
             onValueChange = { onValueChange(it) },
             label = {
-                Row {
-                    Text(label)
-                    if (required) Text(" *")
+                label?.let { label ->
+                    Row {
+                        Text(label)
+                        if (required) Text(" *")
+                    }
                 }
             },
-            placeholder = { Text(placeholder) },
+            placeholder = { placeholder?.let { Text(placeholder) } },
             supportingText = {
                 Text(
                     if (required && formFieldData.error == null) stringResource(R.string.required)
-                    else if (formFieldData.error != null) stringResource(formFieldData.error.messageId)
+                    else if (formFieldData.error != null) formFieldData.error.toUiText().value
                     else ""
                 )
             },
@@ -91,8 +103,8 @@ fun FormTextField(
                 hintLocales = KeyboardOptions.Default.hintLocales
             ),
             visualTransformation = visualTransformation ?: VisualTransformation.None,
-            modifier = Modifier
-                .widthIn(max = 300.dp)
+            modifier = modifier ?: Modifier
+                .widthIn(max = 500.dp)
                 .fillMaxWidth()
         )
     }

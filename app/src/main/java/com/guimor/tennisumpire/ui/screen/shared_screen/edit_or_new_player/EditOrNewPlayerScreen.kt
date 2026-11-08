@@ -41,18 +41,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.guimor.tennisumpire.domain.error.Success
+import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.Country
-import com.guimor.tennisumpire.domain.model.PlayerBackhand
-import com.guimor.tennisumpire.domain.model.PlayerDominantHand
-import com.guimor.tennisumpire.domain.model.PlayerGender
+import com.guimor.tennisumpire.domain.model.player.PlayerBackhand
+import com.guimor.tennisumpire.domain.model.player.PlayerDominantHand
+import com.guimor.tennisumpire.domain.model.player.PlayerGender
+import com.guimor.tennisumpire.domain.operation_result.result_type.SuccessResult
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
 import com.guimor.tennisumpire.ui.components.form.AddPhotoAlertDialog
 import com.guimor.tennisumpire.ui.components.form.FormDateField
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.form.FormTextField
 import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarHost
-import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackbarVisuals
+import com.guimor.tennisumpire.ui.components.snackbar_host.OperationSnackBarVisuals
 import com.guimor.tennisumpire.ui.components.spacer.BigSpacer
 import com.guimor.tennisumpire.ui.components.spacer.DefaultSpacer
 import com.guimor.tennisumpire.ui.components.top_bar.MainTopAppBar
@@ -78,7 +81,7 @@ fun EditOrNewPlayerScreen(
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     editPlayerViewModel: EditOrNewPlayerViewModel,
-    onOperationSuccess: (successResult: Success) -> Unit,
+    onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
     title: String,
     buttonText: String,
 ) {
@@ -91,13 +94,24 @@ fun EditOrNewPlayerScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(uiState.operationResult) {
         uiState.operationResult?.let { operationResult ->
-            if (operationResult is Success) {
-                onOperationSuccess(operationResult)
+            val playerAbbreviatedName = "${
+                uiState.playerFirstName.value.first().uppercase()
+            }. ${uiState.playerLastName.value}"
+            if (operationResult is SuccessResult) {
+                onOperationSuccess(
+                    operationResult.toResultWithUiText(
+                        R.string.player,
+                        playerAbbreviatedName
+                    )
+                )
                 onNavigateBack()
             } else {
                 snackBarHostState.showSnackbar(
-                    visuals = OperationSnackbarVisuals(
-                        operationResult = operationResult,
+                    visuals = OperationSnackBarVisuals(
+                        resultWithUiText = operationResult.toResultWithUiText(
+                            R.string.player,
+                            playerAbbreviatedName
+                        ),
                         duration = SnackbarDuration.Short,
                     ),
                 )
@@ -259,6 +273,7 @@ fun EditOrNewPlayerScreen(
             item {
                 FormTextField(
                     formFieldData = uiState.playerLastName,
+                    iconSpace = true,
                     onValueChange = editPlayerViewModel::setPlayerLastName,
                     label = "Last name",
                     placeholder = "Smith",

@@ -16,7 +16,7 @@ import com.guimor.tennisumpire.ui.icons.settingsIcon
 @Composable
 fun MainTopAppBar(
     title: String,
-    onNavigateToSettings: () -> Unit,
+    onNavigateToSettings: (() -> Unit)? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
@@ -27,15 +27,17 @@ fun MainTopAppBar(
             navigationIcon?.invoke()
         },
         actions = {
-            IconButton(
-                onClick = { onNavigateToSettings() }
-            ) {
-                Icon(
-                    imageVector = settingsIcon,
-                    contentDescription = "Settings",
-                    modifier = Modifier.padding(end = 16.dp)
-                )
+            onNavigateToSettings?.let {
+                IconButton(
+                    onClick = { onNavigateToSettings() }
+                ) {
+                    Icon(
+                        imageVector = settingsIcon,
+                        contentDescription = "Settings",
+                        modifier = Modifier.padding(end = 16.dp)
+                    )
+                }
             }
-        },
+        }
     )
 }

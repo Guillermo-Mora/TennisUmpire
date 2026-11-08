@@ -16,6 +16,7 @@ import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorat
 import androidx.navigation3.ui.NavDisplay
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
+import com.guimor.tennisumpire.ui.screen.edit_rule.EditRuleScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
@@ -26,6 +27,7 @@ import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule.EditOrNewRuleViewModel
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -131,8 +133,35 @@ fun NavigationRoot(
             )
         }
         entry<NavRoutesRoot.NewRule> {
+            val resultBus = LocalResultEventBus.current
             NewRuleScreen(
-                onNavigateBack = navigator::goBack
+                onNavigateBack = navigator::goBack,
+                newRuleViewModel = viewModel(
+                    factory = EditOrNewRuleViewModel
+                        .Factory()
+                ),
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                }
+            )
+        }
+        entry<NavRoutesRoot.EditRule> {
+            val resultBus = LocalResultEventBus.current
+            EditRuleScreen(
+                onNavigateBack = navigator::goBack,
+                editRuleViewModel = viewModel(
+                    factory = EditOrNewRuleViewModel
+                        .Factory()
+                ),
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                }
             )
         }
     }

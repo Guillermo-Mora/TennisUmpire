@@ -19,13 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.guimor.tennisumpire.domain.error.Error
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.domain.error.OperationResult
+import com.guimor.tennisumpire.domain.operation_result.result_type.ErrorResult
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.value
 import com.guimor.tennisumpire.ui.icons.check_circleIcon
 import com.guimor.tennisumpire.ui.icons.closeIcon
 import com.guimor.tennisumpire.ui.icons.errorIcon
@@ -43,7 +42,7 @@ fun OperationSnackBarHost(
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.onBackground)
     ) { snackBarData ->
-        val visuals = snackBarData.visuals as OperationSnackbarVisuals
+        val visuals = snackBarData.visuals as OperationSnackBarVisuals
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -58,13 +57,13 @@ fun OperationSnackBarHost(
             ) {
                 Icon(
                     imageVector =
-                        if (visuals.operationResult is Error) errorIcon
+                        if (visuals.resultWithUiText.resultType is ErrorResult) errorIcon
                         else check_circleIcon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background
                 )
                 Text(
-                    text = stringResource(visuals.operationResult.messageId),
+                    text = visuals.resultWithUiText.uiText.value,
                     color = MaterialTheme.colorScheme.background,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -90,8 +89,8 @@ fun OperationSnackBarHost(
     }
 }
 
-data class OperationSnackbarVisuals (
-    val operationResult: MessageResult,
+data class OperationSnackBarVisuals (
+    val resultWithUiText: ResultWithUiText,
     override val duration: SnackbarDuration,
     override val actionLabel: String? = null,
     override val message: String = "",

@@ -1,10 +1,15 @@
 package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,14 +17,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.guimor.tennisumpire.domain.error.MessageResult
-import com.guimor.tennisumpire.room_database.player.Player
+import com.guimor.tennisumpire.R
+import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
+import com.guimor.tennisumpire.room_database.player.FakePlayerRepository
 import com.guimor.tennisumpire.ui.components.player.PlayerListCard
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +36,7 @@ fun PlayersScreen(
     onNavigateToPlayerProfile: (playerUid: Int) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: PlayersViewModel = viewModel(factory = PlayersViewModel.Factory),
-    onOperationResult: (result: MessageResult) -> Unit,
+    onOperationResult: (resultWithUiText: ResultWithUiText) -> Unit,
 ) {
     //Importante saber esto para más adelante
     //Si añades búsqueda o filtros: deberás recrear el Pager con flatMapLatest
@@ -38,7 +45,10 @@ fun PlayersScreen(
     val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(uiState.messageResult) {
         uiState.messageResult?.let { messageResult ->
-            onOperationResult(messageResult)
+            onOperationResult(messageResult.toResultWithUiText(
+                R.string.player,
+                uiState.playerOperationAbbreviatedName
+            ))
             viewModel.resetMessageResult()
         }
     }
@@ -65,7 +75,37 @@ fun PlayersScreen(
                     onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
                     onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
                 )
+                //Spacer so on the last registry you can access the actions button. Because
+                // the floating action button can cover it otherwise.
+                if (index == players.itemCount - 1) {
+                    Spacer(Modifier.height(84.dp))
+                }
             }
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(
+    widthDp = 300
+)
+@Composable
+fun PlayersScreenPreview() {
+    MaterialTheme {
+        Scaffold {
+            PlayersScreen(
+                onNavigateBack = { },
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                viewModel = viewModel {
+                    PlayersViewModel(
+                        playerRepository = FakePlayerRepository()
+                    )
+                },
+                onNavigateToEditPlayer = {},
+                onNavigateToPlayerProfile = {},
+                onOperationResult = {},
+            )
         }
     }
 }

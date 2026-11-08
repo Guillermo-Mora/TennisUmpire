@@ -33,6 +33,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisumpire.R
+import com.guimor.tennisumpire.domain.ui_messages.toUiText
+import com.guimor.tennisumpire.domain.ui_messages.value
 import com.guimor.tennisumpire.ui.icons.date_rangeIcon
 import com.guimor.tennisumpire.ui.model.FormFieldDataType
 import java.time.LocalDate
@@ -50,6 +52,8 @@ fun FormDateField(
     var selectedDate by rememberSaveable { mutableStateOf<Long?>(null) }
     var showModal by rememberSaveable { mutableStateOf(false) }
     Row(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
             alignment = Alignment.CenterHorizontally
@@ -85,7 +89,7 @@ fun FormDateField(
             supportingText = {
                 Text(
                     if (required && formFieldDataType.error == null) stringResource(R.string.required)
-                    else if (formFieldDataType.error != null) stringResource(formFieldDataType.error.messageId)
+                    else if (formFieldDataType.error != null) formFieldDataType.error.toUiText().value
                     else ""
                 )
             },
@@ -93,7 +97,7 @@ fun FormDateField(
             isError = formFieldDataType.error != null,
             singleLine = true,
             modifier = Modifier
-                .widthIn(max = 300.dp)
+                .widthIn(max = 500.dp)
                 .fillMaxWidth()
                 .pointerInput(selectedDate) {
                     awaitEachGesture {

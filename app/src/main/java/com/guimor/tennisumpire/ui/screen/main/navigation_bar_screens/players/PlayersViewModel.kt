@@ -14,10 +14,7 @@ import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -40,10 +37,14 @@ class PlayersViewModel(
 
     fun deletePlayer(playerUid: Int) {
         viewModelScope.launch {
+            val playerAbbreviatedName = playerRepository.getPlayer(playerUid).let {
+                "${it.firstName.first().uppercase()}. ${it.lastName}"
+            }
             playerRepository.deletePlayer(playerUid).also { messageResult ->
                 _uiState.update { state ->
                     state.copy(
-                        messageResult = messageResult
+                        messageResult = messageResult,
+                        playerOperationAbbreviatedName = playerAbbreviatedName
                     )
                 }
             }
@@ -53,7 +54,8 @@ class PlayersViewModel(
     fun resetMessageResult() {
         _uiState.update { state ->
             state.copy(
-                messageResult = null
+                messageResult = null,
+                playerOperationAbbreviatedName = null
             )
         }
     }

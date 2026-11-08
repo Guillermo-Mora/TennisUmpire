@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "75bc6182bc75ff3411b72fb65fd577f6",
+    "identityHash": "530d8b3345878baaf52750892227d527",
     "entities": [
       {
         "tableName": "Player",
@@ -91,11 +91,119 @@
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Player_first_name_last_name` ON `${TABLE_NAME}` (`first_name`, `last_name`)"
           }
         ]
+      },
+      {
+        "tableName": "Rule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `sets_quantity_type` TEXT NOT NULL, `sets_quantity` INTEGER NOT NULL, `set_set_type` TEXT NOT NULL, `set_games_per_set` INTEGER, `set_on_game_deuce` TEXT, `set_tiebreak_starts_on` TEXT, `set_points_per_tiebreak` INTEGER, `set_tiebreak_decider` TEXT, `deciding_set_set_type` TEXT, `deciding_set_games_per_set` INTEGER, `deciding_set_on_game_deuce` TEXT, `deciding_set_tiebreak_starts_on` TEXT, `deciding_set_points_per_tiebreak` INTEGER, `deciding_set_tiebreak_decider` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setsQuantityType",
+            "columnName": "sets_quantity_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setsQuantity",
+            "columnName": "sets_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setRules.setType",
+            "columnName": "set_set_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setRules.gamesPerSet",
+            "columnName": "set_games_per_set",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "setRules.onGameDeuce",
+            "columnName": "set_on_game_deuce",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "setRules.tiebreakStartsOn",
+            "columnName": "set_tiebreak_starts_on",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "setRules.pointsPerTiebreak",
+            "columnName": "set_points_per_tiebreak",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "setRules.tiebreakDecider",
+            "columnName": "set_tiebreak_decider",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "decidingSetRules.setType",
+            "columnName": "deciding_set_set_type",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "decidingSetRules.gamesPerSet",
+            "columnName": "deciding_set_games_per_set",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "decidingSetRules.onGameDeuce",
+            "columnName": "deciding_set_on_game_deuce",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "decidingSetRules.tiebreakStartsOn",
+            "columnName": "deciding_set_tiebreak_starts_on",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "decidingSetRules.pointsPerTiebreak",
+            "columnName": "deciding_set_points_per_tiebreak",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "decidingSetRules.tiebreakDecider",
+            "columnName": "deciding_set_tiebreak_decider",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "uid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Rule_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Rule_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75bc6182bc75ff3411b72fb65fd577f6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '530d8b3345878baaf52750892227d527')"
     ]
   }
 }

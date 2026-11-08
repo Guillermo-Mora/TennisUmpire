@@ -17,7 +17,7 @@ ui = "1.12.1"
 foundationLayout = "1.12.1"
 dataStore = "1.2.1"
 room = "2.8.5"
-ksp = "2.3.4"
+ksp = "2.3.6"
 coil = "3.6.3"
 
 [libraries]
