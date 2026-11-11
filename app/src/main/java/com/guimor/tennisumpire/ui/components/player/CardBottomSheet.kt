@@ -51,12 +51,12 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlayerCardBottomSheet(
-    player: Player,
-    onClickToggleAddPlayerToFavourites: () -> Unit,
-    onClickDeletePlayer: () -> Unit,
-    onClickEditPlayer: () -> Unit,
-    onClickPlayerProfile: () -> Unit,
+fun CardBottomSheet(
+    registryName: String,
+    onClickDelete: () -> Unit,
+    onClickEdit: () -> Unit,
+    detailsSection: DetailsSection? = null,
+    content: @Composable () -> Unit,
     button: @Composable (onOpenBottomSheet: () -> Unit) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -68,16 +68,7 @@ fun PlayerCardBottomSheet(
             sheetState = sheetState,
             onDismissRequest = { showBottomSheet = false }
         ) {
-            PlayerListCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                player = player,
-                interactiveMode = false,
-                onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() }
-            )
+            content()
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.surfaceContainer,
@@ -95,7 +86,7 @@ fun PlayerCardBottomSheet(
                     modifier = Modifier
                         .padding(8.dp)
                 ) {
-                    PlayerCardBottomSheetButton(
+                    CardBottomSheetButton(
                         onClick = { showDeleteAlertDialog = true },
                         icon = delete_foreverIcon,
                         text = "Delete",
@@ -103,9 +94,22 @@ fun PlayerCardBottomSheet(
                         modifier = Modifier
                             .weight(1f)
                     )
-                    PlayerCardBottomSheetButton(
+                    detailsSection?.let {
+                        CardBottomSheetButton(
+                            onClick = {
+                                it.onClickDetails()
+                                showBottomSheet = false
+                            },
+                            icon = it.icon,
+                            text = it.text,
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
+                    /*
+                    CardBottomSheetButton(
                         onClick = {
-                            onClickPlayerProfile()
+                            onClickDetails()
                             showBottomSheet = false
                         },
                         icon = article_personIcon,
@@ -113,9 +117,10 @@ fun PlayerCardBottomSheet(
                         modifier = Modifier
                             .weight(1f)
                     )
-                    PlayerCardBottomSheetButton(
+                     */
+                    CardBottomSheetButton(
                         onClick = {
-                            onClickEditPlayer()
+                            onClickEdit()
                             showBottomSheet = false
                         },
                         icon = editIcon,
@@ -127,11 +132,11 @@ fun PlayerCardBottomSheet(
             }
         }
         if (showDeleteAlertDialog) {
-            DeletePlayerAlertDialog(
+            DeleteAlertDialog(
                 onDismissRequest = { showDeleteAlertDialog = false },
-                playerFullName = "${player.firstName} ${player.lastName}",
+                registryName = registryName,
                 onClickDeletePlayer = {
-                    onClickDeletePlayer()
+                    onClickDelete()
                     showBottomSheet = false
                 }
             )
@@ -140,7 +145,7 @@ fun PlayerCardBottomSheet(
 }
 
 @Composable
-private fun PlayerCardBottomSheetButton(
+private fun CardBottomSheetButton(
     icon: ImageVector,
     text: String,
     modifier: Modifier,
@@ -183,9 +188,9 @@ private fun PlayerCardBottomSheetButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DeletePlayerAlertDialog(
+private fun DeleteAlertDialog(
     onDismissRequest: () -> Unit,
-    playerFullName: String,
+    registryName: String,
     onClickDeletePlayer: () -> Unit
 ) {
     BasicAlertDialog(
@@ -222,14 +227,14 @@ private fun DeletePlayerAlertDialog(
                             .size(26.dp)
                     )
                     Text(
-                        text = "Permanently delete player ",
+                        text = "Permanently delete ",
                         fontSize = 22.sp
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = playerFullName,
+                            text = registryName,
                             fontSize = 22.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -244,7 +249,7 @@ private fun DeletePlayerAlertDialog(
                         )
                     }
                     Text(
-                        "If you press delete, the player will be permanently deleted"
+                        "If you press delete, it will be permanently deleted"
                     )
                 }
                 Column(
@@ -291,34 +296,51 @@ private fun DeletePlayerAlertDialog(
     }
 }
 
+data class DetailsSection(
+    val text: String,
+    val icon: ImageVector,
+    val onClickDetails: () -> Unit
+)
+
 @Composable
 @Preview
-fun PlayerCardBottomSheetPreview() {
+fun CardBottomSheetPreview() {
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            PlayerCardBottomSheet(
-                player = Player(
-                    uid = 0,
-                    firstName = "Guillermo",
-                    lastName = "Mora",
-                    birthdate = LocalDate.of(2025, 10, 27),
-                    height = 183f,
-                    weight = 68f,
-                    country = null,
-                    gender = PlayerGender.MALE,
-                    dominantHand = PlayerDominantHand.LEFT,
-                    backhand = PlayerBackhand.ONE_HANDED,
-                    photo = null
-                ),
-                onClickToggleAddPlayerToFavourites = {},
-                onClickDeletePlayer = {},
-                onClickEditPlayer = {},
-                onClickPlayerProfile = {}
+            CardBottomSheet(
+                registryName = "Guillermo Mora",
+                onClickDelete = {},
+                onClickEdit = {},
+                content = {
+                    PlayerListCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                        player = Player(
+                            uid = 0,
+                            firstName = "Guillermo",
+                            lastName = "Mora",
+                            birthdate = LocalDate.of(2025, 10, 27),
+                            height = 183f,
+                            weight = 68f,
+                            country = null,
+                            gender = PlayerGender.MALE,
+                            dominantHand = PlayerDominantHand.LEFT,
+                            backhand = PlayerBackhand.ONE_HANDED,
+                            photo = null
+                        ),
+                        interactiveMode = false,
+                        onClickToggleAddPlayerToFavourites = { }
+                    )
+                },
             ) {
+
             }
         }
     }

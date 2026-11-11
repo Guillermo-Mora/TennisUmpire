@@ -58,6 +58,7 @@ import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.matches.Mat
 import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players.PlayersScreen
 import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.results.ResultsScreen
 import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.rules.RulesScreen
+import com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.rules.RulesViewModel
 
 /*
 Text("On app launch, you will appear in matches screen")
@@ -80,7 +81,7 @@ Text("I will also add an option for exporting the data from the app database")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel = viewModel { MainViewModel() },
+    mainViewModel: MainViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToNewMatch: () -> Unit,
@@ -89,6 +90,8 @@ fun MainScreen(
     onNavigateToEditPlayer: (playerUid: Int) -> Unit,
     onNavigateToPlayerProfile: (playerUid: Int) -> Unit,
     onNavigateToNewRule: () -> Unit,
+    onNavigateToEditRule: (ruleUid: Int) -> Unit,
+    onNavigateToRuleDetails: (ruleUid: Int) -> Unit
 ) {
     val topLevelRoutes = setOf(
         NavRoutesMain.Matches,
@@ -165,11 +168,21 @@ fun MainScreen(
             )
         }
         entry<NavRoutesMain.Rules> {
+            val resultBus = LocalResultEventBus.current
             RulesScreen(
                 scrollBehavior = rulesScrollBehavior,
                 onNavigateBack = {
                     mainViewModel.changeMainScreen(navigator.goBackAndGetNewRoute())
-                }
+                },
+                onOperationResult = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                },
+                viewModel = viewModel(factory = RulesViewModel.Factory),
+                onNavigateToEditRule = { ruleUid -> onNavigateToEditRule(ruleUid) },
+                onNavigateToRuleDetails = { ruleUid -> onNavigateToRuleDetails(ruleUid) }
             )
         }
     }

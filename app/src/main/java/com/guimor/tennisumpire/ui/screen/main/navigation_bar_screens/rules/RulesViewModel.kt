@@ -18,10 +18,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PlayersViewModel(
+class RulesViewModel(
     private val ruleRepository: RuleRepository,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(PlayersUiState())
+    private val _uiState = MutableStateFlow(RulesUiState())
     val uiState = _uiState.asStateFlow()
     val rules: Flow<PagingData<Rule>> = Pager(
         config = PagingConfig(pageSize = 50) )
@@ -29,7 +29,7 @@ class PlayersViewModel(
         .flow
         .cachedIn(viewModelScope)
 
-    fun toggleAddPlayerToFavourites(ruleUid: Int) {
+    fun toggleAddRuleToFavourites(ruleUid: Int) {
         viewModelScope.launch {
             //ruleRepository.toggleAddRulesToFavourites(ruleUid)
         }
@@ -42,7 +42,7 @@ class PlayersViewModel(
                 _uiState.update { state ->
                     state.copy(
                         messageResult = messageResult,
-                        playerOperationAbbreviatedName = ruleName
+                        ruleName = ruleName
                     )
                 }
             }
@@ -53,7 +53,7 @@ class PlayersViewModel(
         _uiState.update { state ->
             state.copy(
                 messageResult = null,
-                playerOperationAbbreviatedName = null
+                ruleName = null
             )
         }
     }
@@ -62,7 +62,7 @@ class PlayersViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val ruleRepository = MyApplication.appModule.ruleRepository
-                PlayersViewModel(
+                RulesViewModel(
                     ruleRepository = ruleRepository,
                 )
             }

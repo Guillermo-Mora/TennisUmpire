@@ -32,10 +32,6 @@ class EditOrNewRuleViewModel(
     private val _uiState = MutableStateFlow(EditOrNewRuleUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun resetScrollToError() {
-        _uiState.update { state -> state.copy(scrollToErrorSection = -1) }
-    }
-
     fun resetOperationResult() {
         _uiState.update { state -> state.copy(operationResult = null) }
     }
@@ -240,6 +236,7 @@ class EditOrNewRuleViewModel(
         ruleData: EditOrNewRuleUiState
     ): Rule {
         return Rule(
+            uid = ruleUid ?: 0,
             name = ruleData.ruleName.value,
             setsQuantityType = ruleData.ruleSetsQuantityType,
             setsQuantity = ruleData.ruleSetsQuantity,
@@ -290,6 +287,40 @@ class EditOrNewRuleViewModel(
                     tiebreakDecider
                 else null
         )
+    }
+
+    init {
+        ruleUid?.let { ruleUid ->
+            viewModelScope.launch {
+                val rule = ruleRepository.getRule(ruleUid)
+                _uiState.update { state ->
+                    state.copy(
+                        ruleName = FormFieldData(value = rule.name),
+                        ruleSetsQuantityType = rule.setsQuantityType,
+                        ruleSetsQuantity = rule.setsQuantity,
+                        ruleGlobalSetType = rule.setRules.setType,
+                        ruleGlobalGamesPerSet = rule.setRules.gamesPerSet ?: 6,
+                        ruleGlobalOnGameDeuce = rule.setRules.onGameDeuce
+                            ?: RuleOnGameDeuce.ADVANTAGE,
+                        ruleGlobalSetDecider = rule.setRules.setDecider ?: RuleSetDecider.TIEBREAK,
+                        ruleGlobalPointsPerTiebreak = rule.setRules.pointsPerTiebreak ?: 7,
+                        ruleGlobalTiebreakDecider = rule.setRules.tiebreakDecider
+                            ?: RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
+                        areDecidingSetRulesDifferent = rule.decidingSetRules != null,
+                        ruleDecidingSetType = rule.decidingSetRules?.setType ?: RuleSetType.GAMES,
+                        ruleDecidingGamesPerSet = rule.decidingSetRules?.gamesPerSet ?: 6,
+                        ruleDecidingOnGameDeuce = rule.decidingSetRules?.onGameDeuce
+                            ?: RuleOnGameDeuce.ADVANTAGE,
+                        ruleDecidingSetDecider = rule.decidingSetRules?.setDecider
+                            ?: RuleSetDecider.TIEBREAK,
+                        ruleDecidingPointsPerTiebreak = rule.decidingSetRules?.pointsPerTiebreak
+                            ?: 10,
+                        ruleDecidingTiebreakDecider = rule.decidingSetRules?.tiebreakDecider
+                            ?: RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+                    )
+                }
+            }
+        }
     }
 
     companion object {
