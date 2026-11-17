@@ -9,6 +9,8 @@ import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
 import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeRuleRepository: RuleRepository {
     override fun getAllRules(): PagingSource<Int, Rule> {
@@ -55,5 +57,25 @@ class FakeRuleRepository: RuleRepository {
 
     override suspend fun editRule(rule: Rule): ResultType {
         return DatabaseSuccess.REGISTRY_EDITED
+    }
+
+    override fun getRuleFlow(ruleUid: Int): Flow<Rule> {
+        return flowOf(
+            Rule(
+                uid = 1,
+                name = "Demo rule",
+                setsQuantityType = RuleSetsQuantityType.FIXED_QUANTITY,
+                setsQuantity = 3,
+                setRules = SetRules(
+                    setType = RuleSetType.GAMES,
+                    gamesPerSet = 6,
+                    onGameDeuce = RuleOnGameDeuce.ADVANTAGE,
+                    setDecider = RuleSetDecider.TIEBREAK,
+                    pointsPerTiebreak = 7,
+                    tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+                ),
+                decidingSetRules = null
+            )
+        )
     }
 }

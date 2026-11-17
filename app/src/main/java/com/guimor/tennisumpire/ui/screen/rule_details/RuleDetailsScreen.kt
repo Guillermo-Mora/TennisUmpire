@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
+import com.guimor.tennisumpire.ui.components.rule.RuleDetailsCard
 import com.guimor.tennisumpire.ui.components.rule.RuleTitleCard
 import com.guimor.tennisumpire.ui.components.top_bar.NavigateBackIconButton
 import com.guimor.tennisumpire.ui.components.top_bar.TitleCustomTopAppBar
@@ -43,7 +44,9 @@ fun RuleDetailsScreen(
             modifier = Modifier
                 .padding(paddingValues)
         ) {
-
+            RuleDetailsCard(
+                rule = uiState.rule
+            )
         }
     }
 }

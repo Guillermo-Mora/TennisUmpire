@@ -42,7 +42,7 @@ fun PlayerFullProfileCard(
 ) {
     DetailsCard {
         DetailsCardEntry(
-            definition = "Full Name"
+            definition = "Full name"
         ) {
             TextOneLine("${player?.firstName} ${player?.lastName}")
         }

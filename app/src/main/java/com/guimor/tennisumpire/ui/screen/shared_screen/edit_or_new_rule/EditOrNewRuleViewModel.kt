@@ -277,7 +277,9 @@ class EditOrNewRuleViewModel(
                 if (setType == RuleSetType.GAMES)
                     onGameDeuce
                 else null,
-            setDecider = setDecider,
+            setDecider = if (setType == RuleSetType.GAMES)
+                setDecider
+            else null,
             pointsPerTiebreak =
                 if (setDecider == RuleSetDecider.TIEBREAK)
                     pointsPerTiebreak

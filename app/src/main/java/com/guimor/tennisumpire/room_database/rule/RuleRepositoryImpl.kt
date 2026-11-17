@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseError
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.domain.operation_result.result_type.DatabaseSuccess
+import kotlinx.coroutines.flow.Flow
 
 class RuleRepositoryImpl(
     val ruleDao: RuleDao
@@ -48,5 +49,9 @@ class RuleRepositoryImpl(
             return DatabaseError.REGISTRY_ALREADY_EXISTS
         }
         return DatabaseSuccess.REGISTRY_EDITED
+    }
+
+    override fun getRuleFlow(ruleUid: Int): Flow<Rule> {
+        return ruleDao.getRuleFlow(ruleUid)
     }
 }

@@ -76,7 +76,6 @@ fun EditOrNewRuleScreen(
         onNavigateBack()
     }
     val uiState by editOrNewRuleViewModel.uiState.collectAsState()
-    val lazyListState = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()

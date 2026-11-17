@@ -8,13 +8,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun DetailsCardEntry(
     definition: String,
-    value: @Composable () -> Unit
+    definitionFontWeight: FontWeight? = null,
+    value: @Composable (() -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -27,6 +29,7 @@ fun DetailsCardEntry(
             text = definition,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
+            fontWeight = definitionFontWeight,
             modifier = Modifier
                 .weight(1f)
         )
@@ -39,7 +42,7 @@ fun DetailsCardEntry(
             modifier = Modifier
                 .weight(1f)
         ) {
-            value()
+            value?.invoke()
         }
     }
 }
