@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.guimor.tennisumpire.domain.model.player.PlayerGender
 import com.guimor.tennisumpire.room_database.player.Player
+import com.guimor.tennisumpire.ui.icons.article_personIcon
 import com.guimor.tennisumpire.ui.icons.cakeFilledIcon
 import com.guimor.tennisumpire.ui.icons.femaleIcon
 import com.guimor.tennisumpire.ui.icons.fiber_manual_recordFilledIcon
@@ -264,12 +265,27 @@ fun PlayerListCard(
                 )
             }
             if (interactiveMode) {
-                PlayerCardBottomSheet(
-                    player = player,
-                    onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() },
-                    onClickDeletePlayer = { onClickDeletePlayer?.invoke() },
-                    onClickEditPlayer = { onClickEditPlayer?.invoke() },
-                    onClickPlayerProfile = { onClickPlayerProfile?.invoke() }
+                CardBottomSheet(
+                    registryName = "${player.firstName} ${player.lastName}",
+                    onClickDelete = { onClickDeletePlayer?.invoke() },
+                    onClickEdit = { onClickEditPlayer?.invoke() },
+                    detailsSection = DetailsSection(
+                        text = "Profile",
+                        icon = article_personIcon,
+                        onClickDetails = {onClickPlayerProfile?.invoke()}
+                    ),
+                    content = {
+                        PlayerListCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                            player = player,
+                            interactiveMode = false,
+                            onClickToggleAddPlayerToFavourites = { onClickToggleAddPlayerToFavourites() }
+                        )
+                    },
                 ) { onOpenBottomSheet ->
                     IconButton(
                         onClick = { onOpenBottomSheet() },

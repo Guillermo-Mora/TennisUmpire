@@ -104,18 +104,6 @@ fun EditOrNewRuleScreen(
             }
         }
     }
-    LaunchedEffect(uiState.scrollToErrorSection) {
-        if (uiState.scrollToErrorSection != -1) {
-            try {
-                lazyListState.animateScrollToItem(
-                    index = uiState.scrollToErrorSection,
-                    scrollOffset = -50
-                )
-            } finally {
-                editOrNewRuleViewModel.resetScrollToError()
-            }
-        }
-    }
     val ruleSetsQuantityTypeOptions = listOf(
         SegmentedButtonOption(
             label = stringResource(R.string.best_of),

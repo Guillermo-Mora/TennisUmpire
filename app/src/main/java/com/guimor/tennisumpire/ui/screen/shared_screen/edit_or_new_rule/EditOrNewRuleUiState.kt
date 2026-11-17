@@ -10,7 +10,6 @@ import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.ui_state.BaseUiState
 
 data class EditOrNewRuleUiState(
-    val scrollToErrorSection: Int = -1,
     val operationResult: ResultType? = null,
     //Rules
     val ruleName: FormFieldData = FormFieldData(),

@@ -18,6 +18,7 @@ import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewMo
 import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
 import com.guimor.tennisumpire.ui.screen.edit_rule.EditRuleScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
+import com.guimor.tennisumpire.ui.screen.main.MainViewModel
 import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
@@ -26,6 +27,8 @@ import com.guimor.tennisumpire.ui.screen.new_rule.NewRuleScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
+import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsScreen
+import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsViewModel
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule.EditOrNewRuleViewModel
 import kotlinx.coroutines.runBlocking
@@ -61,6 +64,7 @@ fun NavigationRoot(
         }
         entry<NavRoutesRoot.Main> {
             MainScreen(
+                mainViewModel = viewModel { MainViewModel() },
                 onNavigateBack = navigator::goBack,
                 onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
                 onNavigateToNewMatch = { navigator.navigate(NavRoutesRoot.NewMatch) },
@@ -72,7 +76,13 @@ fun NavigationRoot(
                 onNavigateToPlayerProfile = { playerUid ->
                     navigator.navigate(NavRoutesRoot.PlayerProfile(playerUid))
                 },
-                onNavigateToNewRule = { navigator.navigate(NavRoutesRoot.NewRule) }
+                onNavigateToNewRule = { navigator.navigate(NavRoutesRoot.NewRule) },
+                onNavigateToEditRule = { ruleUid ->
+                    navigator.navigate(NavRoutesRoot.EditRule(ruleUid))
+                },
+                onNavigateToRuleDetails = { ruleUid ->
+                    navigator.navigate(NavRoutesRoot.RuleDetails(ruleUid))
+                }
             )
         }
         entry<NavRoutesRoot.Settings> {
@@ -148,13 +158,31 @@ fun NavigationRoot(
                 }
             )
         }
-        entry<NavRoutesRoot.EditRule> {
+        entry<NavRoutesRoot.EditRule> { navEntry ->
             val resultBus = LocalResultEventBus.current
+            val ruleUid = navEntry.ruleUid
             EditRuleScreen(
                 onNavigateBack = navigator::goBack,
                 editRuleViewModel = viewModel(
                     factory = EditOrNewRuleViewModel
-                        .Factory()
+                        .Factory(ruleUid = ruleUid)
+                ),
+                onOperationSuccess = { result ->
+                    resultBus.sendResult(
+                        resultKey = "result",
+                        result = result
+                    )
+                }
+            )
+        }
+        entry<NavRoutesRoot.RuleDetails> { navEntry ->
+            val ruleUid = navEntry.ruleUid
+            val resultBus = LocalResultEventBus.current
+            RuleDetailsScreen(
+                onNavigateBack = navigator::goBack,
+                ruleDetailsViewModel = viewModel(
+                    factory = RuleDetailsViewModel
+                        .Factory(ruleUid = ruleUid)
                 ),
                 onOperationSuccess = { result ->
                     resultBus.sendResult(

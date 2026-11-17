@@ -3,7 +3,7 @@ package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.rules
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.ui_state.BaseUiState
 
-data class PlayersUiState(
+data class RulesUiState(
     val messageResult: ResultType? = null,
-    val playerOperationAbbreviatedName: String? = null
+    val ruleName: String? = null
 ) : BaseUiState()

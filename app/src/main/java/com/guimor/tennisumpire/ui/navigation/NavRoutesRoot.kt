@@ -51,6 +51,12 @@ sealed interface NavRoutesRoot {
         NavKey
 
     @Serializable
+    data class RuleDetails(
+        val ruleUid: Int
+    ) :
+        NavKey
+
+    @Serializable
     data class Results(
         val canNavigateBack: Boolean = false
     ) :
