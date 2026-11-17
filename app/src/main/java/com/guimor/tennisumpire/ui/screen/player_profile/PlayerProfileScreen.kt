@@ -7,8 +7,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryTabRow
@@ -26,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -74,7 +71,6 @@ fun PlayerProfileScreen(
     }
     val startDestination = Destination.DETAILS
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TitleCustomTopAppBar(
@@ -89,7 +85,7 @@ fun PlayerProfileScreen(
                         onNavigateBack()
                     })
                 },
-                scrollBehavior = scrollBehavior,
+                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 colors = TopAppBarColors(
                     containerColor = TopAppBarDefaults.topAppBarColors().containerColor,
                     scrolledContainerColor = TopAppBarDefaults.topAppBarColors().containerColor,
