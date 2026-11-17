@@ -1,0 +1,20 @@
+- En las normas, debería de incluir los tiempos de descanso entre cada juego, el tiempo para sacar entre cada juego, y el tiempo entre cada set en una sección de tiempos. En este caso concreto, el usuario podría dejarlos a null (sin especificar). De manera que al comenzar el partido, el manejador del marcador no mostrará un botón para comenzar a contar el tiempo.
+
+- En las normas, incluir modificación del funcionamiento de los Warnings (1, 2, 3, [4 y siguientes] pudiendo elegir lo que ocurrirá en cada caso)
+
+- Añadir posibilidad de añadir a favoritos para las normas
+
+- Al crear un partido/resultado, el jugador a elegir podrá dejarse sin rellenar, de manera que se guarde con valores string por defecto para los nombres de estos.
+
+- Al comenzar un partido, saldrá una interfaz para lanzar una moneda/ o directamente elegir quienes eligen, y si eligen sacar/no sacar primero o lado del campo.
+
+- En los partidos, la interfaz mostrará cuando hay que cambiar de lado, cuando hay descanso, con los tiempos incluidos y demás.
+
+- La norma podrá configurarse con/sin cambios de lado durante el partido.
+En las páginas de detalle de jugador y detalle de norma, deberían de estar los 3 puntos accesbiles, con sólo las opciones de editar/eliminar visibles al pulsarlo.
+
+- Los resultados ya colgados deberían de ser completamente independientes de las normas. De manera que una norma se pueda modificar aunque tenga resultados.
+
+- Una norma no se podrá modificar si tiene partidos que se están jugando con ella.
+
+- Las pantallas de jugadores y de normas, tendrán buscador por nombre. El tema de filtros, es algo que me podría plantear para añadir más adelante.

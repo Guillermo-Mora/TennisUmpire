@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleOnPenaltyReceived
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -20,10 +21,10 @@ data class Rule (
     //In the UI, the rules will be separated in these sections for better readability
     // and understanding
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo val name: String,
     //Sets
-    @ColumnInfo(name = "sets_quantity_type") val setsQuantityType: RuleSetsQuantityType,
-    @ColumnInfo(name = "sets_quantity") val setsQuantity: Int,
+    @ColumnInfo val setsQuantityType: RuleSetsQuantityType,
+    @ColumnInfo val setsQuantity: Int,
     @Embedded(prefix = "set_") val setRules: SetRules,
 
     //Deciding set
@@ -37,12 +38,29 @@ data class Rule (
 
 data class SetRules(
     //Set
-    @ColumnInfo(name = "set_type") val setType: RuleSetType,
+    @ColumnInfo val setType: RuleSetType,
     //Games
-    @ColumnInfo(name = "games_per_set") val gamesPerSet: Int? = null,
-    @ColumnInfo(name = "on_game_deuce") val onGameDeuce: RuleOnGameDeuce? = null,
+    @ColumnInfo val gamesPerSet: Int? = null,
+    @ColumnInfo val onGameDeuce: RuleOnGameDeuce? = null,
     //Tiebreaks
-    @ColumnInfo(name = "tiebreak_starts_on") val setDecider: RuleSetDecider? = null,
-    @ColumnInfo(name = "points_per_tiebreak") val pointsPerTiebreak: Int? = null,
-    @ColumnInfo(name = "tiebreak_decider") val tiebreakDecider: RuleTiebreakDecider? = null,
+    @ColumnInfo val setDecider: RuleSetDecider? = null,
+    @ColumnInfo val pointsPerTiebreak: Int? = null,
+    @ColumnInfo val tiebreakDecider: RuleTiebreakDecider? = null,
+)
+
+data class TimeRules(
+    @ColumnInfo val timeBetweenPoints: Int = 25,
+    @ColumnInfo val timeAfterOddGames: Int = 90,
+    @ColumnInfo val timeBetweenSets: Int = 120,
+    @ColumnInfo val timeMedicalTimeOut: Int = 180,
+    @ColumnInfo val timeBathroom: Int = 180
+)
+
+data class CodeViolationRules(
+    @ColumnInfo val onWarningReceived: HashMap<Int, RuleOnPenaltyReceived> = hashMapOf(
+        1 to RuleOnPenaltyReceived.NOTHING,
+        2 to RuleOnPenaltyReceived.POINT_LOSS,
+        3 to RuleOnPenaltyReceived.GAME_LOSS,
+        4 to RuleOnPenaltyReceived.DECIDE
+    )
 )
