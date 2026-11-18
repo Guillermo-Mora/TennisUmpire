@@ -4,6 +4,8 @@
 - El propio marcador de los partidos, permitirá colocar a cada jugador los code violation, medical timeouts, bathroom times, etc.
 - Todos los contadores, será decisión del árbitro comenzarlos o no dándole al botón de empezar a contar. Esto hará todo mucho más cómodo, ya que si se hace automático puede der problemas de que aún no se quiería empezar, etc.
 
+- Quizás sería mejor dejar un contador a mano en la interfaz de llevar el marcador, pero no poner a mano los tiempos de descanso, entre puntos, etc. De manera que el árbitro tenga máxima flexibilidad para menejar esto. Sería un contador que siempre empieza en 0 y va hacia arriba. De manera que nunca acaba, evitando problemas. Esto a la larga será lo mejor, ya que es mucho más cómodo de operar que valores fijos con avisos. Ya es cosa del árbitro acordarse de los tiempos.
+
 - Se podrá poner la opción de retirado de un partido un jugador, de manera que se terminará instantáneamente y ganará el que no se ha retirado.
 
 - Añadir posibilidad de añadir a favoritos para las normas

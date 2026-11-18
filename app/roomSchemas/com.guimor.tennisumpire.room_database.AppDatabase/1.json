@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "530d8b3345878baaf52750892227d527",
+    "identityHash": "aceb3fa5503166726e230c44b438c6dc",
     "entities": [
       {
         "tableName": "Player",
@@ -94,7 +94,7 @@
       },
       {
         "tableName": "Rule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `sets_quantity_type` TEXT NOT NULL, `sets_quantity` INTEGER NOT NULL, `set_set_type` TEXT NOT NULL, `set_games_per_set` INTEGER, `set_on_game_deuce` TEXT, `set_tiebreak_starts_on` TEXT, `set_points_per_tiebreak` INTEGER, `set_tiebreak_decider` TEXT, `deciding_set_set_type` TEXT, `deciding_set_games_per_set` INTEGER, `deciding_set_on_game_deuce` TEXT, `deciding_set_tiebreak_starts_on` TEXT, `deciding_set_points_per_tiebreak` INTEGER, `deciding_set_tiebreak_decider` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `deciding_set_setType` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -110,75 +110,75 @@
           },
           {
             "fieldPath": "setsQuantityType",
-            "columnName": "sets_quantity_type",
+            "columnName": "setsQuantityType",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "setsQuantity",
-            "columnName": "sets_quantity",
+            "columnName": "setsQuantity",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "setRules.setType",
-            "columnName": "set_set_type",
+            "columnName": "set_setType",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "setRules.gamesPerSet",
-            "columnName": "set_games_per_set",
+            "columnName": "set_gamesPerSet",
             "affinity": "INTEGER"
           },
           {
             "fieldPath": "setRules.onGameDeuce",
-            "columnName": "set_on_game_deuce",
+            "columnName": "set_onGameDeuce",
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "setRules.tiebreakStartsOn",
-            "columnName": "set_tiebreak_starts_on",
+            "fieldPath": "setRules.setDecider",
+            "columnName": "set_setDecider",
             "affinity": "TEXT"
           },
           {
             "fieldPath": "setRules.pointsPerTiebreak",
-            "columnName": "set_points_per_tiebreak",
+            "columnName": "set_pointsPerTiebreak",
             "affinity": "INTEGER"
           },
           {
             "fieldPath": "setRules.tiebreakDecider",
-            "columnName": "set_tiebreak_decider",
+            "columnName": "set_tiebreakDecider",
             "affinity": "TEXT"
           },
           {
             "fieldPath": "decidingSetRules.setType",
-            "columnName": "deciding_set_set_type",
+            "columnName": "deciding_set_setType",
             "affinity": "TEXT"
           },
           {
             "fieldPath": "decidingSetRules.gamesPerSet",
-            "columnName": "deciding_set_games_per_set",
+            "columnName": "deciding_set_gamesPerSet",
             "affinity": "INTEGER"
           },
           {
             "fieldPath": "decidingSetRules.onGameDeuce",
-            "columnName": "deciding_set_on_game_deuce",
+            "columnName": "deciding_set_onGameDeuce",
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "decidingSetRules.tiebreakStartsOn",
-            "columnName": "deciding_set_tiebreak_starts_on",
+            "fieldPath": "decidingSetRules.setDecider",
+            "columnName": "deciding_set_setDecider",
             "affinity": "TEXT"
           },
           {
             "fieldPath": "decidingSetRules.pointsPerTiebreak",
-            "columnName": "deciding_set_points_per_tiebreak",
+            "columnName": "deciding_set_pointsPerTiebreak",
             "affinity": "INTEGER"
           },
           {
             "fieldPath": "decidingSetRules.tiebreakDecider",
-            "columnName": "deciding_set_tiebreak_decider",
+            "columnName": "deciding_set_tiebreakDecider",
             "affinity": "TEXT"
           }
         ],
@@ -203,7 +203,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '530d8b3345878baaf52750892227d527')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aceb3fa5503166726e230c44b438c6dc')"
     ]
   }
 }

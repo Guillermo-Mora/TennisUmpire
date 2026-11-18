@@ -21,7 +21,6 @@ data class Rule (
     // and understanding
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     @ColumnInfo val name: String,
-    @ColumnInfo val sideChanges: Boolean,
     //Sets
     @ColumnInfo val setsQuantityType: RuleSetsQuantityType,
     @ColumnInfo val setsQuantity: Int,
@@ -34,7 +33,6 @@ data class Rule (
     //In case different is selected, the options for the deciding set will appear, in case not, it
     //will be sent as null.
     @Embedded(prefix = "deciding_set_") val decidingSetRules: SetRules? = null,
-    @Embedded val timeRules: TimeRules
 )
 
 data class SetRules(
@@ -47,13 +45,4 @@ data class SetRules(
     @ColumnInfo val setDecider: RuleSetDecider? = null,
     @ColumnInfo val pointsPerTiebreak: Int? = null,
     @ColumnInfo val tiebreakDecider: RuleTiebreakDecider? = null,
-)
-
-data class TimeRules(
-    @ColumnInfo val timeBetweenPoints: Int = 25,
-    @ColumnInfo val timeBreakAfterOddGames: Int = 90,
-    @ColumnInfo val timeBreakBetweenSets: Int = 120,
-    @ColumnInfo val timeMedicalTimeOut: Int = 180,
-    @ColumnInfo val timeBathroom: Int = 180,
-    @ColumnInfo val timeBathroomWithClothesChange: Int = 300
 )
