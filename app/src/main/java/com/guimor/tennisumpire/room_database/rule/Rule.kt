@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -45,4 +46,9 @@ data class SetRules(
     @ColumnInfo val setDecider: RuleSetDecider? = null,
     @ColumnInfo val pointsPerTiebreak: Int? = null,
     @ColumnInfo val tiebreakDecider: RuleTiebreakDecider? = null,
+)
+
+data class ServingRules(
+    @ColumnInfo val setsServerChangesOn: RuleServerChangesOn,
+    @ColumnInfo val tiebreaksServerChangesOn: RuleServerChangesOn
 )
