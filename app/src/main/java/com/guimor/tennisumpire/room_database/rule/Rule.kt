@@ -34,6 +34,8 @@ data class Rule (
     //In case different is selected, the options for the deciding set will appear, in case not, it
     //will be sent as null.
     @Embedded(prefix = "deciding_set_") val decidingSetRules: SetRules? = null,
+    //Serving rules
+    @Embedded val servingRules: ServingRules
 )
 
 data class SetRules(
@@ -49,6 +51,6 @@ data class SetRules(
 )
 
 data class ServingRules(
-    @ColumnInfo val setsServerChangesOn: RuleServerChangesOn,
-    @ColumnInfo val tiebreaksServerChangesOn: RuleServerChangesOn
+    @ColumnInfo val setsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OddQuantity,
+    @ColumnInfo val tiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenAlwaysTwo
 )
