@@ -4,7 +4,9 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.room_database.converter.LocalDateConverter
+import com.guimor.tennisumpire.room_database.converter.RuleServerChangesOnConverter
 import com.guimor.tennisumpire.room_database.converter.UriConverter
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.room_database.player.PlayerDao
@@ -24,7 +26,8 @@ import com.guimor.tennisumpire.room_database.rule.RuleDao
 )
 @TypeConverters(
     LocalDateConverter::class,
-    UriConverter::class
+    UriConverter::class,
+    RuleServerChangesOnConverter::class
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao

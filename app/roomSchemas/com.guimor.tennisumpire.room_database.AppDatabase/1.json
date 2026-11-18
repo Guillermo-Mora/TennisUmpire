@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "aceb3fa5503166726e230c44b438c6dc",
+    "identityHash": "21f04885fa5b066f3f1112187f3143e2",
     "entities": [
       {
         "tableName": "Player",
@@ -94,7 +94,7 @@
       },
       {
         "tableName": "Rule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `deciding_set_setType` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `deciding_set_setType` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT, `setsServerChangesOn` TEXT NOT NULL, `tiebreaksServerChangesOn` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -180,6 +180,18 @@
             "fieldPath": "decidingSetRules.tiebreakDecider",
             "columnName": "deciding_set_tiebreakDecider",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "servingRules.setsServerChangesOn",
+            "columnName": "setsServerChangesOn",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "servingRules.tiebreaksServerChangesOn",
+            "columnName": "tiebreaksServerChangesOn",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -203,7 +215,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aceb3fa5503166726e230c44b438c6dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '21f04885fa5b066f3f1112187f3143e2')"
     ]
   }
 }

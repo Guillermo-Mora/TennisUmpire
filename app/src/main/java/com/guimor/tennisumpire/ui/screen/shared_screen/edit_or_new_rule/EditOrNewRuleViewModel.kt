@@ -255,7 +255,8 @@ class EditOrNewRuleViewModel(
                 setDecider = ruleData.ruleDecidingSetDecider,
                 pointsPerTiebreak = ruleData.ruleDecidingPointsPerTiebreak,
                 tiebreakDecider = ruleData.ruleDecidingTiebreakDecider
-            ) else null
+            ) else null,
+            servingRules = TODO()
         )
     }
 

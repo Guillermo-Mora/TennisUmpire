@@ -16,6 +16,7 @@ import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
 import com.guimor.tennisumpire.domain.model.rule.RuleTiebreakDecider
 import com.guimor.tennisumpire.room_database.rule.Rule
+import com.guimor.tennisumpire.room_database.rule.ServingRules
 import com.guimor.tennisumpire.room_database.rule.SetRules
 import com.guimor.tennisumpire.ui.components.card.DetailsCard
 import com.guimor.tennisumpire.ui.components.card.DetailsCardEntry
@@ -133,7 +134,8 @@ private fun RuleDetailsCardPreview() {
                             pointsPerTiebreak = 7,
                             tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
                         ),
-                        decidingSetRules = null
+                        decidingSetRules = null,
+                        servingRules = ServingRules(),
                     )
                 )
             }
