@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
-import com.guimor.tennisumpire.domain.model.rule.RuleOnPenaltyReceived
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -22,6 +21,7 @@ data class Rule (
     // and understanding
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     @ColumnInfo val name: String,
+    @ColumnInfo val sideChanges: Boolean,
     //Sets
     @ColumnInfo val setsQuantityType: RuleSetsQuantityType,
     @ColumnInfo val setsQuantity: Int,
@@ -34,7 +34,8 @@ data class Rule (
     //In case different is selected, the options for the deciding set will appear, in case not, it
     //will be sent as null.
     @Embedded(prefix = "deciding_set_") val decidingSetRules: SetRules? = null,
-    )
+    @Embedded val timeRules: TimeRules
+)
 
 data class SetRules(
     //Set
@@ -50,17 +51,9 @@ data class SetRules(
 
 data class TimeRules(
     @ColumnInfo val timeBetweenPoints: Int = 25,
-    @ColumnInfo val timeAfterOddGames: Int = 90,
-    @ColumnInfo val timeBetweenSets: Int = 120,
+    @ColumnInfo val timeBreakAfterOddGames: Int = 90,
+    @ColumnInfo val timeBreakBetweenSets: Int = 120,
     @ColumnInfo val timeMedicalTimeOut: Int = 180,
-    @ColumnInfo val timeBathroom: Int = 180
-)
-
-data class CodeViolationRules(
-    @ColumnInfo val onWarningReceived: HashMap<Int, RuleOnPenaltyReceived> = hashMapOf(
-        1 to RuleOnPenaltyReceived.NOTHING,
-        2 to RuleOnPenaltyReceived.POINT_LOSS,
-        3 to RuleOnPenaltyReceived.GAME_LOSS,
-        4 to RuleOnPenaltyReceived.DECIDE
-    )
+    @ColumnInfo val timeBathroom: Int = 180,
+    @ColumnInfo val timeBathroomWithClothesChange: Int = 300
 )

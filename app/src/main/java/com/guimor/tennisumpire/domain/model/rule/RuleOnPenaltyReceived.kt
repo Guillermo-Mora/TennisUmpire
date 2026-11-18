@@ -5,6 +5,5 @@ enum class RuleOnPenaltyReceived {
     POINT_LOSS,
     GAME_LOSS,
     SET_LOSS,
-    MATCH_LOSS,
-    DECIDE
+    MATCH_LOSS
 }
