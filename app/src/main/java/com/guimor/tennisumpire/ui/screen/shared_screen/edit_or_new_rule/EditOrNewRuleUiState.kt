@@ -1,6 +1,7 @@
 package com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule
 
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -31,4 +32,7 @@ data class EditOrNewRuleUiState(
     val ruleDecidingSetDecider: RuleSetDecider = RuleSetDecider.TIEBREAK,
     val ruleDecidingPointsPerTiebreak: Int = 10,
     val ruleDecidingTiebreakDecider: RuleTiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
+    //Serving rules
+    val ruleSetsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OddQuantity,
+    val ruleTiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenAlwaysTwo
 ): BaseUiState()

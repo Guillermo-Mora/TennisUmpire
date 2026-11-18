@@ -15,6 +15,7 @@ import com.guimor.tennisumpire.domain.operation_result.result_type.FormatError
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.room_database.rule.Rule
 import com.guimor.tennisumpire.room_database.rule.RuleRepository
+import com.guimor.tennisumpire.room_database.rule.ServingRules
 import com.guimor.tennisumpire.room_database.rule.SetRules
 import com.guimor.tennisumpire.ui.model.FormFieldData
 import com.guimor.tennisumpire.view_model.ValidatableForm
@@ -256,7 +257,10 @@ class EditOrNewRuleViewModel(
                 pointsPerTiebreak = ruleData.ruleDecidingPointsPerTiebreak,
                 tiebreakDecider = ruleData.ruleDecidingTiebreakDecider
             ) else null,
-            servingRules = TODO()
+            servingRules = ServingRules(
+                setsServerChangesOn = ruleData.ruleSetsServerChangesOn,
+                tiebreaksServerChangesOn = ruleData.ruleTiebreaksServerChangesOn
+            )
         )
     }
 
