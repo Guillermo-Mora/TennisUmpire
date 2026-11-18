@@ -1,6 +1,3 @@
-- En las normas, debería de incluir los tiempos de descanso entre cada juego, el tiempo para sacar entre cada juego, y el tiempo entre cada set en una sección de tiempos. En este caso concreto, el usuario podría dejarlos a null (sin especificar). De manera que al comenzar el partido, el manejador del marcador no mostrará un botón para comenzar a contar el tiempo.
-
-- En las normas, incluir modificación del funcionamiento de los Warnings (1, 2, 3, [4 y siguientes] pudiendo elegir lo que ocurrirá en cada caso) -> En vez de añadir normas complejas de code violations. Será mejor que en la interfaz, se tenga un botón para poner una code violation a un jugador, y al ponersela se te presentarán las opciones posibles de (NOTHING, POINT_LOSS, GAME_LOSS, SET_LOSS, MATCH_LOSS). Esto será mucho más cómdo, ya que la propia interfaz mostrará cuantas code violations tiene cada jugador en ese momento.
 - El propio marcador de los partidos, permitirá colocar a cada jugador los code violation, medical timeouts, bathroom times, etc.
 - Todos los contadores, será decisión del árbitro comenzarlos o no dándole al botón de empezar a contar. Esto hará todo mucho más cómodo, ya que si se hace automático puede der problemas de que aún no se quiería empezar, etc.
 
@@ -14,7 +11,7 @@
 
 - Al comenzar un partido, saldrá una interfaz para lanzar una moneda/ o directamente elegir quienes eligen, y si eligen sacar/no sacar primero o lado del campo.
 
-- En los partidos, la interfaz mostrará cuando hay que cambiar de lado, cuando hay descanso, con los tiempos incluidos y demás.
+- En los partidos, la interfaz mostrará quien saca.
 
 - La norma podrá configurarse con/sin cambios de lado durante el partido.
 En las páginas de detalle de jugador y detalle de norma, deberían de estar los 3 puntos accesbiles, con sólo las opciones de editar/eliminar visibles al pulsarlo.
