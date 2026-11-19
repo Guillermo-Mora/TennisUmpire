@@ -201,7 +201,7 @@ fun EditOrNewRuleScreen(
                 HorizontalDivider()
                 RuleSection {
                     DefaultSpacer()
-                    SectionHeaderText("Deciding set")
+                    SectionHeaderText("Deciding set rules")
                     DefaultSpacer()
                     FormSwitch(
                         label = "Deciding set rules are different",
@@ -215,7 +215,6 @@ fun EditOrNewRuleScreen(
                 //Deciding set rules
                 HorizontalDivider()
                 if (uiState.areDecidingSetRulesDifferent) {
-                    HorizontalDivider()
                     SetsSection(
                         isDecidingSet = true,
                         setType = uiState.ruleDecidingSetType,
@@ -234,6 +233,11 @@ fun EditOrNewRuleScreen(
                         canIncrementNumber = editOrNewRuleViewModel::canIncrementNumber
                     )
                     HorizontalDivider()
+                }
+                RuleSection {
+                    DefaultSpacer()
+                    SectionHeaderText("Serving order")
+                    DefaultSpacer()
                 }
                 BigSpacer()
                 Button(
