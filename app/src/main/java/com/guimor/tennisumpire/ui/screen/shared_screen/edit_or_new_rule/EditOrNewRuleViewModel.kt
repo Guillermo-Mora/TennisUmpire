@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -15,10 +16,8 @@ import com.guimor.tennisumpire.domain.operation_result.result_type.FormatError
 import com.guimor.tennisumpire.domain.operation_result.result_type.ResultType
 import com.guimor.tennisumpire.room_database.rule.Rule
 import com.guimor.tennisumpire.room_database.rule.RuleRepository
-import com.guimor.tennisumpire.room_database.rule.ServingRules
 import com.guimor.tennisumpire.room_database.rule.SetRules
 import com.guimor.tennisumpire.ui.model.FormFieldData
-import com.guimor.tennisumpire.view_model.ValidatableForm
 import com.guimor.tennisumpire.view_model.ViewModelHelper
 import com.guimor.tennisumpire.view_model.validationDebounce
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -160,6 +159,38 @@ class EditOrNewRuleViewModel(
         }
     }
 
+    fun setSetsServerChangesOnQuantity(quantity: Int) {
+        _uiState.update { state ->
+            state.copy(
+                ruleGlobalSetsServerChangesOnQuantity = quantity
+            )
+        }
+    }
+
+    fun setSetsServerChangesOn(serverChangesOn: RuleServerChangesOn) {
+        _uiState.update { state ->
+            state.copy(
+                ruleGlobalSetsServerChangesOn = serverChangesOn
+            )
+        }
+    }
+
+    fun setTiebreaksServerChangesOnQuantity(quantity: Int) {
+        _uiState.update { state ->
+            state.copy(
+                ruleGlobalTiebreaksServerChangesOnQuantity = quantity
+            )
+        }
+    }
+
+    fun setTiebreaksServerChangesOn(serverChangesOn: RuleServerChangesOn) {
+        _uiState.update { state ->
+            state.copy(
+                ruleGlobalTiebreaksServerChangesOn = serverChangesOn
+            )
+        }
+    }
+
     fun setDecidingSet(boolean: Boolean) {
         _uiState.update { state ->
             state.copy(
@@ -217,6 +248,38 @@ class EditOrNewRuleViewModel(
         }
     }
 
+    fun setDecidingSetsServerChangesOnQuantity(quantity: Int) {
+        _uiState.update { state ->
+            state.copy(
+                ruleDecidingSetsServerChangesOnQuantity = quantity
+            )
+        }
+    }
+
+    fun setDecidingSetsServerChangesOn(serverChangesOn: RuleServerChangesOn) {
+        _uiState.update { state ->
+            state.copy(
+                ruleDecidingSetsServerChangesOn = serverChangesOn
+            )
+        }
+    }
+
+    fun setDecidingTiebreaksServerChangesOnQuantity(quantity: Int) {
+        _uiState.update { state ->
+            state.copy(
+                ruleDecidingTiebreaksServerChangesOnQuantity = quantity
+            )
+        }
+    }
+
+    fun setDecidingTiebreaksServerChangesOn(serverChangesOn: RuleServerChangesOn) {
+        _uiState.update { state ->
+            state.copy(
+                ruleDecidingTiebreaksServerChangesOn = serverChangesOn
+            )
+        }
+    }
+
     fun validateForm(): RequestableFieldsIDs? {
         var firstErrorFieldID: RequestableFieldsIDs? = null
         if (validateRuleName()) firstErrorFieldID = RequestableFieldsIDs.RULE_NAME
@@ -247,7 +310,11 @@ class EditOrNewRuleViewModel(
                 onGameDeuce = ruleData.ruleGlobalOnGameDeuce,
                 setDecider = ruleData.ruleGlobalSetDecider,
                 pointsPerTiebreak = ruleData.ruleGlobalPointsPerTiebreak,
-                tiebreakDecider = ruleData.ruleGlobalTiebreakDecider
+                tiebreakDecider = ruleData.ruleGlobalTiebreakDecider,
+                setsServerChangesOnQuantity = ruleData.ruleGlobalSetsServerChangesOnQuantity,
+                setsServerChangesOn = ruleData.ruleGlobalSetsServerChangesOn,
+                tiebreaksServerChangesOnQuantity = ruleData.ruleGlobalTiebreaksServerChangesOnQuantity,
+                tiebreaksServerChangesOn = ruleData.ruleGlobalTiebreaksServerChangesOn
             ),
             decidingSetRules = if (ruleData.areDecidingSetRulesDifferent) getCleanedSetRules(
                 setType = ruleData.ruleDecidingSetType,
@@ -255,12 +322,12 @@ class EditOrNewRuleViewModel(
                 onGameDeuce = ruleData.ruleDecidingOnGameDeuce,
                 setDecider = ruleData.ruleDecidingSetDecider,
                 pointsPerTiebreak = ruleData.ruleDecidingPointsPerTiebreak,
-                tiebreakDecider = ruleData.ruleDecidingTiebreakDecider
-            ) else null,
-            servingRules = ServingRules(
-                setsServerChangesOn = ruleData.ruleSetsServerChangesOn,
-                tiebreaksServerChangesOn = ruleData.ruleTiebreaksServerChangesOn
-            )
+                tiebreakDecider = ruleData.ruleDecidingTiebreakDecider,
+                setsServerChangesOnQuantity = ruleData.ruleDecidingSetsServerChangesOnQuantity,
+                setsServerChangesOn = ruleData.ruleDecidingSetsServerChangesOn,
+                tiebreaksServerChangesOnQuantity = ruleData.ruleDecidingTiebreaksServerChangesOnQuantity,
+                tiebreaksServerChangesOn = ruleData.ruleDecidingTiebreaksServerChangesOn
+            ) else null
         )
     }
 
@@ -270,7 +337,11 @@ class EditOrNewRuleViewModel(
         onGameDeuce: RuleOnGameDeuce,
         setDecider: RuleSetDecider,
         pointsPerTiebreak: Int,
-        tiebreakDecider: RuleTiebreakDecider
+        tiebreakDecider: RuleTiebreakDecider,
+        setsServerChangesOnQuantity: Int,
+        setsServerChangesOn: RuleServerChangesOn,
+        tiebreaksServerChangesOnQuantity: Int,
+        tiebreaksServerChangesOn: RuleServerChangesOn
     ): SetRules {
         return SetRules(
             setType = setType,
@@ -292,7 +363,29 @@ class EditOrNewRuleViewModel(
             tiebreakDecider =
                 if (setDecider == RuleSetDecider.TIEBREAK)
                     tiebreakDecider
-                else null
+                else null,
+            setsServerChangesOn = if (setType == RuleSetType.GAMES) {
+                when (setsServerChangesOn) {
+                    is RuleServerChangesOn.EveryQuantity -> RuleServerChangesOn.EveryQuantity(
+                        setsServerChangesOnQuantity
+                    )
+
+                    is RuleServerChangesOn.OneThenEveryQuantity -> RuleServerChangesOn.OneThenEveryQuantity(
+                        setsServerChangesOnQuantity
+                    )
+                }
+            } else null,
+            tiebreaksServerChangesOn = if (setType == RuleSetType.TIEBREAK || setDecider == RuleSetDecider.TIEBREAK) {
+                when (tiebreaksServerChangesOn) {
+                    is RuleServerChangesOn.EveryQuantity -> RuleServerChangesOn.EveryQuantity(
+                        tiebreaksServerChangesOnQuantity
+                    )
+
+                    is RuleServerChangesOn.OneThenEveryQuantity -> RuleServerChangesOn.OneThenEveryQuantity(
+                        tiebreaksServerChangesOnQuantity
+                    )
+                }
+            } else null
         )
     }
 
@@ -323,11 +416,32 @@ class EditOrNewRuleViewModel(
                         ruleDecidingPointsPerTiebreak = rule.decidingSetRules?.pointsPerTiebreak
                             ?: 10,
                         ruleDecidingTiebreakDecider = rule.decidingSetRules?.tiebreakDecider
-                            ?: RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+                            ?: RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
+                        ruleGlobalSetsServerChangesOn = rule.setRules.setsServerChangesOn?.getDefaultServerChangesOn()
+                            ?: RuleServerChangesOn.EveryQuantity(1),
+                        ruleGlobalSetsServerChangesOnQuantity = rule.setRules.setsServerChangesOn?.quantity
+                            ?: 1,
+                        ruleDecidingSetsServerChangesOn = rule.decidingSetRules?.setsServerChangesOn?.getDefaultServerChangesOn()
+                            ?: RuleServerChangesOn.EveryQuantity(1),
+                        ruleDecidingSetsServerChangesOnQuantity = rule.decidingSetRules?.setsServerChangesOn?.quantity
+                            ?: 1,
+                        ruleGlobalTiebreaksServerChangesOn = rule.setRules.tiebreaksServerChangesOn?.getDefaultServerChangesOn()
+                            ?: RuleServerChangesOn.OneThenEveryQuantity(2),
+                        ruleGlobalTiebreaksServerChangesOnQuantity = rule.setRules.tiebreaksServerChangesOn?.quantity
+                            ?: 2,
+                        ruleDecidingTiebreaksServerChangesOn = rule.decidingSetRules?.tiebreaksServerChangesOn?.getDefaultServerChangesOn()
+                            ?: RuleServerChangesOn.OneThenEveryQuantity(2),
+                        ruleDecidingTiebreaksServerChangesOnQuantity = rule.decidingSetRules?.tiebreaksServerChangesOn?.quantity
+                            ?: 2,
                     )
                 }
             }
         }
+    }
+
+    private fun RuleServerChangesOn.getDefaultServerChangesOn() = when (this) {
+        is RuleServerChangesOn.EveryQuantity -> RuleServerChangesOn.EveryQuantity(1)
+        is RuleServerChangesOn.OneThenEveryQuantity -> RuleServerChangesOn.OneThenEveryQuantity(2)
     }
 
     companion object {

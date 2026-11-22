@@ -38,11 +38,11 @@ data class Rule (
 
 data class SetRules(
     @ColumnInfo val setType: RuleSetType,
-    @ColumnInfo val setsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OddQuantity,
+    @ColumnInfo val setsServerChangesOn: RuleServerChangesOn? = RuleServerChangesOn.EveryQuantity(1),
     @ColumnInfo val gamesPerSet: Int? = null,
     @ColumnInfo val onGameDeuce: RuleOnGameDeuce? = null,
     @ColumnInfo val setDecider: RuleSetDecider? = null,
     @ColumnInfo val pointsPerTiebreak: Int? = null,
     @ColumnInfo val tiebreakDecider: RuleTiebreakDecider? = null,
-    @ColumnInfo val tiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenAlwaysTwo
+    @ColumnInfo val tiebreaksServerChangesOn: RuleServerChangesOn? = RuleServerChangesOn.OneThenEveryQuantity(2)
 )

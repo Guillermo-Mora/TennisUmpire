@@ -15,23 +15,23 @@ class RuleServerChangesOnConverter {
     }
 
     companion object {
-        private const val EVEN_QUANTITY = "even_quantity"
-        private const val ODD_QUANTITY = "odd_quantity"
-        private const val ONE_THEN_ALWAYS_TWO = "one_then_always_two"
+        private const val ONE_THEN_EVERY_QUANTITY = "one_then_every_quantity"
         private const val EVERY_QUANTITY = "every_quantity"
 
         private fun RuleServerChangesOn.convertToDatabase(): String = when (this) {
-            RuleServerChangesOn.EvenQuantity -> EVEN_QUANTITY
-            RuleServerChangesOn.OddQuantity -> ODD_QUANTITY
-            RuleServerChangesOn.OneThenAlwaysTwo -> ONE_THEN_ALWAYS_TWO
+            is RuleServerChangesOn.OneThenEveryQuantity -> "$ONE_THEN_EVERY_QUANTITY${this.quantity}"
             is RuleServerChangesOn.EveryQuantity -> "$EVERY_QUANTITY${this.quantity}"
         }
 
-        private fun String.convertFromDatabase(): RuleServerChangesOn = when (this) {
-            EVEN_QUANTITY -> RuleServerChangesOn.EvenQuantity
-            ODD_QUANTITY -> RuleServerChangesOn.OddQuantity
-            ONE_THEN_ALWAYS_TWO -> RuleServerChangesOn.OneThenAlwaysTwo
-            else -> RuleServerChangesOn.EveryQuantity(this.substringAfter(EVERY_QUANTITY).toInt())
-        }
+        private fun String.convertFromDatabase(): RuleServerChangesOn =
+            if (this.contains(ONE_THEN_EVERY_QUANTITY)) RuleServerChangesOn.OneThenEveryQuantity(
+                this.substringAfter(ONE_THEN_EVERY_QUANTITY).toInt()
+            ) else if (this.contains(EVERY_QUANTITY)) RuleServerChangesOn.EveryQuantity(
+                this.substringAfter(EVERY_QUANTITY).toInt()
+            )
+            else {
+                println("ERROR OBTAINING TYPE")
+                RuleServerChangesOn.EveryQuantity(1)
+            }
     }
 }

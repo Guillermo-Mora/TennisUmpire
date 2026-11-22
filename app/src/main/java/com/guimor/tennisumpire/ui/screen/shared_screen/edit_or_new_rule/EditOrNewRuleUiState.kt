@@ -19,20 +19,25 @@ data class EditOrNewRuleUiState(
     //Sets rules
     val ruleGlobalSetType: RuleSetType = RuleSetType.GAMES,
     val ruleGlobalGamesPerSet: Int = 6,
+    val ruleGlobalSetsServerChangesOnQuantity: Int = 1,
+    val ruleGlobalSetsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.EveryQuantity(1),
     val ruleGlobalOnGameDeuce: RuleOnGameDeuce = RuleOnGameDeuce.ADVANTAGE,
     val ruleGlobalSetDecider: RuleSetDecider = RuleSetDecider.TIEBREAK,
     val ruleGlobalPointsPerTiebreak: Int = 7,
+    val ruleGlobalTiebreaksServerChangesOnQuantity: Int = 2,
+    val ruleGlobalTiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenEveryQuantity(2),
     val ruleGlobalTiebreakDecider: RuleTiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
     //Check for enabling deciding set rules
     val areDecidingSetRulesDifferent: Boolean = false,
     //Deciding set rules
     val ruleDecidingSetType: RuleSetType = RuleSetType.GAMES,
     val ruleDecidingGamesPerSet: Int = 6,
+    val ruleDecidingSetsServerChangesOnQuantity: Int = 1,
+    val ruleDecidingSetsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.EveryQuantity(1),
     val ruleDecidingOnGameDeuce: RuleOnGameDeuce = RuleOnGameDeuce.ADVANTAGE,
     val ruleDecidingSetDecider: RuleSetDecider = RuleSetDecider.TIEBREAK,
     val ruleDecidingPointsPerTiebreak: Int = 10,
+    val ruleDecidingTiebreaksServerChangesOnQuantity: Int = 2,
+    val ruleDecidingTiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenEveryQuantity(2),
     val ruleDecidingTiebreakDecider: RuleTiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
-    //Serving rules
-    val ruleSetsServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OddQuantity,
-    val ruleTiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenAlwaysTwo
 ): BaseUiState()

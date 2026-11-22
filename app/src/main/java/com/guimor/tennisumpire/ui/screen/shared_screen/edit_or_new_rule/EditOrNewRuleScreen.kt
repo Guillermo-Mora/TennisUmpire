@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType.BEST_OF
@@ -189,14 +190,22 @@ fun EditOrNewRuleScreen(
                     onGameDeuce = uiState.ruleGlobalOnGameDeuce,
                     pointsPerTiebreak = uiState.ruleGlobalPointsPerTiebreak,
                     tieBreakDecider = uiState.ruleGlobalTiebreakDecider,
+                    setsServerChangesOnQuantity = uiState.ruleGlobalSetsServerChangesOnQuantity,
+                    setsServerChangesOn = uiState.ruleGlobalSetsServerChangesOn,
+                    tiebreaksServerChangesOnQuantity = uiState.ruleGlobalTiebreaksServerChangesOnQuantity,
+                    tiebreaksServerChangesOn = uiState.ruleGlobalTiebreaksServerChangesOn,
                     setSetType = editOrNewRuleViewModel::setSetsType,
                     setGamesPerSet = editOrNewRuleViewModel::setGamesPerSet,
                     setSetDecider = editOrNewRuleViewModel::setSetDecider,
                     setOnGameDeuce = editOrNewRuleViewModel::setOnGameDeuce,
                     setTiebreakDecider = editOrNewRuleViewModel::setTiebreakDecider,
                     setPointsPerTiebreak = editOrNewRuleViewModel::setPointsPerTiebreak,
+                    setSetsServerChangesOnQuantity = editOrNewRuleViewModel::setSetsServerChangesOnQuantity,
+                    setSetsServerChangesOn = editOrNewRuleViewModel::setSetsServerChangesOn,
+                    setTiebreaksServerChangesOnQuantity = editOrNewRuleViewModel::setTiebreaksServerChangesOnQuantity,
+                    setTiebreaksServerChangesOn = editOrNewRuleViewModel::setTiebreaksServerChangesOn,
                     canDecrementNumber = editOrNewRuleViewModel::canDecrementNumber,
-                    canIncrementNumber = editOrNewRuleViewModel::canIncrementNumber
+                    canIncrementNumber = editOrNewRuleViewModel::canIncrementNumber,
                 )
                 HorizontalDivider()
                 RuleSection {
@@ -223,21 +232,24 @@ fun EditOrNewRuleScreen(
                         onGameDeuce = uiState.ruleDecidingOnGameDeuce,
                         pointsPerTiebreak = uiState.ruleDecidingPointsPerTiebreak,
                         tieBreakDecider = uiState.ruleDecidingTiebreakDecider,
+                        setsServerChangesOnQuantity = uiState.ruleDecidingSetsServerChangesOnQuantity,
+                        setsServerChangesOn = uiState.ruleDecidingSetsServerChangesOn,
+                        tiebreaksServerChangesOnQuantity = uiState.ruleDecidingTiebreaksServerChangesOnQuantity,
+                        tiebreaksServerChangesOn = uiState.ruleDecidingTiebreaksServerChangesOn,
                         setSetType = editOrNewRuleViewModel::setDecidingSetType,
                         setGamesPerSet = editOrNewRuleViewModel::setDecidingGamesPerSet,
                         setSetDecider = editOrNewRuleViewModel::setDecidingSetDecider,
                         setOnGameDeuce = editOrNewRuleViewModel::setDecidingOnGameDeuce,
                         setTiebreakDecider = editOrNewRuleViewModel::setDecidingTiebreakDecider,
                         setPointsPerTiebreak = editOrNewRuleViewModel::setDecidingPointsPerTiebreak,
+                        setSetsServerChangesOnQuantity = editOrNewRuleViewModel::setDecidingSetsServerChangesOnQuantity,
+                        setSetsServerChangesOn = editOrNewRuleViewModel::setDecidingSetsServerChangesOn,
+                        setTiebreaksServerChangesOnQuantity = editOrNewRuleViewModel::setDecidingTiebreaksServerChangesOnQuantity,
+                        setTiebreaksServerChangesOn = editOrNewRuleViewModel::setDecidingTiebreaksServerChangesOn,
                         canDecrementNumber = editOrNewRuleViewModel::canDecrementNumber,
                         canIncrementNumber = editOrNewRuleViewModel::canIncrementNumber
                     )
                     HorizontalDivider()
-                }
-                RuleSection {
-                    DefaultSpacer()
-                    SectionHeaderText("Serving order")
-                    DefaultSpacer()
                 }
                 BigSpacer()
                 Button(
@@ -295,12 +307,20 @@ private fun SetsSection(
     onGameDeuce: RuleOnGameDeuce,
     pointsPerTiebreak: Int,
     tieBreakDecider: RuleTiebreakDecider,
+    setsServerChangesOnQuantity: Int,
+    setsServerChangesOn: RuleServerChangesOn,
+    tiebreaksServerChangesOnQuantity: Int,
+    tiebreaksServerChangesOn: RuleServerChangesOn,
     setSetType: (RuleSetType) -> Unit,
     setGamesPerSet: (Int) -> Unit,
     setSetDecider: (RuleSetDecider) -> Unit,
     setOnGameDeuce: (RuleOnGameDeuce) -> Unit,
     setTiebreakDecider: (RuleTiebreakDecider) -> Unit,
     setPointsPerTiebreak: (Int) -> Unit,
+    setSetsServerChangesOnQuantity: (Int) -> Unit,
+    setSetsServerChangesOn: (RuleServerChangesOn) -> Unit,
+    setTiebreaksServerChangesOnQuantity: (Int) -> Unit,
+    setTiebreaksServerChangesOn: (RuleServerChangesOn) -> Unit,
     canDecrementNumber: (Int) -> Boolean,
     canIncrementNumber: (Int) -> Boolean
 ) {
@@ -350,6 +370,16 @@ private fun SetsSection(
             value = RuleTiebreakDecider.GOLDEN_POINT
         ),
     )
+    val servingOrderOptionsSets = listOf<SegmentedButtonOption<RuleServerChangesOn>>(
+        SegmentedButtonOption(
+            label = "Every N",
+            value = RuleServerChangesOn.EveryQuantity(1)
+        ),
+        SegmentedButtonOption(
+            label = "1st once, then every N",
+            value = RuleServerChangesOn.OneThenEveryQuantity(2)
+        ),
+    )
     RuleSection {
         DefaultSpacer()
         SectionHeaderText(stringValue(common = "Sets rules", deciding = "${prefix}Set rules"))
@@ -375,6 +405,20 @@ private fun SetsSection(
                 selectedOption = setDecider,
                 options = setDeciderOptions,
                 onClick = { setSetDecider(it) },
+            )
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Serve rotation",
+                selectedOption = setsServerChangesOn,
+                options = servingOrderOptionsSets,
+                onClick = { setSetsServerChangesOn(it) },
+            )
+            DefaultSpacer()
+            FormNumberPicker(
+                value = setsServerChangesOnQuantity,
+                onValueChange = { setSetsServerChangesOnQuantity(it) },
+                enabledRemove = canDecrementNumber(setsServerChangesOnQuantity),
+                enabledAdd = canIncrementNumber(setsServerChangesOnQuantity),
             )
             DefaultSpacer()
         }
@@ -428,10 +472,24 @@ private fun SetsSection(
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
-                label = "Tiebreak winner on points draw",
+                label = "Tiebreak decider on maximum points draw",
                 selectedOption = tieBreakDecider,
                 options = tiebreakDeciderOptions,
                 onClick = { setTiebreakDecider(it) },
+            )
+            DefaultSpacer()
+            FormSingleChoiceSegmentedButtonRow(
+                label = "Serve rotation",
+                selectedOption = tiebreaksServerChangesOn,
+                options = servingOrderOptionsSets,
+                onClick = { setTiebreaksServerChangesOn(it) },
+            )
+            DefaultSpacer()
+            FormNumberPicker(
+                value = tiebreaksServerChangesOnQuantity,
+                onValueChange = { setTiebreaksServerChangesOnQuantity(it) },
+                enabledRemove = canDecrementNumber(tiebreaksServerChangesOnQuantity),
+                enabledAdd = canIncrementNumber(tiebreaksServerChangesOnQuantity),
             )
             DefaultSpacer()
         }

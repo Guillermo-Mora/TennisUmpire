@@ -47,8 +47,7 @@ class FakeRuleRepository: RuleRepository {
                 pointsPerTiebreak = 7,
                 tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
             ),
-            decidingSetRules = null,
-            servingRules = ServingRules()
+            decidingSetRules = null
         )
     }
 
@@ -75,8 +74,7 @@ class FakeRuleRepository: RuleRepository {
                     pointsPerTiebreak = 7,
                     tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
                 ),
-                decidingSetRules = null,
-                servingRules = ServingRules()
+                decidingSetRules = null
             )
         )
     }

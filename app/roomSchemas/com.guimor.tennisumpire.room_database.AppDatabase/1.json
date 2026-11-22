@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "21f04885fa5b066f3f1112187f3143e2",
+    "identityHash": "be822f555c131b06404d2c6af166ecff",
     "entities": [
       {
         "tableName": "Player",
@@ -94,7 +94,7 @@
       },
       {
         "tableName": "Rule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `deciding_set_setType` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT, `setsServerChangesOn` TEXT NOT NULL, `tiebreaksServerChangesOn` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_setsServerChangesOn` TEXT, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `set_tiebreaksServerChangesOn` TEXT, `deciding_set_setType` TEXT, `deciding_set_setsServerChangesOn` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT, `deciding_set_tiebreaksServerChangesOn` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -127,6 +127,11 @@
             "notNull": true
           },
           {
+            "fieldPath": "setRules.setsServerChangesOn",
+            "columnName": "set_setsServerChangesOn",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "setRules.gamesPerSet",
             "columnName": "set_gamesPerSet",
             "affinity": "INTEGER"
@@ -152,8 +157,18 @@
             "affinity": "TEXT"
           },
           {
+            "fieldPath": "setRules.tiebreaksServerChangesOn",
+            "columnName": "set_tiebreaksServerChangesOn",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "decidingSetRules.setType",
             "columnName": "deciding_set_setType",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "decidingSetRules.setsServerChangesOn",
+            "columnName": "deciding_set_setsServerChangesOn",
             "affinity": "TEXT"
           },
           {
@@ -182,16 +197,9 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "servingRules.setsServerChangesOn",
-            "columnName": "setsServerChangesOn",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "servingRules.tiebreaksServerChangesOn",
-            "columnName": "tiebreaksServerChangesOn",
-            "affinity": "TEXT",
-            "notNull": true
+            "fieldPath": "decidingSetRules.tiebreaksServerChangesOn",
+            "columnName": "deciding_set_tiebreaksServerChangesOn",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -215,7 +223,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '21f04885fa5b066f3f1112187f3143e2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be822f555c131b06404d2c6af166ecff')"
     ]
   }
 }
