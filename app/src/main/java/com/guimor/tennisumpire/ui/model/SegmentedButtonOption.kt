@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class SegmentedButtonOption<T>(
     val selected: Boolean = false,
-    val label: String,
+    val label: String? = null,
     val icon: ImageVector? = null,
     val mirrorIcon: Boolean = false,
     val value: T

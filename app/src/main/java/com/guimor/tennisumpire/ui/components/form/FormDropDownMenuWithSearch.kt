@@ -1,6 +1,7 @@
 package com.guimor.tennisumpire.ui.components.form
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,9 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -66,15 +70,17 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun <T>FormDropDownMenuWithSearch(
     icon: ImageVector? = null,
+    iconSpace: Boolean = false,
     value: String? = null,
     valueIcon: Painter? = null,
     label: String,
     onItemSelected: (T?) -> Unit,
+    getItemValue: @Composable (T) -> String,
     options: List<T>,
     keyboardType: KeyboardType = KeyboardOptions.Default.keyboardType,
     searchFilter: @Composable (searchValue: String, options: List<T>) -> List<T>,
     required: Boolean = false,
-    menuItem: @Composable (T) -> Unit
+    menuItem: @Composable (itemValue: T, selectedValue: String?) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -100,7 +106,8 @@ fun <T>FormDropDownMenuWithSearch(
                 imageVector = it,
                 contentDescription = null,
             )
-        } ?: Spacer(modifier = Modifier.size(24.dp))
+        }
+        if (iconSpace) Spacer(modifier = Modifier.size(24.dp))
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = {
@@ -196,12 +203,15 @@ fun <T>FormDropDownMenuWithSearch(
                         items = itemsList
                     ) { option ->
                         DropdownMenuItem(
-                            text = { menuItem(option) },
+                            text = { menuItem(option, value) },
                             onClick = {
                                 onItemSelected(option)
                                 expanded = false
                             },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                            modifier = if (value == getItemValue(option)) Modifier.background(
+                                color = MaterialTheme.colorScheme.surfaceContainerHighest
+                            ) else Modifier
                         )
                     }
                 }

@@ -327,8 +327,9 @@ fun EditOrNewPlayerScreen(
                     },
                     label = "Country",
                     onItemSelected = editPlayerViewModel::setPlayerCountry,
-                    options = Country.entries
-                ) { option ->
+                    options = Country.entries,
+                    getItemValue = { stringResource(it.displayName) },
+                ) { option, _ ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(

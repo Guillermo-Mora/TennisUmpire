@@ -83,17 +83,20 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
                         icon = { SegmentedButtonDefaults.Icon(active = option.value == selectedOption) },
                         label = {
                             option.icon?.let { icon ->
-                                Icon(
-                                    imageVector = icon,
-                                    contentDescription = option.label,
-                                    modifier = if (option.mirrorIcon)
-                                        Modifier.scale(scaleX = -1f, scaleY = 1f)
-                                    else Modifier
-                                )
-                            } ?:
-                            Text(
-                                text = option.label
-                            )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = option.label,
+                                        modifier = if (option.mirrorIcon)
+                                            Modifier.scale(scaleX = -1f, scaleY = 1f)
+                                        else Modifier
+                                    )
+                                    option.label?.let { label -> Text(text = label) }
+                                }
+                            } ?: option.label?.let { label -> Text(text = label) }
                         }
                     )
                 }
