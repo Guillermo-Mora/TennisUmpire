@@ -20,20 +20,33 @@ fun OnBoardingScreenContent(
     content: @Composable (ColumnScope.() -> Unit)
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxHeight(0.5F)
-            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-            alignment = Alignment.CenterVertically
-        )
     ) {
-        content()
-    }
-    Button(
-        onClick = { buttonAction() }
-    ) {
-        Text(buttonText)
+        Column(
+            modifier = Modifier
+                .weight(
+                    weight = 1F,
+                    fill = false
+                )
+                .fillMaxSize(),
+
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
+                alignment = Alignment.CenterVertically
+            )
+        ) {
+            content()
+        }
+        Column(
+            modifier = Modifier
+                .height(75.dp)
+        ) {
+            Button(
+                onClick = { buttonAction() }
+            ) {
+                Text(buttonText)
+            }
+        }
     }
 }

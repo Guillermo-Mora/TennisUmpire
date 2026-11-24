@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.sp
 import com.guimor.tennisumpire.ui.components.onboarding.OnBoardingScreenContent
 
 @Composable
-fun OnBoardingScreen3(
+fun OnBoardingScreenSettings(
     onNextPage: () -> Unit
 ) {
     OnBoardingScreenContent(

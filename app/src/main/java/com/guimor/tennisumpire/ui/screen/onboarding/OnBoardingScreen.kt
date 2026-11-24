@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.shape.CircleShape
@@ -48,75 +51,85 @@ fun OnBoardingScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Scaffold { paddingValues ->
-            HorizontalPager(
-                state = uiState.pagerState,
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .padding(horizontal = 16.dp)
-            ) { page ->
-                val nextPage = page + 1
-                Column(
+            ) {
+                HorizontalPager(
+                    state = uiState.pagerState,
                     modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(
-                        space = 16.dp,
-                        alignment = Alignment.CenterVertically
-                    ),
+                        .fillMaxSize()
+                        .weight(
+                            weight =  1F,
+                            fill = true
+                        )
+                ) { page ->
+                    val nextPage = page + 1
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 16.dp,
+                            alignment = Alignment.CenterVertically
+                        ),
+                    ) {
+                        when (page) {
+                            0 -> OnBoardingScreen1(
+                                onNextPage = {
+                                    scope.launch {
+                                        uiState.pagerState.animateScrollToPage(nextPage)
+                                    }
+                                },
+                            )
+
+                            1 -> OnBoardingScreen2(
+                                onNextPage = {
+                                    scope.launch {
+                                        uiState.pagerState.animateScrollToPage(nextPage)
+                                    }
+                                },
+                            )
+
+                            else -> OnBoardingScreenSettings(
+                                onNextPage = {
+                                    onNavigateToMainScreen()
+                                    preferencesDataStoreViewModel.finishOnBoarding()
+                                }
+                            )
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .padding()
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .padding(bottom = 26.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom
                 ) {
-                    when (page) {
-                        0 -> OnBoardingScreen1(
-                            onNextPage = {
-                                scope.launch {
-                                    uiState.pagerState.animateScrollToPage(nextPage)
-                                }
-                            },
-                        )
-
-                        1 -> OnBoardingScreen2(
-                            onNextPage = {
-                                scope.launch {
-                                    uiState.pagerState.animateScrollToPage(nextPage)
-                                }
-                            },
-                        )
-
-                        else -> OnBoardingScreen3(
-                            onNextPage = {
-                                onNavigateToMainScreen()
-                                preferencesDataStoreViewModel.finishOnBoarding()
-                            }
+                    repeat(uiState.pagerState.pageCount) {
+                        val color =
+                            if (uiState.pagerState.currentPage == it) colorScheme.primary
+                            else colorScheme.surfaceContainerHighest
+                        Box(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .clip(CircleShape)
+                                .background(color)
+                                .size(10.dp)
+                                .clickable(
+                                    onClick = {
+                                        scope.launch { uiState.pagerState.animateScrollToPage(it) }
+                                    }
+                                )
                         )
                     }
                 }
-            }
-        }
-        Row(
-            modifier = Modifier
-                .padding()
-                .wrapContentHeight()
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 26.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            repeat(uiState.pagerState.pageCount) {
-                val color =
-                    if (uiState.pagerState.currentPage == it) colorScheme.primary
-                    else colorScheme.surfaceContainerHighest
-                Box(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(10.dp)
-                        .clickable(
-                            onClick = {
-                                scope.launch { uiState.pagerState.animateScrollToPage(it) }
-                            }
-                        )
-                )
             }
         }
     }
