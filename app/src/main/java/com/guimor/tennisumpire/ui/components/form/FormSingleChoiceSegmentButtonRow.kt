@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,7 @@ import kotlin.collections.forEachIndexed
 @Composable
 fun <T>FormSingleChoiceSegmentedButtonRow(
     label: String? = null,
+    icon: ImageVector? = null,
     selectedOption: T?,
     options: List<SegmentedButtonOption<T>>,
     onClick: (optionValue: T) -> Unit,
@@ -44,7 +47,20 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
-            label?.let { label -> Text(label) }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                icon?.let { icon ->
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = label,
+                        modifier = Modifier
+                            .size(24.dp),
+                    )
+                }
+                label?.let { label -> Text(label) }
+            }
             Spacer(
                 modifier = Modifier
                     .height(8.dp)
