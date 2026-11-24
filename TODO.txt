@@ -3,6 +3,10 @@
 
 - Quizás sería mejor dejar un contador a mano en la interfaz de llevar el marcador, pero no poner a mano los tiempos de descanso, entre puntos, etc. De manera que el árbitro tenga máxima flexibilidad para menejar esto. Sería un contador que siempre empieza en 0 y va hacia arriba. De manera que nunca acaba, evitando problemas. Esto a la larga será lo mejor, ya que es mucho más cómodo de operar que valores fijos con avisos. Ya es cosa del árbitro acordarse de los tiempos.
 
+- Se podría simplificar la página de matches y results en una misma llamada matches. En esta, en la sección superior del todo aparecerían la lista de partdos que aún no están terminados, marcados con in play o algo así, y con un pequeño espacio y más abajo, se mostrarían el resto de partidos ya terminados.
+
+- HACER Y TERMINAR LA SCREEN DE SETTINGS.
+
 - Se podrá poner la opción de retirado de un partido un jugador, de manera que se terminará instantáneamente y ganará el que no se ha retirado.
 
 - Añadir posibilidad de añadir a favoritos para las normas
