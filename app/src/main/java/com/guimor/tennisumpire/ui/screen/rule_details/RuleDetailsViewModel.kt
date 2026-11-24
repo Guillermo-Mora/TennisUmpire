@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class RuleDetailsViewModel(
     private val ruleRepository: RuleRepository,
@@ -34,6 +35,10 @@ class RuleDetailsViewModel(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = RuleDetailsUiState()
     )
+
+    fun toggleAddRuleToFavourites() {
+        viewModelScope.launch { ruleRepository.toggleAddRulesToFavourites(ruleUid) }
+    }
 
     companion object {
         fun Factory(

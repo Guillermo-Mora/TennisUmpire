@@ -27,6 +27,7 @@ import com.guimor.tennisumpire.ui.icons.starIcon
 @Composable
 fun RuleTitleCard(
     ruleName: String?,
+    isFavourite: Boolean?,
     onClickToggleAddRuleToFavourites: () -> Unit,
     ) {
     Row(
@@ -74,11 +75,11 @@ fun RuleTitleCard(
             ) {
                 Icon(
                     imageVector =
-                        if (/*rule?.favourite == true*/ false) starFilledIcon
+                        if (isFavourite == true) starFilledIcon
                         else starIcon,
                     contentDescription = "Toggle add to favourites",
                     tint =
-                        if (/*rule?.favourite == true*/ false) MaterialTheme.colorScheme.tertiary
+                        if (isFavourite == true) MaterialTheme.colorScheme.tertiary
                         else LocalContentColor.current,
                 )
             }
@@ -98,6 +99,7 @@ private fun RuleTitleCardPreview() {
                     RuleTitleCard(
                         ruleName = "Normal rule loooooooong",
                         onClickToggleAddRuleToFavourites = {},
+                        isFavourite = false,
                     )
                 },
                 navigationIcon = { NavigateBackIconButton(onNavigateBack = {}) },

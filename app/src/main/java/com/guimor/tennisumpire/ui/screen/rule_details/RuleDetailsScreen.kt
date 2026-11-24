@@ -31,8 +31,9 @@ fun RuleDetailsScreen(
             TitleCustomTopAppBar(
                 titleContent = {
                     RuleTitleCard(
-                        ruleName = "test",
-                        onClickToggleAddRuleToFavourites = { }
+                        ruleName = uiState.rule?.name,
+                        onClickToggleAddRuleToFavourites = { ruleDetailsViewModel.toggleAddRuleToFavourites() },
+                        isFavourite = uiState.rule?.favourite
                     )
                 },
                 navigationIcon = { NavigateBackIconButton { onNavigateBack() } },
