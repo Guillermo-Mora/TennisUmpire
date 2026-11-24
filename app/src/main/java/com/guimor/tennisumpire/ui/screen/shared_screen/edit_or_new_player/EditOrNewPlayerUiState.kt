@@ -24,5 +24,6 @@ data class EditOrNewPlayerUiState(
     val playerDominantHand: PlayerDominantHand? = null,
     val playerBackhand: PlayerBackhand? = null,
     val playerPhotoUri: Uri? = null,
-    val operationResult: ResultType? = null
+    val operationResult: ResultType? = null,
+    val favourite: Boolean = false
 ) : BaseUiState()

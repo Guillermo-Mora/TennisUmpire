@@ -40,4 +40,6 @@ data class EditOrNewRuleUiState(
     val ruleDecidingTiebreaksServerChangesOnQuantity: Int = 2,
     val ruleDecidingTiebreaksServerChangesOn: RuleServerChangesOn = RuleServerChangesOn.OneThenEveryQuantity(2),
     val ruleDecidingTiebreakDecider: RuleTiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE,
+    //favourite
+    val favourite: Boolean = false
 ): BaseUiState()

@@ -327,7 +327,8 @@ class EditOrNewRuleViewModel(
                 setsServerChangesOn = ruleData.ruleDecidingSetsServerChangesOn,
                 tiebreaksServerChangesOnQuantity = ruleData.ruleDecidingTiebreaksServerChangesOnQuantity,
                 tiebreaksServerChangesOn = ruleData.ruleDecidingTiebreaksServerChangesOn
-            ) else null
+            ) else null,
+            favourite = ruleData.favourite
         )
     }
 
@@ -433,6 +434,7 @@ class EditOrNewRuleViewModel(
                             ?: RuleServerChangesOn.OneThenEveryQuantity(2),
                         ruleDecidingTiebreaksServerChangesOnQuantity = rule.decidingSetRules?.tiebreaksServerChangesOn?.quantity
                             ?: 2,
+                        favourite = rule.favourite
                     )
                 }
             }

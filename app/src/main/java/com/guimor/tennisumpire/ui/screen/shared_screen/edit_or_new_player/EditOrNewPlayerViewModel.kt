@@ -285,7 +285,8 @@ class EditOrNewPlayerViewModel(
         gender = uiState.value.playerGender,
         dominantHand = uiState.value.playerDominantHand,
         backhand = uiState.value.playerBackhand,
-        photo = playerPhotoPersistedUri
+        photo = playerPhotoPersistedUri,
+        favourite = uiState.value.favourite
     )
 
     //In case we are editing, I access the player values and set them in the ui state.
@@ -305,7 +306,8 @@ class EditOrNewPlayerViewModel(
                         playerDominantHand = player.dominantHand,
                         playerBackhand = player.backhand,
                         playerPhotoUri = player.photo,
-                        oldPlayerEditPhotoUri = player.photo
+                        oldPlayerEditPhotoUri = player.photo,
+                        favourite = player.favourite
                     )
                 }
             }
