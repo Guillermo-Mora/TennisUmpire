@@ -25,3 +25,69 @@ En las páginas de detalle de jugador y detalle de norma, deberían de estar los
 - Una norma no se podrá modificar si tiene partidos que se están jugando con ella.
 
 - Las pantallas de jugadores y de normas, tendrán buscador por nombre. El tema de filtros, es algo que me podría plantear para añadir más adelante.
+
+
+
+
+
+
+Opinión de la ia sobre fusionar las pantallas de partidos/resultados (debería de hacerlo):
+
+Mi recomendación: sí fusionaría, pero no exactamente como “arriba en juego y abajo terminados” con un FAB de dos opciones. Lo haría como una única pantalla Partidos con filtros/segmentos y un FAB contextual. Es decir, “Resultados” deja de ser una pestaña y pasa a ser una vista filtrada de partidos.
+
+Por qué fusionar tiene sentido
+Un partido es una sola entidad con un estado: en juego, finalizado, pendiente…
+
+“Resultados” no es realmente otra cosa: es un filtro de partidos terminados.
+
+La barra inferior debería representar destinos principales, no filtros. Tener “Matches” y “Results” como dos pestañas puede hacer que el usuario aprenda dos sitios para lo mismo.
+
+Para el usuario es más simple: “aquí están todos mis partidos; los activos arriba y los terminados abajo o en otra pestaña interna”.
+
+Dónde está el riesgo
+Si pones en la misma pantalla scroll “En juego” + “Finalizados”, cuando haya muchos partidos terminados la zona operativa se puede volver incómoda.
+
+Un FAB con dos acciones (Nuevo partido / Añadir resultado) no es malo, pero añade un toque y diluye la acción principal. El FAB funciona mejor con una acción dominante.
+
+Durante un partido en directo necesitas acceso rápido y sin ruido. No quieres que lo importante compita con el historial.
+
+Diseño concreto que haría
+Una pestaña Partidos con:
+
+Un segmented control arriba: En juego | Finalizados | Todos (o solo En juego | Finalizados).
+
+Por defecto, si arbitrar en directo es el uso principal: En juego.
+
+En Todos, secciones: primero “En juego” y debajo “Finalizados”, pero con los finalizados colapsados o limitados y un “Ver todos”.
+
+Tarjetas con estado visual claro: chip EN JUEGO, marcador, jugadores, hora.
+
+Finalizados agrupados por fecha/torneo.
+
+FAB contextual:
+
+En En juego: + Nuevo partido.
+
+En Finalizados: + Añadir resultado.
+
+En Todos: un + que abre un bottom sheet con las dos opciones.
+
+Si Nuevo partido es mucho más frecuente, deja el FAB siempre como Nuevo partido y pon Añadir resultado como botón en la cabecera de finalizados.
+
+Así mantienes la simplicidad de una sola pestaña sin esconder las dos acciones importantes.
+
+Cuándo las dejaría separadas
+Si el flujo de arbitrar en directo es el 90% de la app y “Resultados” es un archivo histórico que se consulta poco, puede tener sentido mantener:
+
+Partidos como pantalla operativa.
+
+Resultados o mejor Historial como pantalla de consulta/edición.
+
+Pero incluso ahí, yo renombraría “Results” a “Historial” o “Resultados”, porque “Results” en inglés rompe consistencia.
+
+Veredicto
+Para una app pequeña y con dos flujos que conceptualmente son el mismo objeto, fusiona. Mi opción preferida:
+
+Una pestaña “Partidos” con segmentos En juego / Finalizados, FAB contextual y los finalizados agrupados por fecha.
+
+No haría simplemente una lista larga con todo mezclado y un FAB de dos opciones si puedes evitarlo. La fusión sí simplifica, pero el diablo está en cómo separas visualmente lo operativo de lo histórico.
