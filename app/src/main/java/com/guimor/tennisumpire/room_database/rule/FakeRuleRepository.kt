@@ -78,4 +78,6 @@ class FakeRuleRepository: RuleRepository {
             )
         )
     }
+
+    override suspend fun toggleAddRulesToFavourites(ruleUid: Int) {}
 }

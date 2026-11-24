@@ -26,4 +26,8 @@ interface RuleDao {
 
     @Query("SELECT * FROM rule WHERE uid = :ruleUid")
     fun getRuleFlow(ruleUid: Int): Flow<Rule>
+
+    @Query("UPDATE rule SET favourite = NOT favourite WHERE uid = :ruleUid")
+
+    suspend fun toggleAddRuleToFavourites(ruleUid: Int)
 }

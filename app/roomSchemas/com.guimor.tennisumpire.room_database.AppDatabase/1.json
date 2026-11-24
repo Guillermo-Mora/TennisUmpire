@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "be822f555c131b06404d2c6af166ecff",
+    "identityHash": "ef42771f07e207bb5c59293977aacdf2",
     "entities": [
       {
         "tableName": "Player",
@@ -94,7 +94,7 @@
       },
       {
         "tableName": "Rule",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_setsServerChangesOn` TEXT, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `set_tiebreaksServerChangesOn` TEXT, `deciding_set_setType` TEXT, `deciding_set_setsServerChangesOn` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT, `deciding_set_tiebreaksServerChangesOn` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `setsQuantityType` TEXT NOT NULL, `setsQuantity` INTEGER NOT NULL, `favourite` INTEGER NOT NULL, `set_setType` TEXT NOT NULL, `set_setsServerChangesOn` TEXT, `set_gamesPerSet` INTEGER, `set_onGameDeuce` TEXT, `set_setDecider` TEXT, `set_pointsPerTiebreak` INTEGER, `set_tiebreakDecider` TEXT, `set_tiebreaksServerChangesOn` TEXT, `deciding_set_setType` TEXT, `deciding_set_setsServerChangesOn` TEXT, `deciding_set_gamesPerSet` INTEGER, `deciding_set_onGameDeuce` TEXT, `deciding_set_setDecider` TEXT, `deciding_set_pointsPerTiebreak` INTEGER, `deciding_set_tiebreakDecider` TEXT, `deciding_set_tiebreaksServerChangesOn` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -117,6 +117,12 @@
           {
             "fieldPath": "setsQuantity",
             "columnName": "setsQuantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "favourite",
+            "columnName": "favourite",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -223,7 +229,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be822f555c131b06404d2c6af166ecff')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef42771f07e207bb5c59293977aacdf2')"
     ]
   }
 }

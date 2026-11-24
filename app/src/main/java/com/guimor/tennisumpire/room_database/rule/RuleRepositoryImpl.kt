@@ -54,4 +54,8 @@ class RuleRepositoryImpl(
     override fun getRuleFlow(ruleUid: Int): Flow<Rule> {
         return ruleDao.getRuleFlow(ruleUid)
     }
+
+    override suspend fun toggleAddRulesToFavourites(ruleUid: Int) {
+        ruleDao.toggleAddRuleToFavourites(ruleUid)
+    }
 }

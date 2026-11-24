@@ -24,15 +24,14 @@ class RulesViewModel(
     private val _uiState = MutableStateFlow(RulesUiState())
     val uiState = _uiState.asStateFlow()
     val rules: Flow<PagingData<Rule>> = Pager(
-        config = PagingConfig(pageSize = 50) )
+        config = PagingConfig(pageSize = 50)
+    )
     { ruleRepository.getAllRules() }
         .flow
         .cachedIn(viewModelScope)
 
     fun toggleAddRuleToFavourites(ruleUid: Int) {
-        viewModelScope.launch {
-            //ruleRepository.toggleAddRulesToFavourites(ruleUid)
-        }
+        viewModelScope.launch { ruleRepository.toggleAddRulesToFavourites(ruleUid) }
     }
 
     fun deleteRule(ruleUid: Int) {

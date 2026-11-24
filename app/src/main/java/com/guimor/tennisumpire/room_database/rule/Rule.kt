@@ -34,6 +34,7 @@ data class Rule (
     //In case different is selected, the options for the deciding set will appear, in case not, it
     //will be sent as null.
     @Embedded(prefix = "deciding_set_") val decidingSetRules: SetRules? = null,
+    @ColumnInfo val favourite: Boolean = false
 )
 
 data class SetRules(

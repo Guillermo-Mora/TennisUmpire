@@ -11,4 +11,5 @@ interface RuleRepository {
     suspend fun deleteRule(ruleUid: Int): ResultType
     suspend fun editRule(rule: Rule): ResultType
     fun getRuleFlow(ruleUid: Int): Flow<Rule>
+    suspend fun toggleAddRulesToFavourites(ruleUid: Int)
 }

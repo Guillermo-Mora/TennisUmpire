@@ -24,6 +24,7 @@ import com.guimor.tennisumpire.ui.components.player.CardBottomSheet
 import com.guimor.tennisumpire.ui.components.player.DetailsSection
 import com.guimor.tennisumpire.ui.icons.articleIcon
 import com.guimor.tennisumpire.ui.icons.more_vertIcon
+import com.guimor.tennisumpire.ui.icons.starFilledIcon
 import com.guimor.tennisumpire.ui.icons.starIcon
 
 @Composable
@@ -79,21 +80,14 @@ fun RuleListCard(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                /*
-            Icon(
-                imageVector =
-                    if (rule.favourite) starFilledIcon
-                    else starIcon,
-                contentDescription = "Toggle add to favourites",
-                tint =
-                    if (rule.favourite) MaterialTheme.colorScheme.tertiary
-                    else LocalContentColor.current,
-            )
-             */
                 Icon(
-                    imageVector = starIcon,
+                    imageVector =
+                        if (rule.favourite) starFilledIcon
+                        else starIcon,
                     contentDescription = "Toggle add to favourites",
-                    tint = LocalContentColor.current
+                    tint =
+                        if (rule.favourite) MaterialTheme.colorScheme.tertiary
+                        else LocalContentColor.current,
                 )
             }
             if (interactiveMode) {
