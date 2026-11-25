@@ -7,4 +7,5 @@ object PreferencesDataStoreKeys {
     val IS_ONBOARDING_FINISHED = booleanPreferencesKey("is_onboarding_finished")
     val HEIGHT_FORMAT = stringPreferencesKey("height_format")
     val WEIGHT_FORMAT = stringPreferencesKey("weight_format")
+    val THEME = stringPreferencesKey("theme")
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
 import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Theme
 import com.guimor.tennisumpire.domain.model.preferences.Weight
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,12 +18,21 @@ class PreferencesDataStoreViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     //private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val userPreferencesDataStore: StateFlow<PreferencesDataStore> = userPreferencesRepository.userPreferencesDataStoreFlow
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = PreferencesDataStore.LoadingPreferencesDataStore
-        )
+    val userPreferencesDataStore: StateFlow<PreferencesDataStore> =
+        userPreferencesRepository.userPreferencesDataStoreFlow
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = PreferencesDataStore.LoadingPreferencesDataStore
+            )
+
+    val theme: StateFlow<Theme> =
+        userPreferencesRepository.themeFlow
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Theme.SYSTEM
+            )
 
     suspend fun getUserSettingsValue(): PreferencesDataStore.LoadedPreferencesDataStore =
         userPreferencesRepository.getUserSettingsValue()
@@ -42,6 +52,12 @@ class PreferencesDataStoreViewModel(
     fun changeHeightFormat(height: Height) {
         viewModelScope.launch {
             userPreferencesRepository.changeHeightFormat(height)
+        }
+    }
+
+    fun changeTheme(theme: Theme) {
+        viewModelScope.launch {
+            userPreferencesRepository.changeTheme(theme)
         }
     }
 

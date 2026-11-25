@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Theme
 import com.guimor.tennisumpire.domain.model.preferences.Weight
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -19,6 +20,11 @@ class UserPreferencesRepository(
                 heightFormat = it[PreferencesDataStoreKeys.HEIGHT_FORMAT].toEnum(Height.CENTIMETERS),
                 weightFormat = it[PreferencesDataStoreKeys.WEIGHT_FORMAT].toEnum(Weight.KILOGRAMS)
             )
+        }
+
+    val themeFlow: Flow<Theme> =
+        dataStore.data.map {
+            it[PreferencesDataStoreKeys.THEME].toEnum(Theme.SYSTEM)
         }
 
     suspend fun getUserSettingsValue(): PreferencesDataStore.LoadedPreferencesDataStore {
@@ -46,6 +52,12 @@ class UserPreferencesRepository(
     suspend fun changeHeightFormat(height: Height) {
         dataStore.edit {
             it[PreferencesDataStoreKeys.HEIGHT_FORMAT] = height.name
+        }
+    }
+
+    suspend fun changeTheme(theme: Theme) {
+        dataStore.edit {
+            it[PreferencesDataStoreKeys.THEME] = theme.name
         }
     }
 

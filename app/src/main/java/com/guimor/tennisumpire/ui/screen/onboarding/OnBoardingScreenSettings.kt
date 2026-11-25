@@ -130,9 +130,9 @@ fun OnBoardingScreenSettings(
             FormSingleChoiceSegmentedButtonRow(
                 label = "Theme",
                 icon = paletteIcon,
-                selectedOption = Theme.SYSTEM,
+                selectedOption = preferencesDataStoreState.value { it.theme },
                 options = themeOptions,
-                onClick = { }
+                onClick = preferencesDataStoreViewModel::changeTheme
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
