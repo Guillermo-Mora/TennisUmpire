@@ -9,13 +9,18 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.guimor.tennisumpire.domain.model.Height
 import com.guimor.tennisumpire.domain.model.Theme
 import com.guimor.tennisumpire.domain.model.Weight
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStore
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
+import com.guimor.tennisumpire.preferences_data_store.value
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
 import com.guimor.tennisumpire.ui.components.onboarding.OnBoardingScreenContent
@@ -34,8 +39,10 @@ import kotlin.collections.filter
 
 @Composable
 fun OnBoardingScreenSettings(
-    onNextPage: () -> Unit
+    onNextPage: () -> Unit,
+    preferencesDataStoreViewModel: PreferencesDataStoreViewModel
 ) {
+    val preferencesDataStoreState by preferencesDataStoreViewModel.userPreferencesDataStore.collectAsStateWithLifecycle()
     val themeOptions = listOf(
         SegmentedButtonOption(
             label = "System",
@@ -83,7 +90,7 @@ fun OnBoardingScreenSettings(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            SmallSpacer()
+            DefaultSpacer()
             Text(
                 text = "Set up your preferences",
                 fontWeight = FontWeight.SemiBold,
@@ -133,17 +140,17 @@ fun OnBoardingScreenSettings(
             FormSingleChoiceSegmentedButtonRow(
                 label = "Height",
                 icon = straightenIcon,
-                selectedOption = Height.CENTIMETERS,
+                selectedOption = preferencesDataStoreState.value { it.heightFormat },
                 options = heightOptions,
-                onClick = { }
+                onClick = preferencesDataStoreViewModel::changeHeightFormat
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
                 label = "Weight",
                 icon = weightIcon,
-                selectedOption = Weight.KILOGRAMS,
+                selectedOption = preferencesDataStoreState.value { it.weightFormat },
                 options = weightOptions,
-                onClick = { }
+                onClick = preferencesDataStoreViewModel::changeWeightFormat
             )
         }
     }

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.domain.model.Height
+import com.guimor.tennisumpire.domain.model.Weight
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -28,6 +30,18 @@ class PreferencesDataStoreViewModel(
     fun finishOnBoarding() {
         viewModelScope.launch {
             userPreferencesRepository.finishOnBoarding()
+        }
+    }
+
+    fun changeWeightFormat(weight: Weight) {
+        viewModelScope.launch {
+            userPreferencesRepository.changeWeightFormat(weight)
+        }
+    }
+
+    fun changeHeightFormat(height: Height) {
+        viewModelScope.launch {
+            userPreferencesRepository.changeHeightFormat(height)
         }
     }
 

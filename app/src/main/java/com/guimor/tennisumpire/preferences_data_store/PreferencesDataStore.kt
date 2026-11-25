@@ -12,3 +12,10 @@ sealed class PreferencesDataStore {
 
         object LoadingPreferencesDataStore : PreferencesDataStore()
 }
+
+fun <T>PreferencesDataStore.value(
+        function: (PreferencesDataStore.LoadedPreferencesDataStore) -> T
+): T? = when(this) {
+        is PreferencesDataStore.LoadedPreferencesDataStore -> function(this)
+        PreferencesDataStore.LoadingPreferencesDataStore -> null
+}

@@ -37,10 +37,19 @@ class UserPreferencesRepository(
         }
     }
 
+    suspend fun changeWeightFormat(weight: Weight) {
+        dataStore.edit {
+            it[PreferencesDataStoreKeys.WEIGHT_FORMAT] = weight.name
+        }
+    }
+
+    suspend fun changeHeightFormat(height: Height) {
+        dataStore.edit {
+            it[PreferencesDataStoreKeys.HEIGHT_FORMAT] = height.name
+        }
+    }
+
     private inline fun <reified T : Enum<T>> String?.toEnum(
         defaultValue: T
-    ): T =
-        this?.let { name ->
-            enumValues<T>().firstOrNull { it.name == name }?.let { defaultValue }
-        } ?: defaultValue
+    ): T = this?.let { name -> enumValues<T>().firstOrNull { it.name == name } } ?: defaultValue
 }
