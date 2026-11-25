@@ -1,7 +1,7 @@
 package com.guimor.tennisumpire.preferences_data_store
 
-import com.guimor.tennisumpire.domain.model.Height
-import com.guimor.tennisumpire.domain.model.Weight
+import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Weight
 
 sealed class PreferencesDataStore {
         data class LoadedPreferencesDataStore(

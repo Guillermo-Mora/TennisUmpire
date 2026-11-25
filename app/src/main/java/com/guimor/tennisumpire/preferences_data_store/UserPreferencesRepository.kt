@@ -3,8 +3,8 @@ package com.guimor.tennisumpire.preferences_data_store
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.guimor.tennisumpire.domain.model.Height
-import com.guimor.tennisumpire.domain.model.Weight
+import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Weight
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

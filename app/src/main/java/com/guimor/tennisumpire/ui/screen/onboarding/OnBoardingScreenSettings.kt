@@ -15,10 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.guimor.tennisumpire.domain.model.Height
-import com.guimor.tennisumpire.domain.model.Theme
-import com.guimor.tennisumpire.domain.model.Weight
-import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStore
+import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Theme
+import com.guimor.tennisumpire.domain.model.preferences.Weight
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
 import com.guimor.tennisumpire.preferences_data_store.value
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
@@ -35,7 +34,6 @@ import com.guimor.tennisumpire.ui.icons.paletteIcon
 import com.guimor.tennisumpire.ui.icons.straightenIcon
 import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
-import kotlin.collections.filter
 
 @Composable
 fun OnBoardingScreenSettings(

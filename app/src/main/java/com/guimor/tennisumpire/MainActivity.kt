@@ -11,6 +11,8 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.preferencesDataStore
+import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Weight
 import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreKeys
 import com.guimor.tennisumpire.ui.navigation.NavigationRoot
 import com.guimor.tennisumpire.ui.theme.TennisUmpireTheme
@@ -19,7 +21,9 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "settings",
     corruptionHandler = ReplaceFileCorruptionHandler {
         preferencesOf(
-            PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED to true
+            PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED to true,
+            PreferencesDataStoreKeys.HEIGHT_FORMAT to Height.CENTIMETERS.name,
+            PreferencesDataStoreKeys.WEIGHT_FORMAT to Weight.KILOGRAMS.name
         )
     }
 )
@@ -30,13 +34,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TennisUmpireTheme {
-                TennisUmpireApp()
+                NavigationRoot()
             }
         }
     }
-}
-
-@Composable
-fun TennisUmpireApp() {
-    NavigationRoot()
 }

@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
-import com.guimor.tennisumpire.domain.model.Height
-import com.guimor.tennisumpire.domain.model.Weight
+import com.guimor.tennisumpire.domain.model.preferences.Height
+import com.guimor.tennisumpire.domain.model.preferences.Weight
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
