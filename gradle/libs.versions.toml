@@ -8,6 +8,7 @@ lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 kotlin = "2.4.20"
 composeBom = "2026.09.00"
+multidex = "2.0.1"
 nav3Core = "1.2.0-rc01"
 lifecycleViewmodelNav3 = "2.11.0"
 kotlinSerialization = "2.4.20"
@@ -22,6 +23,7 @@ coil = "3.6.3"
 appcompat = "1.8.0"
 
 [libraries]
+androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 io-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 io-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
