@@ -18,7 +18,8 @@ class UserPreferencesRepository(
             PreferencesDataStore.LoadedPreferencesDataStore(
                 isOnBoardingFinished = it[PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED] ?: false,
                 heightFormat = it[PreferencesDataStoreKeys.HEIGHT_FORMAT].toEnum(Height.CENTIMETERS),
-                weightFormat = it[PreferencesDataStoreKeys.WEIGHT_FORMAT].toEnum(Weight.KILOGRAMS)
+                weightFormat = it[PreferencesDataStoreKeys.WEIGHT_FORMAT].toEnum(Weight.KILOGRAMS),
+                theme = it[PreferencesDataStoreKeys.THEME].toEnum(Theme.SYSTEM)
             )
         }
 
@@ -33,7 +34,8 @@ class UserPreferencesRepository(
             isOnBoardingFinished = settings[PreferencesDataStoreKeys.IS_ONBOARDING_FINISHED]
                 ?: false,
             heightFormat = settings[PreferencesDataStoreKeys.HEIGHT_FORMAT].toEnum(Height.CENTIMETERS),
-            weightFormat = settings[PreferencesDataStoreKeys.WEIGHT_FORMAT].toEnum(Weight.KILOGRAMS)
+            weightFormat = settings[PreferencesDataStoreKeys.WEIGHT_FORMAT].toEnum(Weight.KILOGRAMS),
+            theme = settings[PreferencesDataStoreKeys.THEME].toEnum(Theme.SYSTEM)
         )
     }
 
