@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tennis Umpire</string>
+    <string name="system">Sistema</string>
+    <string name="dark">Oscuro</string>
+    <string name="light">Claro</string>
+</resources>

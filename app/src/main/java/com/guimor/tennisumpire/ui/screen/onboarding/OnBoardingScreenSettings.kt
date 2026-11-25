@@ -1,5 +1,6 @@
 package com.guimor.tennisumpire.ui.screen.onboarding
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +11,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.guimor.tennisumpire.R
+import com.guimor.tennisumpire.domain.AppLanguage
+import com.guimor.tennisumpire.domain.SYSTEM_DEFAULT_LANGUAGE
 import com.guimor.tennisumpire.domain.model.preferences.Height
 import com.guimor.tennisumpire.domain.model.preferences.Theme
 import com.guimor.tennisumpire.domain.model.preferences.Weight
@@ -41,18 +50,39 @@ fun OnBoardingScreenSettings(
     preferencesDataStoreViewModel: PreferencesDataStoreViewModel
 ) {
     val preferencesDataStoreState by preferencesDataStoreViewModel.userPreferencesDataStore.collectAsStateWithLifecycle()
+    val appLocales = AppCompatDelegate.getApplicationLocales()
+    val currentLocaleTag = appLocales.get(0)?.toLanguageTag()
+
+    var currentLanguage: Int by rememberSaveable {
+        mutableIntStateOf(
+            currentLocaleTag?.let {
+                AppLanguage.entries
+                    .filter { it.code == currentLocaleTag }
+                    .map { it.displayName }
+                    .first()
+            } ?: AppLanguage.SYSTEM.displayName
+        )
+    }
+
+    val languageOptions =
+        AppLanguage.entries.map {
+            SegmentedButtonOption(
+                label = stringResource(it.displayName),
+                value = it.code
+            )
+        }.toList()
     val themeOptions = listOf(
         SegmentedButtonOption(
-            label = "System",
+            label = stringResource(R.string.system),
             value = Theme.SYSTEM,
         ),
         SegmentedButtonOption(
-            label = "Dark",
+            label = stringResource(R.string.dark),
             value = Theme.DARK,
             icon = dark_modeIcon
         ),
         SegmentedButtonOption(
-            label = "Light",
+            label = stringResource(R.string.light),
             value = Theme.LIGHT,
             icon = light_modeIcon
         ),
@@ -102,15 +132,33 @@ fun OnBoardingScreenSettings(
             )
             SmallSpacer()
             FormDropDownMenuWithSearch(
-                value = "System",
+                value = stringResource(currentLanguage),
                 required = true,
                 searchFilter = { searchValue, list ->
-                    list.filter { it.contains(searchValue.trim(), ignoreCase = true) }
+                    list.filter {
+                        it.label?.contains(
+                            searchValue.trim(),
+                            ignoreCase = true
+                        ) == true
+                    }
                 },
-                label = "Country",
-                onItemSelected = { },
-                options = listOf("System", "English", "Spanish"),
-                getItemValue = { it },
+                label = "Language",
+                onItemSelected = { languageSelected ->
+                    val newLanguageTag =
+                        if (languageSelected?.value == SYSTEM_DEFAULT_LANGUAGE) null
+                        else languageSelected?.value
+                    println(newLanguageTag)
+
+                    currentLanguage = AppLanguage.entries
+                        .filter { it.code == languageSelected?.value }
+                        .map { it.displayName }
+                        .first()
+
+                    AppCompatDelegate
+                        .setApplicationLocales(LocaleListCompat.forLanguageTags(newLanguageTag))
+                },
+                options = languageOptions,
+                getItemValue = { it.value },
             ) { option, _ ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -120,7 +168,7 @@ fun OnBoardingScreenSettings(
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = option,
+                            text = option.label ?: "",
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                     }

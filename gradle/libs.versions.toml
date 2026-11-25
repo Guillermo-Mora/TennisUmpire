@@ -19,6 +19,7 @@ dataStore = "1.2.1"
 room = "2.8.5"
 ksp = "2.3.6"
 coil = "3.6.3"
+appcompat = "1.8.0"
 
 [libraries]
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
@@ -52,6 +53,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

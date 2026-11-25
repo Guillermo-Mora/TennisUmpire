@@ -297,4 +297,9 @@
     <string name="advantage">Advantage</string>
     <string name="golden_point">Golden point</string>
     <string name="star_point">Star point</string>
+    <string name="system">System</string>
+    <string name="english">English</string>
+    <string name="spanish">Español</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
 </resources>

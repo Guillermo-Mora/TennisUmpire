@@ -46,6 +46,7 @@ room {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.appcompat)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.paging.compose)
     implementation(libs.io.coil.compose)
