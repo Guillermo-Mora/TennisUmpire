@@ -29,6 +29,7 @@ import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
 import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsScreen
 import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsViewModel
+import com.guimor.tennisumpire.ui.screen.settings.SettingsRoot
 import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule.EditOrNewRuleViewModel
 import kotlinx.coroutines.runBlocking
@@ -86,7 +87,7 @@ fun NavigationRoot(
             )
         }
         entry<NavRoutesRoot.Settings> {
-            SettingsScreen(
+            SettingsRoot(
                 onNavigateBack = navigator::goBack,
             )
         }
