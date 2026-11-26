@@ -1,11 +1,14 @@
 package com.guimor.tennisumpire.preferences_data_store
 
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.guimor.tennisumpire.dependency_injection.MyApplication
+import com.guimor.tennisumpire.domain.SYSTEM_DEFAULT_LANGUAGE
 import com.guimor.tennisumpire.domain.model.preferences.Height
 import com.guimor.tennisumpire.domain.model.preferences.Theme
 import com.guimor.tennisumpire.domain.model.preferences.Weight
@@ -34,8 +37,36 @@ class PreferencesDataStoreViewModel(
                 initialValue = Theme.SYSTEM
             )
 
-    suspend fun getUserSettingsValue(): PreferencesDataStore.LoadedPreferencesDataStore =
-        userPreferencesRepository.getUserSettingsValue()
+    fun onEvent(event: PreferencesDataStoreEvent) {
+        when (event) {
+            is PreferencesDataStoreEvent.OnChangeHeightFormat -> changeHeightFormat(
+                height = event.height
+            )
+
+            is PreferencesDataStoreEvent.OnChangeTheme -> changeTheme(
+                theme = event.theme
+            )
+
+            is PreferencesDataStoreEvent.OnChangeWeightFormat -> changeWeightFormat(
+                weight = event.weight
+            )
+
+            PreferencesDataStoreEvent.OnFinishOnBoarding -> finishOnBoarding()
+            is PreferencesDataStoreEvent.OnChangeLanguage -> changeLanguage(language = event.language)
+        }
+    }
+
+    suspend fun getUserSettingsValue(): PreferencesDataStore.LoadedPreferencesDataStore {
+        return userPreferencesRepository.getUserSettingsValue()
+    }
+
+    fun changeLanguage(language: String) {
+        val selectedLanguage =
+            if (language == SYSTEM_DEFAULT_LANGUAGE) null
+            else language
+        AppCompatDelegate
+            .setApplicationLocales(LocaleListCompat.forLanguageTags(selectedLanguage))
+    }
 
     fun finishOnBoarding() {
         viewModelScope.launch {

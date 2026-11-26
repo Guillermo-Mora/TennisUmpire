@@ -11,3 +11,7 @@ enum class AppLanguage(
     ENGLISH(code = "en", displayName = R.string.english),
     SPANISH(code = "es", displayName = R.string.spanish);
 }
+
+fun String?.getLanguage() = this?.let {
+    AppLanguage.entries.first { it.code == this }
+} ?: AppLanguage.SYSTEM

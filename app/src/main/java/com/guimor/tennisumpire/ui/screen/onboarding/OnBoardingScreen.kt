@@ -27,13 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
+import com.guimor.tennisumpire.ui.screen.onboarding.settings.OnBoardingSettingsRoot
+import com.guimor.tennisumpire.ui.screen.onboarding.settings.OnBoardingSettingsScreen
 import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
     viewModel: OnBoardingViewModel = viewModel { OnBoardingViewModel() },
-    preferencesDataStoreViewModel: PreferencesDataStoreViewModel = viewModel(factory = PreferencesDataStoreViewModel.Factory),
     onNavigateToMainScreen: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -60,7 +60,7 @@ fun OnBoardingScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(
-                            weight =  1F,
+                            weight = 1F,
                             fill = true
                         )
                 ) { page ->
@@ -91,11 +91,9 @@ fun OnBoardingScreen(
                                 },
                             )
 
-                            else -> OnBoardingScreenSettings(
-                                preferencesDataStoreViewModel = preferencesDataStoreViewModel,
+                            else -> OnBoardingSettingsRoot(
                                 onNextPage = {
                                     onNavigateToMainScreen()
-                                    preferencesDataStoreViewModel.finishOnBoarding()
                                 }
                             )
                         }

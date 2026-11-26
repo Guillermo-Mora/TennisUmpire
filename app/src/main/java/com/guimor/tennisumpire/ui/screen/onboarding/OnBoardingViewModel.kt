@@ -11,6 +11,4 @@ class OnBoardingViewModel(
     override val _uiState: MutableStateFlow<OnBoardingUiState> = MutableStateFlow(OnBoardingUiState()),
     override val uiState: StateFlow<OnBoardingUiState> = _uiState.asStateFlow(),
 ) : ViewModel(),
-    UiStateHolder<OnBoardingUiState> {
-
-    }
+    UiStateHolder<OnBoardingUiState>

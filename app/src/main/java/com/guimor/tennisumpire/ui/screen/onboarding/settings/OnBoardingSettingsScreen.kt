@@ -1,4 +1,4 @@
-package com.guimor.tennisumpire.ui.screen.onboarding
+package com.guimor.tennisumpire.ui.screen.onboarding.settings
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
@@ -10,24 +10,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.core.os.LocaleListCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.guimor.tennisumpire.R
 import com.guimor.tennisumpire.domain.AppLanguage
 import com.guimor.tennisumpire.domain.SYSTEM_DEFAULT_LANGUAGE
+import com.guimor.tennisumpire.domain.getLanguage
 import com.guimor.tennisumpire.domain.model.preferences.Height
 import com.guimor.tennisumpire.domain.model.preferences.Theme
 import com.guimor.tennisumpire.domain.model.preferences.Weight
-import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreViewModel
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStore
+import com.guimor.tennisumpire.preferences_data_store.PreferencesDataStoreEvent
 import com.guimor.tennisumpire.preferences_data_store.value
 import com.guimor.tennisumpire.ui.components.form.FormDropDownMenuWithSearch
 import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButtonRow
@@ -45,25 +41,11 @@ import com.guimor.tennisumpire.ui.icons.weightIcon
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 
 @Composable
-fun OnBoardingScreenSettings(
+fun OnBoardingSettingsScreen(
     onNextPage: () -> Unit,
-    preferencesDataStoreViewModel: PreferencesDataStoreViewModel
+    uiState: PreferencesDataStore,
+    onEvent: (PreferencesDataStoreEvent) -> Unit
 ) {
-    val preferencesDataStoreState by preferencesDataStoreViewModel.userPreferencesDataStore.collectAsStateWithLifecycle()
-    val appLocales = AppCompatDelegate.getApplicationLocales()
-    val currentLocaleTag = appLocales.get(0)?.toLanguageTag()
-
-    var currentLanguage: Int by rememberSaveable {
-        mutableIntStateOf(
-            currentLocaleTag?.let {
-                AppLanguage.entries
-                    .filter { it.code == currentLocaleTag }
-                    .map { it.displayName }
-                    .first()
-            } ?: AppLanguage.SYSTEM.displayName
-        )
-    }
-
     val languageOptions =
         AppLanguage.entries.map {
             SegmentedButtonOption(
@@ -132,7 +114,10 @@ fun OnBoardingScreenSettings(
             )
             SmallSpacer()
             FormDropDownMenuWithSearch(
-                value = stringResource(currentLanguage),
+                value = stringResource(
+                    AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag()
+                        .getLanguage().displayName
+                ),
                 required = true,
                 searchFilter = { searchValue, list ->
                     list.filter {
@@ -143,19 +128,12 @@ fun OnBoardingScreenSettings(
                     }
                 },
                 label = "Language",
-                onItemSelected = { languageSelected ->
-                    val newLanguageTag =
-                        if (languageSelected?.value == SYSTEM_DEFAULT_LANGUAGE) null
-                        else languageSelected?.value
-                    println(newLanguageTag)
-
-                    currentLanguage = AppLanguage.entries
-                        .filter { it.code == languageSelected?.value }
-                        .map { it.displayName }
-                        .first()
-
-                    AppCompatDelegate
-                        .setApplicationLocales(LocaleListCompat.forLanguageTags(newLanguageTag))
+                onItemSelected = {
+                    onEvent(
+                        PreferencesDataStoreEvent.OnChangeLanguage(
+                            it?.value ?: SYSTEM_DEFAULT_LANGUAGE
+                        )
+                    )
                 },
                 options = languageOptions,
                 getItemValue = { it.value },
@@ -178,25 +156,25 @@ fun OnBoardingScreenSettings(
             FormSingleChoiceSegmentedButtonRow(
                 label = "Theme",
                 icon = paletteIcon,
-                selectedOption = preferencesDataStoreState.value { it.theme },
+                selectedOption = uiState.value { it.theme },
                 options = themeOptions,
-                onClick = preferencesDataStoreViewModel::changeTheme
+                onClick = { onEvent(PreferencesDataStoreEvent.OnChangeTheme(it)) }
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
                 label = "Height",
                 icon = straightenIcon,
-                selectedOption = preferencesDataStoreState.value { it.heightFormat },
+                selectedOption = uiState.value { it.heightFormat },
                 options = heightOptions,
-                onClick = preferencesDataStoreViewModel::changeHeightFormat
+                onClick = { onEvent(PreferencesDataStoreEvent.OnChangeHeightFormat(it)) }
             )
             DefaultSpacer()
             FormSingleChoiceSegmentedButtonRow(
                 label = "Weight",
                 icon = weightIcon,
-                selectedOption = preferencesDataStoreState.value { it.weightFormat },
+                selectedOption = uiState.value { it.weightFormat },
                 options = weightOptions,
-                onClick = preferencesDataStoreViewModel::changeWeightFormat
+                onClick = { onEvent(PreferencesDataStoreEvent.OnChangeWeightFormat(it)) }
             )
         }
     }
