@@ -18,6 +18,8 @@
 
 - Limitar ancho página detalle norma. [Hecho]
 
+- Añadir posibilidad de añadir a favoritos para las normas [Hecho]
+
 - Terminar de hacer bien la página de detalle de norma. [Hecho]
 
 - En las páginas de detalle, arriba en el header debe mostrarse el botón interactuable de 3 puntos, para poder desde ahí acceder a editar/eliminar (El de detalle no se mostrará evidentemente).
@@ -27,8 +29,6 @@
 - Hacer que las opciones de longitud/kilos apliquen su funcionalidad correctamente en las vistas.
 
 - Se podrá poner la opción de retirado de un partido un jugador, de manera que se terminará instantáneamente y ganará el que no se ha retirado.
-
-- Añadir posibilidad de añadir a favoritos para las normas
 
 - Al crear un partido/resultado, el jugador a elegir podrá dejarse sin rellenar, de manera que se guarde con valores string por defecto para los nombres de estos.
 
