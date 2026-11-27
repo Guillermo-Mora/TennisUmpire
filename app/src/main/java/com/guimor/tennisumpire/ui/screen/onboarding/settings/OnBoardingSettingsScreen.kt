@@ -30,8 +30,6 @@ import com.guimor.tennisumpire.ui.components.form.FormSingleChoiceSegmentedButto
 import com.guimor.tennisumpire.ui.components.onboarding.OnBoardingScreenContent
 import com.guimor.tennisumpire.ui.components.spacer.BigSpacer
 import com.guimor.tennisumpire.ui.components.spacer.DefaultSpacer
-import com.guimor.tennisumpire.ui.components.spacer.SmallSpacer
-import com.guimor.tennisumpire.ui.components.text.TextWithIcon
 import com.guimor.tennisumpire.ui.icons.dark_modeIcon
 import com.guimor.tennisumpire.ui.icons.languageIcon
 import com.guimor.tennisumpire.ui.icons.light_modeIcon
@@ -98,7 +96,8 @@ fun OnBoardingSettingsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DefaultSpacer()
             Text(
@@ -108,12 +107,9 @@ fun OnBoardingSettingsScreen(
                 fontSize = 24.sp
             )
             BigSpacer()
-            TextWithIcon(
-                label = "Language",
-                icon = languageIcon
-            )
-            SmallSpacer()
             FormDropDownMenuWithSearch(
+                labelTitle = "Language",
+                iconTitle = languageIcon,
                 value = stringResource(
                     AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag()
                         .getLanguage().displayName

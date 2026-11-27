@@ -128,14 +128,12 @@ fun SettingsScreen(
                 .padding(horizontal = 16.dp)
                 .imePadding()
                 .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BigSpacer()
-            TextWithIcon(
-                label = "Language",
-                icon = languageIcon
-            )
-            SmallSpacer()
+            DefaultSpacer()
             FormDropDownMenuWithSearch(
+                labelTitle = "Language",
+                iconTitle = languageIcon,
                 value = stringResource(
                     AppCompatDelegate.getApplicationLocales().get(0)?.toLanguageTag()
                         .getLanguage().displayName

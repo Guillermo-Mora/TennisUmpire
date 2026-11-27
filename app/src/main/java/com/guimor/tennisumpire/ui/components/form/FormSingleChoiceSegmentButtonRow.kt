@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import com.guimor.tennisumpire.ui.components.spacer.SmallSpacer
 import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 import kotlin.collections.forEachIndexed
 
@@ -37,6 +38,7 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
 ) {
     Row(
         modifier = Modifier
+            .widthIn(max = 500.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -61,10 +63,7 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
                 }
                 label?.let { label -> Text(label) }
             }
-            Spacer(
-                modifier = Modifier
-                    .height(8.dp)
-            )
+            SmallSpacer()
             SingleChoiceSegmentedButtonRow(
                 modifier = Modifier.fillMaxWidth(),
                 //

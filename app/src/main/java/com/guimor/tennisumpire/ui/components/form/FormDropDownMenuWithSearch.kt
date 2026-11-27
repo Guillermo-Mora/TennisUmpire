@@ -3,6 +3,7 @@ package com.guimor.tennisumpire.ui.components.form
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -57,6 +58,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.guimor.tennisumpire.ui.components.spacer.SmallSpacer
 import com.guimor.tennisumpire.ui.icons.cancelIcon
 import com.guimor.tennisumpire.ui.icons.searchIcon
 import kotlinx.coroutines.delay
@@ -69,6 +71,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T>FormDropDownMenuWithSearch(
+    labelTitle: String? = null,
+    iconTitle: ImageVector? = null,
     icon: ImageVector? = null,
     iconSpace: Boolean = false,
     value: String? = null,
@@ -90,129 +94,152 @@ fun <T>FormDropDownMenuWithSearch(
         searchValue.isNotBlank()
     ) searchFilter(searchValue, options)
     else options
-    Row(
+    Column(
         modifier = Modifier
+            .widthIn(max = 500.dp)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-            alignment = Alignment.CenterHorizontally
-        ),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center
     ) {
-        icon?.let {
-            Icon(
-                modifier = Modifier
-                    .padding(bottom = 20.dp),
-                imageVector = it,
-                contentDescription = null,
-            )
-        }
-        if (iconSpace) Spacer(modifier = Modifier.size(24.dp))
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-                if (expanded) searchValue = ""
-            },
-            modifier = Modifier
-                .widthIn(max = 500.dp)
-                .fillMaxWidth()
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            TextField(
-                value = value ?: label,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                },
-                leadingIcon =
-                    valueIcon?.let {
-                        {
-                            Image(
-                                painter = it,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-            )
-            DropdownMenu(
+            iconTitle?.let { iconTitle ->
+                Icon(
+                    imageVector = iconTitle,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp),
+                )
+            }
+            labelTitle?.let { labelTitle -> Text(labelTitle) }
+        }
+        SmallSpacer()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
+                alignment = Alignment.CenterHorizontally
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            icon?.let {
+                Icon(
+                    modifier = Modifier
+                        .padding(bottom = 20.dp),
+                    imageVector = it,
+                    contentDescription = null,
+                )
+            }
+            if (iconSpace) Spacer(modifier = Modifier.size(24.dp))
+            ExposedDropdownMenuBox(
                 expanded = expanded,
-                onDismissRequest = { expanded = false },
+                onExpandedChange = {
+                    expanded = !expanded
+                    if (expanded) searchValue = ""
+                },
                 modifier = Modifier
-                    .imePadding()
+                    .widthIn(max = 500.dp)
+                    .fillMaxWidth()
             ) {
-                OutlinedTextField(
-                    value = searchValue,
-                    onValueChange = { searchValue = it },
-                    placeholder = { Text("Search...") },
-                    singleLine = true,
-                    leadingIcon = {
-                        Icon(
-                            imageVector = searchIcon,
-                            contentDescription = "Search"
-                        )
+                TextField(
+                    value = value ?: label,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardOptions.Default.capitalization,
-                        autoCorrectEnabled = KeyboardOptions.Default.autoCorrectEnabled,
-                        keyboardType = keyboardType,
-                        imeAction = KeyboardOptions.Default.imeAction,
-                        platformImeOptions = KeyboardOptions.Default.platformImeOptions,
-                        showKeyboardOnFocus = KeyboardOptions.Default.showKeyboardOnFocus,
-                        hintLocales = KeyboardOptions.Default.hintLocales
-                    ),
+                    leadingIcon =
+                        valueIcon?.let {
+                            {
+                                Image(
+                                    painter = it,
+                                    contentDescription = null
+                                )
+                            }
+                        },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .focusRequester(focusRequester)
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                 )
-                LazyColumn(
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
                     modifier = Modifier
-                        .width(500.dp)
-                        .height(200.dp)
+                        .imePadding()
                 ) {
-                    if (!required) {
-                        item {
-                            DropdownMenuItem(
-                                text = {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(
-                                            space = 8.dp,
-                                            alignment = Alignment.Start
-                                        )
-                                    ) {
-                                        Icon(
-                                            imageVector = cancelIcon,
-                                            contentDescription = "Select none"
-                                        )
-                                        Text("None")
+                    OutlinedTextField(
+                        value = searchValue,
+                        onValueChange = { searchValue = it },
+                        placeholder = { Text("Search...") },
+                        singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = searchIcon,
+                                contentDescription = "Search"
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardOptions.Default.capitalization,
+                            autoCorrectEnabled = KeyboardOptions.Default.autoCorrectEnabled,
+                            keyboardType = keyboardType,
+                            imeAction = KeyboardOptions.Default.imeAction,
+                            platformImeOptions = KeyboardOptions.Default.platformImeOptions,
+                            showKeyboardOnFocus = KeyboardOptions.Default.showKeyboardOnFocus,
+                            hintLocales = KeyboardOptions.Default.hintLocales
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester)
+                    )
+                    LazyColumn(
+                        modifier = Modifier
+                            .width(500.dp)
+                            .height(200.dp)
+                    ) {
+                        if (!required) {
+                            item {
+                                DropdownMenuItem(
+                                    text = {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(
+                                                space = 8.dp,
+                                                alignment = Alignment.Start
+                                            )
+                                        ) {
+                                            Icon(
+                                                imageVector = cancelIcon,
+                                                contentDescription = "Select none"
+                                            )
+                                            Text("None")
+                                        }
+                                    },
+                                    onClick = {
+                                        onItemSelected(null)
+                                        expanded = false
                                     }
-                                },
+                                )
+                            }
+                        }
+                        items(
+                            items = itemsList
+                        ) { option ->
+                            DropdownMenuItem(
+                                text = { menuItem(option, value) },
                                 onClick = {
-                                    onItemSelected(null)
+                                    onItemSelected(option)
                                     expanded = false
-                                }
+                                },
+                                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                modifier = if (value == getItemValue(option)) Modifier.background(
+                                    color = MaterialTheme.colorScheme.surfaceContainerHighest
+                                ) else Modifier
                             )
                         }
-                    }
-                    items(
-                        items = itemsList
-                    ) { option ->
-                        DropdownMenuItem(
-                            text = { menuItem(option, value) },
-                            onClick = {
-                                onItemSelected(option)
-                                expanded = false
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                            modifier = if (value == getItemValue(option)) Modifier.background(
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest
-                            ) else Modifier
-                        )
                     }
                 }
             }
