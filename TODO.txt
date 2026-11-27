@@ -26,6 +26,7 @@ En las páginas de detalle de jugador y detalle de norma, deberían de estar los
 
 - Las pantallas de jugadores y de normas, tendrán buscador por nombre. El tema de filtros, es algo que me podría plantear para añadir más adelante.
 
+- Las pantallas de edición/creación deberían de mostrar un alert dialog si hay datos en ellas, y el usuario le da a volver atrás. Indicando si quiere descartar los datos.
 
 
 
