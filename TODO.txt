@@ -14,9 +14,11 @@
 
 - Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno. [Hecho]
 
-- Limitar ancho página detalle de jugador.
+- Limitar ancho página detalle de jugador. [Hecho]
 
-- Limitar ancho página detalle norma.
+- Limitar ancho página detalle norma. [Hecho]
+
+- Terminar de hacer bien la página de detalle de norma.
 
 - En las páginas de detalle, arriba en el header debe mostrarse el botón interactuable de 3 puntos, para poder desde ahí acceder a editar/eliminar (El de detalle no se mostrará evidentemente).
 

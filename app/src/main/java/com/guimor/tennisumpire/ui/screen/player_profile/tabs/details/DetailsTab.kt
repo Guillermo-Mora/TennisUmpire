@@ -1,10 +1,14 @@
 package com.guimor.tennisumpire.ui.screen.player_profile.tabs.details
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.guimor.tennisumpire.room_database.player.Player
 import com.guimor.tennisumpire.ui.components.player.PlayerFullProfileCard
 
@@ -15,6 +19,8 @@ fun DetailsTab(
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
+            .widthIn(max = 560.dp)
+            .fillMaxWidth()
     ) {
         PlayerFullProfileCard(player = player)
     }
