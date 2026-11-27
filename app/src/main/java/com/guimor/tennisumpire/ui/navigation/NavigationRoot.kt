@@ -19,10 +19,9 @@ import com.guimor.tennisumpire.ui.screen.edit_player.EditPlayerScreen
 import com.guimor.tennisumpire.ui.screen.edit_rule.EditRuleScreen
 import com.guimor.tennisumpire.ui.screen.main.MainScreen
 import com.guimor.tennisumpire.ui.screen.main.MainViewModel
-import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_match.NewMatchScreen
 import com.guimor.tennisumpire.ui.screen.new_player.NewPlayerScreen
-import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
+import com.guimor.tennisumpire.ui.screen.new_result.NewResultScreen
 import com.guimor.tennisumpire.ui.screen.new_rule.NewRuleScreen
 import com.guimor.tennisumpire.ui.screen.onboarding.OnBoardingScreen
 import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileScreen
@@ -30,7 +29,7 @@ import com.guimor.tennisumpire.ui.screen.player_profile.PlayerProfileViewModel
 import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsScreen
 import com.guimor.tennisumpire.ui.screen.rule_details.RuleDetailsViewModel
 import com.guimor.tennisumpire.ui.screen.settings.SettingsRoot
-import com.guimor.tennisumpire.ui.screen.settings.SettingsScreen
+import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOrNewPlayerViewModel
 import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_rule.EditOrNewRuleViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -112,7 +111,6 @@ fun NavigationRoot(
                 },
                 newPlayerViewModel = viewModel(factory = EditOrNewPlayerViewModel.Factory()),
                 onNavigateBack = navigator::goBack,
-                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
             )
         }
         entry<NavRoutesRoot.EditPlayer> { navEntry ->
@@ -130,7 +128,6 @@ fun NavigationRoot(
                         .Factory(playerUid = playerUid),
                 ),
                 onNavigateBack = navigator::goBack,
-                onNavigateToSettings = { navigator.navigate(NavRoutesRoot.Settings) },
             )
         }
         entry<NavRoutesRoot.PlayerProfile> { navEntry ->

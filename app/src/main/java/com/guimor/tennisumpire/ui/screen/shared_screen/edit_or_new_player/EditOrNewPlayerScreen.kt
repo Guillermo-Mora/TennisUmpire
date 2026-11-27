@@ -79,7 +79,6 @@ import com.guimor.tennisumpire.ui.model.SegmentedButtonOption
 @Composable
 fun EditOrNewPlayerScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToSettings: () -> Unit,
     editPlayerViewModel: EditOrNewPlayerViewModel,
     onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
     title: String,
@@ -173,7 +172,6 @@ fun EditOrNewPlayerScreen(
         topBar = {
             MainTopAppBar(
                 title = title,
-                onNavigateToSettings = { onNavigateToSettings() },
                 navigationIcon = {
                     NavigateBackIconButton(onNavigateBack = {
                         onNavigateBack()

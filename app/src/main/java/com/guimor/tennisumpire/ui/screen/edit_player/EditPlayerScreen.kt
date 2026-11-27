@@ -12,13 +12,11 @@ import com.guimor.tennisumpire.ui.screen.shared_screen.edit_or_new_player.EditOr
 @Composable
 fun EditPlayerScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToSettings: () -> Unit,
     editPlayerViewModel: EditOrNewPlayerViewModel,
     onOperationSuccess: (resultWithUiText: ResultWithUiText) -> Unit,
 ) {
     EditOrNewPlayerScreen(
         onNavigateBack = { onNavigateBack() },
-        onNavigateToSettings = { onNavigateToSettings() },
         editPlayerViewModel = editPlayerViewModel,
         onOperationSuccess = { resultWithUiText -> onOperationSuccess(resultWithUiText) },
         title = stringResource(R.string.edit_player),
