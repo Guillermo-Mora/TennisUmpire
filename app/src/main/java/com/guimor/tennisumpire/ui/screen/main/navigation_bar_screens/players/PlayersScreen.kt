@@ -2,9 +2,12 @@ package com.guimor.tennisumpire.ui.screen.main.navigation_bar_screens.players
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -15,10 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -45,40 +50,51 @@ fun PlayersScreen(
     val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(uiState.messageResult) {
         uiState.messageResult?.let { messageResult ->
-            onOperationResult(messageResult.toResultWithUiText(
-                R.string.player,
-                uiState.playerOperationAbbreviatedName
-            ))
+            onOperationResult(
+                messageResult.toResultWithUiText(
+                    R.string.player,
+                    uiState.playerOperationAbbreviatedName
+                )
+            )
             viewModel.resetMessageResult()
         }
     }
     val players = viewModel.players.collectAsLazyPagingItems()
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+    Column(
         modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(
-            count = players.itemCount,
-            key = players.itemKey { it.uid }
-        ) { index ->
-            val player = players[index]
-            player?.let { player ->
-                PlayerListCard(
-                    player = player,
-                    onClickToggleAddPlayerToFavourites = {
-                        viewModel.toggleAddPlayerToFavourites(
-                            playerUid = player.uid
-                        )
-                    },
-                    onClickPlayerProfile = { onNavigateToPlayerProfile(player.uid) },
-                    onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
-                    onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
-                )
-                //Spacer so on the last registry you can access the actions button. Because
-                // the floating action button can cover it otherwise.
-                if (index == players.itemCount - 1) {
-                    Spacer(Modifier.height(84.dp))
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .widthIn(max = 560.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(
+                count = players.itemCount,
+                key = players.itemKey { it.uid }
+            ) { index ->
+                val player = players[index]
+                player?.let { player ->
+                    PlayerListCard(
+                        player = player,
+                        onClickToggleAddPlayerToFavourites = {
+                            viewModel.toggleAddPlayerToFavourites(
+                                playerUid = player.uid
+                            )
+                        },
+                        onClickPlayerProfile = { onNavigateToPlayerProfile(player.uid) },
+                        onClickDeletePlayer = { viewModel.deletePlayer(playerUid = player.uid) },
+                        onClickEditPlayer = { onNavigateToEditPlayer(player.uid) }
+                    )
+                    //Spacer so on the last registry you can access the actions button. Because
+                    // the floating action button can cover it otherwise.
+                    if (index == players.itemCount - 1) {
+                        Spacer(Modifier.height(84.dp))
+                    }
                 }
             }
         }
