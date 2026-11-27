@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.guimor.tennisumpire.domain.model.rule.RuleOnGameDeuce
+import com.guimor.tennisumpire.domain.model.rule.RuleServerChangesOn
 import com.guimor.tennisumpire.domain.model.rule.RuleSetDecider
 import com.guimor.tennisumpire.domain.model.rule.RuleSetType
 import com.guimor.tennisumpire.domain.model.rule.RuleSetsQuantityType
@@ -66,10 +68,11 @@ private fun SetDetails(
 ) {
     DetailsCardEntry(
         definition = title,
-        definitionFontWeight = FontWeight.Bold
+        definitionFontWeight = FontWeight.SemiBold,
+        definitionColor = MaterialTheme.colorScheme.primary
     )
     DetailsCardEntry(
-        definition = "Sets type"
+        definition = "Set type"
     ) {
         TextOneLine(
             when (setRules?.setType) {
@@ -94,7 +97,7 @@ private fun SetDetails(
     }
     setRules?.setDecider?.let { setDecider ->
         DetailsCardEntry(
-            definition = "Sets decider"
+            definition = "Set decider"
         ) {
             TextOneLine(
                 when (setDecider) {
@@ -104,12 +107,53 @@ private fun SetDetails(
             )
         }
     }
+    setRules?.setsServerChangesOn?.let { setsServerChangesOn ->
+        DetailsCardEntry(
+            definition = "Set serving order"
+        ) {
+            val quantity = setsServerChangesOn.quantity
+            TextOneLine(
+                when (setsServerChangesOn) {
+                    is RuleServerChangesOn.EveryQuantity ->
+                        "$quantity, $quantity, $quantity..."
+                    is RuleServerChangesOn.OneThenEveryQuantity ->
+                        "1, $quantity, $quantity..."
+                }
+            )
+        }
+    }
+    setRules?.tiebreakDecider?.let { tiebreakDecider ->
+        DetailsCardEntry(
+            definition = "Tiebreak decider"
+        ) {
+            TextOneLine(
+                when (tiebreakDecider) {
+                    RuleTiebreakDecider.GOLDEN_POINT -> "Golden point"
+                    RuleTiebreakDecider.TWO_POINTS_DIFFERENCE -> "Two points difference"
+                }
+            )
+        }
+    }
+    setRules?.tiebreaksServerChangesOn?.let { tiebreaksServerChangesOn ->
+        DetailsCardEntry(
+            definition = "Tiebreak serving order"
+        ) {
+            val quantity = tiebreaksServerChangesOn.quantity
+            TextOneLine(
+                when (tiebreaksServerChangesOn) {
+                    is RuleServerChangesOn.EveryQuantity ->
+                        "$quantity, $quantity, $quantity..."
+                    is RuleServerChangesOn.OneThenEveryQuantity ->
+                        "1, $quantity, $quantity..."
+                }
+            )
+        }
+    }
 }
 
 @Composable
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    widthDp = 100,
 )
 private fun RuleDetailsCardPreview() {
     MaterialTheme {
@@ -128,12 +172,19 @@ private fun RuleDetailsCardPreview() {
                         setRules = SetRules(
                             setType = RuleSetType.GAMES,
                             gamesPerSet = 6,
-                            onGameDeuce = RuleOnGameDeuce.ADVANTAGE,
+                            onGameDeuce = RuleOnGameDeuce.GOLDEN_POINT,
                             setDecider = RuleSetDecider.TIEBREAK,
                             pointsPerTiebreak = 7,
-                            tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+                            tiebreakDecider = RuleTiebreakDecider.GOLDEN_POINT,
                         ),
-                        decidingSetRules = null
+                        decidingSetRules = SetRules(
+                            setType = RuleSetType.TIEBREAK,
+                            setsServerChangesOn = null,
+                            onGameDeuce = null,
+                            setDecider = null,
+                            pointsPerTiebreak = 7,
+                            tiebreakDecider = RuleTiebreakDecider.TWO_POINTS_DIFFERENCE
+                        )
                     )
                 )
             }

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -13,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.ui.components.rule.RuleDetailsCard
@@ -29,6 +32,7 @@ fun RuleDetailsScreen(
 ) {
     BackHandler { onNavigateBack() }
     val uiState by ruleDetailsViewModel.uiState.collectAsState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
         topBar = {
@@ -41,14 +45,17 @@ fun RuleDetailsScreen(
                     )
                 },
                 navigationIcon = { NavigateBackIconButton { onNavigateBack() } },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                scrollBehavior = scrollBehavior,
             )
-        }
+        },
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(

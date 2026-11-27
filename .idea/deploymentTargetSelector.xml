@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-11-27T14:24:31.322191254Z">
+        <DropdownSelection timestamp="2026-11-27T16:42:29.579458653Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/guimor/.android/avd/Pixel_Tablet.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/guimor/.android/avd/Pixel_9a.avd" />
             </handle>
           </Target>
         </DropdownSelection>

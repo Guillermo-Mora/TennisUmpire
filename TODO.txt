@@ -18,7 +18,7 @@
 
 - Limitar ancho página detalle norma. [Hecho]
 
-- Terminar de hacer bien la página de detalle de norma.
+- Terminar de hacer bien la página de detalle de norma. [Hecho]
 
 - En las páginas de detalle, arriba en el header debe mostrarse el botón interactuable de 3 puntos, para poder desde ahí acceder a editar/eliminar (El de detalle no se mostrará evidentemente).
 
