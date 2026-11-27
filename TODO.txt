@@ -10,7 +10,9 @@
 
 - HACER Y TERMINAR LA SCREEN DE SETTINGS. [Hecho]
 
-- Limitar el ancho de las cards mostradas en lista (jugadores, normas, partidos).
+- Limitar el ancho de las cards mostradas en lista (jugadores, normas, partidos). [En progreso]
+
+- Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno. [En progreso]
 
 - Limitar ancho página detalle de jugador.
 
@@ -21,8 +23,6 @@
 - Convertir todos los strings a string resources.
 
 - Hacer que las opciones de longitud/kilos apliquen su funcionalidad correctamente en las vistas.
-
-- Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno.
 
 - Se podrá poner la opción de retirado de un partido un jugador, de manera que se terminará instantáneamente y ganará el que no se ha retirado.
 

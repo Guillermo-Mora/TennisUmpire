@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -32,6 +31,8 @@ import com.guimor.tennisumpire.domain.ui_messages.ResultWithUiText
 import com.guimor.tennisumpire.domain.ui_messages.toResultWithUiText
 import com.guimor.tennisumpire.room_database.player.FakePlayerRepository
 import com.guimor.tennisumpire.ui.components.player.PlayerListCard
+import com.guimor.tennisumpire.ui.components.text.textEmptyListAction
+import com.guimor.tennisumpire.ui.icons.person_addIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +74,12 @@ fun PlayersScreen(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            textEmptyListAction(
+                itemCount = players.itemCount,
+                title = "No players yet",
+                actionText = "Tap the+button to add a player",
+                icon = person_addIcon
+            )
             items(
                 count = players.itemCount,
                 key = players.itemKey { it.uid }
