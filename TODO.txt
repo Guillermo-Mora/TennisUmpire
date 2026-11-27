@@ -5,7 +5,21 @@
 
 - Se podría simplificar la página de matches y results en una misma llamada matches. En esta, en la sección superior del todo aparecerían la lista de partdos que aún no están terminados, marcados con in play o algo así, y con un pequeño espacio y más abajo, se mostrarían el resto de partidos ya terminados.
 
-- HACER Y TERMINAR LA SCREEN DE SETTINGS.
+- HACER Y TERMINAR LA SCREEN DE SETTINGS. [Hecho]
+
+- Limitar el ancho de las cards mostradas en lista (jugadores, normas, partidos).
+
+- Limitar ancho página detalle de jugador.
+
+- Limitar ancho página detalle norma.
+
+- En las páginas de detalle, arriba en el header debe mostrarse el botón interactuable de 3 puntos, para poder desde ahí acceder a editar/eliminar (El de detalle no se mostrará evidentemente).
+
+- Convertir todos los strings a string resources.
+
+- Hacer que las opciones de longitud/kilos apliquen su funcionalidad correctamente en las vistas.
+
+- Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno.
 
 - Se podrá poner la opción de retirado de un partido un jugador, de manera que se terminará instantáneamente y ganará el que no se ha retirado.
 
