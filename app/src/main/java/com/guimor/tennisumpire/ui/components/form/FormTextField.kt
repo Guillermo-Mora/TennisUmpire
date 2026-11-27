@@ -44,6 +44,7 @@ fun FormTextField(
 ) {
     Row(
         modifier = Modifier
+            .widthIn(max = 560.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
             space = 16.dp,
@@ -104,10 +105,8 @@ fun FormTextField(
             ),
             visualTransformation = visualTransformation ?: VisualTransformation.None,
             modifier = modifier
-                ?.widthIn(max = 500.dp)
                 ?.fillMaxWidth()
                 ?: Modifier
-                    .widthIn(max = 500.dp)
                     .fillMaxWidth()
         )
     }

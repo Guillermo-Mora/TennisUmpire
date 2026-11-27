@@ -96,14 +96,16 @@ fun <T>FormDropDownMenuWithSearch(
     else options
     Column(
         modifier = Modifier
-            .widthIn(max = 500.dp)
+            .widthIn(max = 560.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             iconTitle?.let { iconTitle ->
                 Icon(
@@ -141,7 +143,6 @@ fun <T>FormDropDownMenuWithSearch(
                     if (expanded) searchValue = ""
                 },
                 modifier = Modifier
-                    .widthIn(max = 500.dp)
                     .fillMaxWidth()
             ) {
                 TextField(
@@ -197,7 +198,7 @@ fun <T>FormDropDownMenuWithSearch(
                     )
                     LazyColumn(
                         modifier = Modifier
-                            .width(500.dp)
+                            .width(560.dp)
                             .height(200.dp)
                     ) {
                         if (!required) {

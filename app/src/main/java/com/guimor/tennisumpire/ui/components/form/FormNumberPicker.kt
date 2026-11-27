@@ -37,7 +37,7 @@ fun FormNumberPicker(
 ) {
     Column(
         modifier = Modifier
-            .widthIn(max = 500.dp)
+            .widthIn(max = 560.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

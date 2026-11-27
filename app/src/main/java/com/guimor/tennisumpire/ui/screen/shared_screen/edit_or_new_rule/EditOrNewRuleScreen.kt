@@ -291,7 +291,7 @@ private fun RuleSection(
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .widthIn(max = 500.dp)
+            .widthIn(max = 560.dp)
             .fillMaxWidth()
             .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -38,7 +38,7 @@ fun <T>FormSingleChoiceSegmentedButtonRow(
 ) {
     Row(
         modifier = Modifier
-            .widthIn(max = 500.dp)
+            .widthIn(max = 560.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically

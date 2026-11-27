@@ -28,6 +28,8 @@ En las páginas de detalle de jugador y detalle de norma, deberían de estar los
 
 - Las pantallas de edición/creación deberían de mostrar un alert dialog si hay datos en ellas, y el usuario le da a volver atrás. Indicando si quiere descartar los datos.
 
+- Hacer rework en la screen de edit/create player para usar el bringintoview requester en lugar de la chapuza que tengo hecha con lazycolumn.
+
 
 
 
