@@ -10,9 +10,9 @@
 
 - HACER Y TERMINAR LA SCREEN DE SETTINGS. [Hecho]
 
-- Limitar el ancho de las cards mostradas en lista (jugadores, normas, partidos). [En progreso]
+- Limitar el ancho de las cards mostradas en lista (jugadores, normas, partidos). [Hecho]
 
-- Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno. [En progreso]
+- Las pantallas de listas deben de mostrar un mensaje si la lista está vacía. Como aún no hay jugadores / aún no hay normas, etc. Opcionalmente con un botón/indicación para crear uno. [Hecho]
 
 - Limitar ancho página detalle de jugador.
 
