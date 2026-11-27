@@ -103,9 +103,12 @@ fun FormTextField(
                 hintLocales = KeyboardOptions.Default.hintLocales
             ),
             visualTransformation = visualTransformation ?: VisualTransformation.None,
-            modifier = modifier ?: Modifier
-                .widthIn(max = 500.dp)
-                .fillMaxWidth()
+            modifier = modifier
+                ?.widthIn(max = 500.dp)
+                ?.fillMaxWidth()
+                ?: Modifier
+                    .widthIn(max = 500.dp)
+                    .fillMaxWidth()
         )
     }
 }

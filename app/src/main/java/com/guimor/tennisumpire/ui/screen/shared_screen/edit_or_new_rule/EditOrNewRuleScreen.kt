@@ -143,6 +143,7 @@ fun EditOrNewRuleScreen(
         ) {
             Column(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .animateContentSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -156,8 +157,6 @@ fun EditOrNewRuleScreen(
                         placeholder = "My rule",
                         required = true,
                         modifier = Modifier
-                            .widthIn(max = 500.dp)
-                            .fillMaxWidth()
                             .bringIntoViewRequester(ruleNameRequester)
                     )
                     DefaultSpacer()
@@ -292,7 +291,10 @@ private fun RuleSection(
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .animateContentSize()
+            .widthIn(max = 500.dp)
+            .fillMaxWidth()
+            .animateContentSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         content()
     }
